@@ -1,5 +1,4 @@
 import markdownIt from 'markdown-it'
-import table from 'markdown-it-synapse-table'
 import emoji from 'markdown-it-emoji'
 import subscript from 'markdown-it-sub'
 import superscript from 'markdown-it-sup'
