@@ -10,6 +10,7 @@ Supported Markdown Syntax:
 
 * [x] automatic table of contents
 * [x] table & class customize
+* [x] *SyntaxHighlighter
 * [x] definition list
 * [x] strikethrough
 * [x] abbreviation
@@ -19,6 +20,8 @@ Supported Markdown Syntax:
 * [x] insert
 * [x] emoji
 * [x] mark
+
+`*SyntaxHighlighter` work with [Prism.css](http://prismjs.com/themes/prism.css) default
 
 # Instllation
 
