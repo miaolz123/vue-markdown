@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import MarkdownIt from 'markdown-it'
+import markdownIt from 'markdown-it'
 import table from 'markdown-it-synapse-table'
 import emoji from 'markdown-it-emoji'
 import subscript from 'markdown-it-sub'
@@ -12,7 +11,8 @@ import mark from 'markdown-it-mark'
 import toc from 'markdown-it-toc-and-anchor'
 import Prism from 'prismjs'
 
-let md = new MarkdownIt()
+const md = new markdownIt().use(emoji).use(subscript).use(superscript)
+  .use(footnote).use(deflist).use(abbreviation).use(insert).use(mark)
 
 export default {
   template: '<div></div>',
@@ -49,13 +49,16 @@ export default {
       type: String,
       default: '“”‘’',
     },
+    tableClass: {
+      type: String,
+      default: 'table',
+    },
     toc: {
       type: Boolean,
       default: false,
     },
     tocId: {
       type: String,
-      default: 'my-toc',
     },
     tocClass: {
       type: String,
@@ -67,11 +70,14 @@ export default {
     },
     tocLastLevel: {
       type: Number,
-      default: 2,
     },
     tocAnchorLink: {
       type: Boolean,
       default: true,
+    },
+    tocAnchorClass: {
+      type: String,
+      default: 'toc-anchor',
     },
     tocAnchorLinkSymbol: {
       type: String,
@@ -81,17 +87,13 @@ export default {
       type: Boolean,
       default: true,
     },
-    tocAnchorClass: {
-      type: String,
-      default: 'toc-anchor-class',
-    },
     tocAnchorLinkClass: {
       type: String,
-      default: 'toc-anchor-link-class',
+      default: 'toc-anchor-link',
     },
   },
   ready() {
-    const op = {
+    md.set({
       html: this.html,
       xhtmlOut: this.xhtmlOut,
       breaks: this.breaks,
@@ -103,9 +105,9 @@ export default {
         if (l) return Prism.highlight(code, l)
         return ''
       },
-    }
-    md = new MarkdownIt(op).use(table).use(emoji).use(subscript).use(footnote)
-      .use(superscript).use(deflist).use(abbreviation).use(insert).use(mark)
+    })
+    md.renderer.rules.table_open = () => `<table class="${this.tableClass}">\n`
+    if (!this.tocLastLevel) this.tocLastLevel = this.tocFirstLevel + 1
     if (this.toc) md.use(toc, {
       tocClassName: this.tocClass,
       tocFirstLevel: this.tocFirstLevel,
@@ -116,19 +118,18 @@ export default {
       anchorClassName: this.tocAnchorClass,
       anchorLinkSymbolClassName: this.tocAnchorLinkClass,
       tocCallback: (tocMarkdown, tocArray, tocHtml) => {
-        if (this.tocId && document.getElementById(this.tocId)) {
-          console.log(1212)
-          document.getElementById(this.tocId).innerHTML = tocHtml
+        if (tocHtml) {
+          if (this.tocId && document.getElementById(this.tocId))
+            document.getElementById(this.tocId).innerHTML = tocHtml
+          this.$dispatch('toc', tocHtml)
         }
-        this.$dispatch('toc', tocHtml)
       },
     })
     const outHtml = md.render(this.source)
     if (this.show) this.$el.innerHTML = outHtml
     this.$dispatch('parsed', outHtml)
-    this.$watch('source', function (newVal) {
-      const outHtml = md.render(newVal)
-      this.out = outHtml
+    this.$watch('source', function () {
+      const outHtml = md.render(this.source)
       if (this.show) this.$el.innerHTML = outHtml
       this.$dispatch('parsed', outHtml)
     })

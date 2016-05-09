@@ -70,54 +70,64 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _markdownIt2 = _interopRequireDefault(_markdownIt);
 
-	var _markdownItEmoji = __webpack_require__(69);
+	var _markdownItSynapseTable = __webpack_require__(69);
+
+	var _markdownItSynapseTable2 = _interopRequireDefault(_markdownItSynapseTable);
+
+	var _markdownItEmoji = __webpack_require__(70);
 
 	var _markdownItEmoji2 = _interopRequireDefault(_markdownItEmoji);
 
-	var _markdownItSub = __webpack_require__(75);
+	var _markdownItSub = __webpack_require__(76);
 
 	var _markdownItSub2 = _interopRequireDefault(_markdownItSub);
 
-	var _markdownItSup = __webpack_require__(76);
+	var _markdownItSup = __webpack_require__(77);
 
 	var _markdownItSup2 = _interopRequireDefault(_markdownItSup);
 
-	var _markdownItFootnote = __webpack_require__(77);
+	var _markdownItFootnote = __webpack_require__(78);
 
 	var _markdownItFootnote2 = _interopRequireDefault(_markdownItFootnote);
 
-	var _markdownItDeflist = __webpack_require__(78);
+	var _markdownItDeflist = __webpack_require__(79);
 
 	var _markdownItDeflist2 = _interopRequireDefault(_markdownItDeflist);
 
-	var _markdownItAbbr = __webpack_require__(79);
+	var _markdownItAbbr = __webpack_require__(80);
 
 	var _markdownItAbbr2 = _interopRequireDefault(_markdownItAbbr);
 
-	var _markdownItIns = __webpack_require__(80);
+	var _markdownItIns = __webpack_require__(81);
 
 	var _markdownItIns2 = _interopRequireDefault(_markdownItIns);
 
-	var _markdownItMark = __webpack_require__(81);
+	var _markdownItMark = __webpack_require__(82);
 
 	var _markdownItMark2 = _interopRequireDefault(_markdownItMark);
 
-	var _markdownItTocAndAnchor = __webpack_require__(82);
+	var _markdownItTocAndAnchor = __webpack_require__(83);
 
 	var _markdownItTocAndAnchor2 = _interopRequireDefault(_markdownItTocAndAnchor);
 
-	var _prismjs = __webpack_require__(95);
+	var _prismjs = __webpack_require__(96);
 
 	var _prismjs2 = _interopRequireDefault(_prismjs);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var md = new _markdownIt2.default().use(_markdownItEmoji2.default).use(_markdownItSub2.default).use(_markdownItSup2.default).use(_markdownItFootnote2.default).use(_markdownItDeflist2.default).use(_markdownItAbbr2.default).use(_markdownItIns2.default).use(_markdownItMark2.default);
 
 	exports.default = {
 	  template: '<div></div>',
 	  props: {
 	    source: {
 	      type: String,
-	      default: '<h3 id="introduction" class="section scrollspy">真的假的</h3>\n\n### 真的假的\n\n- sss\n- ddd\n- fff\n\n### 我的\n\n[^first]: Footnote **can have markup**\n\n*[HTML]: Hyper Text Markup Language\n\nTerm 1\n\n:   Definition 1\nwith lazy continuation.'
+	      default: ''
+	    },
+	    show: {
+	      type: Boolean,
+	      default: true
 	    },
 	    html: {
 	      type: Boolean,
@@ -143,13 +153,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      type: String,
 	      default: '“”‘’'
 	    },
+	    tableClass: {
+	      type: String,
+	      default: 'table'
+	    },
 	    toc: {
 	      type: Boolean,
 	      default: false
 	    },
 	    tocId: {
-	      type: String,
-	      default: 'my-toc'
+	      type: String
 	    },
 	    tocClass: {
 	      type: String,
@@ -160,12 +173,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: 2
 	    },
 	    tocLastLevel: {
-	      type: Number,
-	      default: 2
+	      type: Number
 	    },
 	    tocAnchorLink: {
 	      type: Boolean,
 	      default: true
+	    },
+	    tocAnchorClass: {
+	      type: String,
+	      default: 'toc-anchor'
 	    },
 	    tocAnchorLinkSymbol: {
 	      type: String,
@@ -175,19 +191,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      type: Boolean,
 	      default: true
 	    },
-	    tocAnchorClass: {
-	      type: String,
-	      default: 'toc-anchor-class'
-	    },
 	    tocAnchorLinkClass: {
 	      type: String,
-	      default: 'toc-anchor-link-class'
+	      default: 'toc-anchor-link'
 	    }
 	  },
 	  ready: function ready() {
 	    var _this = this;
 
-	    var op = {
+	    md.set({
 	      html: this.html,
 	      xhtmlOut: this.xhtmlOut,
 	      breaks: this.breaks,
@@ -199,8 +211,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (l) return _prismjs2.default.highlight(code, l);
 	        return '';
 	      }
+	    });
+	    md.renderer.rules.table_open = function () {
+	      return '<table class="' + _this.tableClass + '">\n';
 	    };
-	    var md = new _markdownIt2.default(op).use(_markdownItEmoji2.default).use(_markdownItSub2.default).use(_markdownItSup2.default).use(_markdownItFootnote2.default).use(_markdownItDeflist2.default).use(_markdownItAbbr2.default).use(_markdownItIns2.default).use(_markdownItMark2.default);
+	    if (!this.tocLastLevel) this.tocLastLevel = this.tocFirstLevel + 1;
 	    if (this.toc) md.use(_markdownItTocAndAnchor2.default, {
 	      tocClassName: this.tocClass,
 	      tocFirstLevel: this.tocFirstLevel,
@@ -211,15 +226,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      anchorClassName: this.tocAnchorClass,
 	      anchorLinkSymbolClassName: this.tocAnchorLinkClass,
 	      tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
-	        if (_this.tocId && document.getElementById(_this.tocId)) {
-	          document.getElementById(_this.tocId).innerHTML = tocHtml;
+	        if (tocHtml) {
+	          if (_this.tocId && document.getElementById(_this.tocId)) document.getElementById(_this.tocId).innerHTML = tocHtml;
+	          _this.$dispatch('toc', tocHtml);
 	        }
-	        _this.$dispatch('toc', tocHtml);
 	      }
 	    });
-	    this.html = md.render(this.source);
-	    this.$el.innerHTML = this.html;
-	    this.$dispatch('parsed', this.html);
+	    var outHtml = md.render(this.source);
+	    if (this.show) this.$el.innerHTML = outHtml;
+	    this.$dispatch('parsed', outHtml);
+	    this.$watch('source', function () {
+	      var outHtml = md.render(this.source);
+	      if (this.show) this.$el.innerHTML = outHtml;
+	      this.$dispatch('parsed', outHtml);
+	    });
 	  }
 	};
 
@@ -10269,16 +10289,228 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 69 */
+/***/ function(module, exports) {
+
+	// Process '## headings'
+
+	'use strict';
+
+	module.exports = function synapse_table_plugin(md) {
+	    var tableClassStartRE = new RegExp(
+	            '^\\s*{[|]{1}\\s*class\\s*=\\s*"\\s*(.*)"\\s*');
+	    var tableClassEndRE = new RegExp('^\\s*[|]{1}}\\s*');
+	    var centerStartRE = new RegExp('^\s*[-]{1}[>]{1}.*');
+	    var centerEndRE = new RegExp('.*[<]{1}[-]{1}\s*$');
+	    var outerPipesRE = new RegExp('^\s*[|]{1}.+[|]{1}\s*$');
+	    function getLine(state, line) {
+	      var pos = state.bMarks[line] + state.blkIndent, max = state.eMarks[line];
+
+	      return state.src.substr(pos, max - pos);
+	    }
+
+	    function escapedSplit(str) {
+	      if (outerPipesRE.test(str)) {
+	        str = str.replace(/^\||\|$/g, '');
+	      }
+
+	      var result = [], pos = 0, max = str.length, ch, escapes = 0, lastPos = 0, backTicked = false, lastBackTick = 0;
+
+	      ch = str.charCodeAt(pos);
+
+	      while (pos < max) {
+	        if (ch === 0x60 && (escapes % 2 === 0)) { // `
+	          backTicked = !backTicked;
+	          lastBackTick = pos;
+	        } else if (ch === 0x7c && (escapes % 2 === 0) && !backTicked) { // |
+	          result.push(str.substring(lastPos, pos));
+	          lastPos = pos + 1;
+	        } else if (ch === 0x5c) { // \
+	          escapes++;
+	        } else {
+	          escapes = 0;
+	        }
+
+	        pos++;
+
+	        // If there was an un-closed backtick, go back to just after
+	        // the last backtick, but as if it was a normal character
+	        if (pos === max && backTicked) {
+	          backTicked = false;
+	          pos = lastBackTick + 1;
+	        }
+
+	        ch = str.charCodeAt(pos);
+	      }
+
+	      result.push(str.substring(lastPos));
+
+	      return result;
+	    }
+
+	    function table(state, startLine, endLine, silent) {
+	      var lineText, pos, i, nextLine, columns, columnCount, token,
+	        tableLines, tbodyLines, classNames, tableBodyStartLine, headerLine,
+	        isSpecialSyntaxTable = false, wrapWithDiv = false;
+	      // should have at least two lines
+	      // (!!! Synapse change, used to be 3 due to required ---|---|--- line).  Header and single row.
+	      if (startLine + 1 > endLine) {
+	        return false;
+	      }
+
+	      pos = state.bMarks[startLine] + state.tShift[startLine];
+	      if (pos >= state.eMarks[startLine]) {
+	        return false;
+	      }
+	      lineText = getLine(state, startLine);
+
+	      // look for optional class definition start, like '{| class="border"'
+	      if (tableClassStartRE.test(lineText)) {
+	        // this table definition includes class names, so the start marker is {| and end marker will be |}
+	        classNames = lineText.match(tableClassStartRE)[1];
+	        wrapWithDiv = classNames.indexOf('short') !== -1;
+	        headerLine = startLine + 1;
+	        // If tableClassStartRE passes, then it's definitely a table.
+	        isSpecialSyntaxTable = true;
+	      } else {
+	        headerLine = startLine;
+	      }
+
+	      if (state.sCount[headerLine] < state.blkIndent) {
+	        return false;
+	      }
+
+	      pos = state.bMarks[headerLine] + state.tShift[headerLine];
+	      if (pos >= state.eMarks[headerLine]) {
+	        return false;
+	      }
+
+	      // read column headers
+	      lineText = getLine(state, headerLine).trim();
+	      if (lineText.indexOf('|') === -1 && !isSpecialSyntaxTable) {
+	        return false;
+	      }
+
+	      // has a '|'.  If it looks like there is math on this line, skip it.
+	      if (lineText.indexOf('$$') !== -1) {
+	        return false;
+	      }
+	      columns = escapedSplit(lineText);
+	      // header row will define an amount of columns in the entire table,
+	      // and align row shouldn't be smaller than that (the rest of the rows can)
+	      columnCount = columns.length;
+
+	      if (silent) {
+	        return true;
+	      }
+
+	      if (wrapWithDiv) {
+	        token = state.push('div_wrapper', 'div', 1);
+	        token.attrs = [ [ 'class', ' markdowntableWrap ' ] ];
+	      }
+	      token = state.push('table_open', 'table', 1);
+	      token.map = tableLines = [ startLine, 0 ];
+	      if (classNames) {
+	        token.attrs = [ [ 'class', ' ' + classNames + ' ' ] ];
+	        // start line of the table (header) is really the second line.
+	        startLine++;
+	      }
+
+	      lineText = getLine(state, headerLine + 1).trim();
+
+	      // If this line is of the form ---|---|---, then we have column headers and we should skip this line.
+	      // Else, no column headers and we should skip to the body.
+	      if (/^[-:| ]+$/.test(lineText) && lineText.indexOf('|') !== -1) {
+	        // we have column headers
+	        tableBodyStartLine = headerLine + 2;
+	        token = state.push('thead_open', 'thead', 1);
+	        token.map = [ startLine, startLine + 1 ];
+
+	        token = state.push('tr_open', 'tr', 1);
+	        token.map = [ startLine, startLine + 1 ];
+
+	        for (i = 0; i < columns.length; i++) {
+	          token = state.push('th_open', 'th', 1);
+	          token.map = [ startLine, startLine + 1 ];
+
+	          token = state.push('inline', '', 0);
+	          token.content = columns[i].trim();
+	          token.map = [ startLine, startLine + 1 ];
+	          token.children = [];
+
+	          token = state.push('th_close', 'th', -1);
+	        }
+
+	        token = state.push('tr_close', 'tr', -1);
+	        token = state.push('thead_close', 'thead', -1);
+	      } else {
+	        // no column headers
+	        tableBodyStartLine = headerLine;
+	      }
+
+	      token = state.push('tbody_open', 'tbody', 1);
+	      token.map = tbodyLines = [ tableBodyStartLine, 0 ];
+
+	      for (nextLine = tableBodyStartLine; nextLine < endLine; nextLine++) {
+	        if (state.sCount[nextLine] < state.blkIndent) {
+	          break;
+	        }
+
+	        lineText = getLine(state, nextLine).trim();
+	        if (tableClassEndRE.test(lineText)) {
+	          // end of table with class definitions. Include this line in the table definition
+	          nextLine++;
+	          break;
+	        }
+	        if (lineText.indexOf('|') === -1 && !isSpecialSyntaxTable) {
+	          break;
+	        }
+	        columns = escapedSplit(lineText);
+
+	        token = state.push('tr_open', 'tr', 1);
+	        // if line starts with -> and ends with <-, then eat these characters (SWC-3000)
+	        if (centerStartRE.test(columns[0]) && centerEndRE.test(columns[columnCount - 1])) {
+	          columns[0] = columns[0].substring(columns[0].indexOf('->') + 2);
+	          columns[columnCount - 1] = columns[columnCount - 1].substring(0, columns[columnCount - 1].indexOf('<-'));
+	        }
+	        for (i = 0; i < columnCount; i++) {
+	          token = state.push('td_open', 'td', 1);
+
+	          token = state.push('inline', '', 0);
+	          token.content = columns[i] ? columns[i].trim() : '';
+	          token.children = [];
+
+	          token = state.push('td_close', 'td', -1);
+	        }
+	        token = state.push('tr_close', 'tr', -1);
+	      }
+	      token = state.push('tbody_close', 'tbody', -1);
+	      token = state.push('table_close', 'table', -1);
+
+	      if (wrapWithDiv) {
+	        token = state.push('div_wrapper', 'div', -1);
+	      }
+
+	      tableLines[1] = tbodyLines[1] = nextLine;
+	      state.line = nextLine;
+	      return true;
+	    }
+	    var rulesCanBeTerminated = [ 'paragraph', 'reference' ];
+	    md.block.ruler.at('table', table, { alt: (rulesCanBeTerminated).slice() });
+	  };
+
+
+/***/ },
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 
-	var emojies_defs      = __webpack_require__(70);
-	var emojies_shortcuts = __webpack_require__(71);
-	var emoji_html        = __webpack_require__(72);
-	var emoji_replace     = __webpack_require__(73);
-	var normalize_opts    = __webpack_require__(74);
+	var emojies_defs      = __webpack_require__(71);
+	var emojies_shortcuts = __webpack_require__(72);
+	var emoji_html        = __webpack_require__(73);
+	var emoji_replace     = __webpack_require__(74);
+	var normalize_opts    = __webpack_require__(75);
 
 
 	module.exports = function emoji_plugin(md, options) {
@@ -10297,7 +10529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -11174,7 +11406,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports) {
 
 	// Emoticons -> Emoji mapping.
@@ -11221,7 +11453,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11232,7 +11464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports) {
 
 	// Emojies & shortcuts replacement logic.
@@ -11317,7 +11549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports) {
 
 	// Convert input options to more useable format
@@ -11381,7 +11613,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports) {
 
 	// Process ~subscript~
@@ -11453,7 +11685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports) {
 
 	// Process ^superscript^
@@ -11524,7 +11756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports) {
 
 	// Process footnotes
@@ -11856,7 +12088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports) {
 
 	// Process definition lists
@@ -12087,7 +12319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports) {
 
 	// Enclose abbreviations in <abbr> tags
@@ -12240,7 +12472,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -12366,7 +12598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -12492,7 +12724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -12687,11 +12919,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
-	var _clone = __webpack_require__(83);
+	var _clone = __webpack_require__(84);
 
 	var _clone2 = _interopRequireDefault(_clone);
 
-	var _uslug = __webpack_require__(88);
+	var _uslug = __webpack_require__(89);
 
 	var _uslug2 = _interopRequireDefault(_uslug);
 
@@ -12805,7 +13037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var clone = (function() {
@@ -12969,10 +13201,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  module.exports = clone;
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(84).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(85).Buffer))
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -12985,9 +13217,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict'
 
-	var base64 = __webpack_require__(85)
-	var ieee754 = __webpack_require__(86)
-	var isArray = __webpack_require__(87)
+	var base64 = __webpack_require__(86)
+	var ieee754 = __webpack_require__(87)
+	var isArray = __webpack_require__(88)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -14524,10 +14756,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return i
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(84).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(85).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -14657,7 +14889,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -14747,7 +14979,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -14758,21 +14990,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 88 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(89);
-
-/***/ },
 /* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__(90);
+
+/***/ },
+/* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
 	(function() {
-	  var L = __webpack_require__(90).L,
-	      N = __webpack_require__(91).N,
-	      Z = __webpack_require__(92).Z,
-	      M = __webpack_require__(93).M,
-	      unorm = __webpack_require__(94);
+	  var L = __webpack_require__(91).L,
+	      N = __webpack_require__(92).N,
+	      Z = __webpack_require__(93).Z,
+	      M = __webpack_require__(94).M,
+	      unorm = __webpack_require__(95);
 
 	  var _unicodeCategory = function(code) {
 	    if (~L.indexOf(code)) return 'L';
@@ -14827,7 +15059,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}());
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports) {
 
 	/* 
@@ -14848,7 +15080,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports) {
 
 	/*
@@ -14867,7 +15099,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports) {
 
 	/*
@@ -14886,7 +15118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports) {
 
 	/*
@@ -14905,7 +15137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (root) {
@@ -15353,7 +15585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {

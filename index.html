@@ -2,29 +2,29 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
   <title>vue-markdown</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="dist/css/prism.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="dist/css/prism.css">
 </head>
 
 <body>
-  <div class="container">
-    <h1>vue-markdown</h1>
-    <div class="row">
-      <div class="col-sm-12 col-md-9">
-        <div class="panel panel-default">
-          <div class="panel-heading">Source</div>
-          <div class="panel-body">
-            <textarea class="form-control" rows="12" v-model="source"># h1 Heading 8-)
+  <div class="container full-height">
+    <h2>VueMarkdown Live Demo <small><a href="toc.html" >TOC Demo</a></small></h2>
+    <div class="row full-height">
+      <section class="col-xs-6 full-height">
+        <vue-markdown class="result-html full-height" :toc="true" :source="source"></vue-markdown>
+      </section>
+      <div class="col-xs-6 full-height">
+        <textarea class="source full-height" v-model="source"># h1 Heading 8-)
 ## h2 Heading
 ### h3 Heading
 #### h4 Heading
 ##### h5 Heading
 ###### h6 Heading
 
-## Horizontal Rules
+<h2>Horizontal Rules</h2>
 
 ___
 
@@ -123,13 +123,19 @@ console.log(foo(5));
 
 ## Tables
 
-{| class="table"
 | Option | Description |
 | ------ | ----------- |
 | data   | path to data files to supply the data that will be passed into templates. |
 | engine | engine to be used for processing templates. Handlebars is the default. |
 | ext    | extension to be used for dest files. |
-|}
+
+Right aligned columns
+
+| Option | Description |
+| ------:| -----------:|
+| data   | path to data files to supply the data that will be passed into templates. |
+| engine | engine to be used for processing templates. Handlebars is the default. |
+| ext    | extension to be used for dest files. |
 
 ## Links
 
@@ -155,7 +161,7 @@ With a reference later in the document defining the URL location:
 
 ### Emojies
 
-> Classic markup: :wink: :crush: :cry: :tear: :laughing: :yum:
+> Classic markup: :wink: :cry: :laughing: :yum:
 >
 > Shortcuts (emoticons): :-) :-( 8-) ;)
 
@@ -224,54 +230,20 @@ This is HTML abbreviation example.
 
 It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 
-*[HTML]: Hyper Text Markup Language
-</textarea>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-12 col-md-3">
-        <div class="panel panel-default">
-          <div class="panel-heading">TOC</div>
-          <div id="my-toc" class="panel-body"></div>
-        </div>
-      </div>
-      <div class="col-sm-12 col-md-6" v-if="source">
-        <div class="panel panel-default">
-          <div class="panel-heading">Parsed Source</div>
-          <div class="panel-body">
-            <vue-markdown :source="previewSource"></vue-markdown>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-12 col-md-6" v-if="source">
-        <div class="panel panel-default">
-          <div class="panel-heading">Preview</div>
-          <div class="panel-body">
-            <vue-markdown :source="source" :toc="true" v-on:parsed="parsed" v-on:toc="toc"></vue-markdown>
-          </div>
-        </div>
+*[HTML]: Hyper Text Markup Language</textarea>
       </div>
     </div>
   </div>
-  <script type="text/javascript" src="dist/js/vue.js"></script>
-  <script type="text/javascript" src="dist/vue-markdown.js"></script>
+  <div class="gh-ribbon"><a href="https://github.com/miaolz123/vue-markdown" target="_blank">Fork me on GitHub</a></div>
+  <script src="dist/js/vue.js"></script>
+  <script src="dist/vue-markdown.js"></script>
+  <script src="dist/js/main.js"></script>
   <script>
     Vue.use(VueMarkdown);
     var vm = new Vue({
       el: "body",
       data: {
-        source: "",
-        previewSource: "```markup\n",
-        tocSource: ""
-      },
-      methods: {
-        parsed: function(html) {
-          this.previewSource = "```markup\n" + html;
-        },
-        toc: function(tocHtml) {
-          this.tocSource = tocHtml;
-          console.log(tocHtml);
-        }
+        source: ""
       }
     });
   </script>

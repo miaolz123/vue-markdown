@@ -46,10 +46,8 @@
     "markdown-it-mark": "^2.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
-    "markdown-it-synapse-table": "^1.0.6",
     "markdown-it-toc-and-anchor": "^4.1.1",
     "prismjs": "^1.4.1",
-    "vue": "^1.0.22",
     "vue-loader": "^8.3.1",
     "webpack": "^1.13.0"
   }
