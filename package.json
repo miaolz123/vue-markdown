@@ -10,8 +10,9 @@
     "src"
   ],
   "scripts": {
-    "start": "webpack --config webpack.default.js",
-    "build": "webpack --config webpack.config.js",
+    "start": "webpack --config webpack.config.js",
+    "min": "uglifyjs ./dist/vue-markdown.js -m -c --noerr -o ./dist/vue-markdown.min.js",
+    "build": "webpack --config webpack.common.js",
     "test": "echo true"
   },
   "repository": {
@@ -52,7 +53,6 @@
     "markdown-it-mark": "^2.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
-    "markdown-it-toc-and-anchor": "^4.1.1",
-    "prismjs": "^1.4.1"
+    "markdown-it-toc-and-anchor": "^4.1.1"
   }
 }
