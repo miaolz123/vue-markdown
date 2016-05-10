@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="dist/css/prism.css">
+  <!--<link rel="stylesheet" href="dist/css/prism.css">-->
 </head>
 
 <body>
@@ -110,12 +110,22 @@ Sample text here...
 ```
 Syntax highlighting
 
-``` js
+``` javascript
 var foo = function (bar) {
   return bar++;
 };
 
 console.log(foo(5));
+```
+
+``` go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, world!")
+}
 ```
 
 ## Tables
@@ -230,7 +240,7 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 *[HTML]: Hyper Text Markup Language</textarea>
       </div>
       <section class="col-xs-6 full-height">
-        <vue-markdown class="result-html full-height" :toc="true" :source="source"></vue-markdown>
+        <vue-markdown class="result-html full-height" :highlights="['go']" :prism-plugins="['show-language']" :source="source"></vue-markdown>
       </section>
     </div>
   </div>

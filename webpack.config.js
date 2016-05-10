@@ -29,6 +29,9 @@ module.exports = {
         loader: "babel",
         exclude: /node_modules/
       }, {
+        test: /\.css$/,
+        loader: "style!css"
+      }, {
         test: /\.json$/,
         loader: "json-loader"
       }]

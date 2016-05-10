@@ -44,6 +44,16 @@ export default {
       type: Boolean,
       default: true,
     },
+    highlights: {
+      type: Array,
+    },
+    prismTheme: {
+      type: String,
+      default: 'default',
+    },
+    prismPlugins: {
+      type: Array,
+    },
     quotes: {
       type: String,
       default: '“”‘’',
@@ -92,6 +102,18 @@ export default {
     },
   },
   ready() {
+    if (this.highlights) this.highlights.forEach((lang) => {
+      require(`prismjs/components/prism-${lang}`)
+    })
+    const prismThemes = ['coy', 'dark', 'funky', 'okaidia', 'solarizedlight',
+      'tomorrow', 'twilight']
+    if (prismThemes.indexOf(this.prismTheme) > -1) {
+      require(`prismjs/themes/prism-${this.prismTheme}.css`)
+    } else require('prismjs/themes/prism.css')
+    if (this.prismPlugins) this.prismPlugins.forEach((plugin) => {
+      require(`prismjs/plugins/${plugin}/prism-${plugin}.js`)
+      require(`prismjs/plugins/${plugin}/prism-${plugin}.css`)
+    })
     md.set({
       html: this.html,
       xhtmlOut: this.xhtmlOut,
