@@ -1,5 +1,5 @@
 /**
- * vue-helmet v1.0.1
+ * vue-helmet v1.1.0
  * https://github.com/miaolz123/vue-helmet
  * MIT License
  */
@@ -108,9 +108,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var md = new _markdownIt2.default().use(_markdownItEmoji2.default).use(_markdownItSub2.default).use(_markdownItSup2.default).use(_markdownItFootnote2.default).use(_markdownItDeflist2.default).use(_markdownItAbbr2.default).use(_markdownItIns2.default).use(_markdownItMark2.default);
+	var md = new _markdownIt2.default();
 
-	var _rende = function _rende(root) {
+	var rende = function rende(root) {
+	  md = new _markdownIt2.default().use(_markdownItSub2.default).use(_markdownItSup2.default).use(_markdownItFootnote2.default).use(_markdownItDeflist2.default).use(_markdownItAbbr2.default).use(_markdownItIns2.default).use(_markdownItMark2.default);
+	  if (root.emoji) md.use(_markdownItEmoji2.default);
 	  md.set({
 	    html: root.html,
 	    xhtmlOut: root.xhtmlOut,
@@ -124,30 +126,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return '<table class="' + root.tableClass + '">\n';
 	  };
 	  if (!root.tocLastLevel) root.tocLastLevel = root.tocFirstLevel + 1;
-	  if (root.toc) md.use(_markdownItTocAndAnchor2.default, {
-	    tocClassName: root.tocClass,
-	    tocFirstLevel: root.tocFirstLevel,
-	    tocLastLevel: root.tocLastLevel,
-	    anchorLink: root.tocAnchorLink,
-	    anchorLinkSymbol: root.tocAnchorLinkSymbol,
-	    anchorLinkSpace: root.tocAnchorLinkSpace,
-	    anchorClassName: root.tocAnchorClass,
-	    anchorLinkSymbolClassName: root.tocAnchorLinkClass,
-	    tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
-	      if (tocHtml) {
-	        if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = tocHtml;
-	        root.$dispatch('toc', tocHtml);
+	  if (root.toc) {
+	    md.use(_markdownItTocAndAnchor2.default, {
+	      tocClassName: root.tocClass,
+	      tocFirstLevel: root.tocFirstLevel,
+	      tocLastLevel: root.tocLastLevel,
+	      anchorLink: root.tocAnchorLink,
+	      anchorLinkSymbol: root.tocAnchorLinkSymbol,
+	      anchorLinkSpace: root.tocAnchorLinkSpace,
+	      anchorClassName: root.tocAnchorClass,
+	      anchorLinkSymbolClassName: root.tocAnchorLinkClass,
+	      tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
+	        if (tocHtml) {
+	          if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = tocHtml;
+	          root.$dispatch('toc-rendered', tocHtml);
+	        }
 	      }
-	    }
-	  });
-	  var outHtml = md.render(root.source);
-	  if (root.show) root.$el.innerHTML = outHtml;
-	  root.$dispatch('parsed', outHtml);
+	    });
+	  } else if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = '';
+	  var outHtml = root.show ? md.render(root.source) : '';
+	  root.$el.innerHTML = outHtml;
+	  root.$dispatch('rendered', outHtml);
 	};
 
 	exports.default = {
-	  template: '<div v-on:click="rende" ></div>',
+	  template: '<div></div>',
 	  props: {
+	    watches: {
+	      type: Array,
+	      default: function _default() {
+	        return ['source', 'show', 'toc'];
+	      }
+	    },
 	    source: {
 	      type: String,
 	      default: ''
@@ -169,6 +179,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: true
 	    },
 	    linkify: {
+	      type: Boolean,
+	      default: true
+	    },
+	    emoji: {
 	      type: Boolean,
 	      default: true
 	    },
@@ -232,17 +246,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      msg: 'hello'
 	    };
 	  },
-	  methods: {
-	    rende: function rende() {
-	      _rende(this);
-	    }
-	  },
-	  ready: function ready() {
-	    _rende(this);
+	  created: function created() {
+	    var _this = this;
+
 	    this.$watch('source', function () {
-	      var outHtml = md.render(this.source);
-	      if (this.show) this.$el.innerHTML = outHtml;
-	      this.$dispatch('parsed', outHtml);
+	      rende(_this);
+	    });
+	    this.watches.forEach(function (v) {
+	      _this.$watch(v, function () {
+	        rende(_this);
+	      });
 	    });
 	  }
 	};

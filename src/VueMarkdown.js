@@ -9,10 +9,12 @@ import insert from 'markdown-it-ins'
 import mark from 'markdown-it-mark'
 import toc from 'markdown-it-toc-and-anchor'
 
-const md = new markdownIt().use(emoji).use(subscript).use(superscript)
-  .use(footnote).use(deflist).use(abbreviation).use(insert).use(mark)
+let md = new markdownIt()
 
 const rende = (root) => {
+  md = new markdownIt().use(subscript).use(superscript)
+    .use(footnote).use(deflist).use(abbreviation).use(insert).use(mark)
+  if (root.emoji) md.use(emoji)
   md.set({
     html: root.html,
     xhtmlOut: root.xhtmlOut,
@@ -24,31 +26,38 @@ const rende = (root) => {
   })
   md.renderer.rules.table_open = () => `<table class="${root.tableClass}">\n`
   if (!root.tocLastLevel) root.tocLastLevel = root.tocFirstLevel + 1
-  if (root.toc) md.use(toc, {
-    tocClassName: root.tocClass,
-    tocFirstLevel: root.tocFirstLevel,
-    tocLastLevel: root.tocLastLevel,
-    anchorLink: root.tocAnchorLink,
-    anchorLinkSymbol: root.tocAnchorLinkSymbol,
-    anchorLinkSpace: root.tocAnchorLinkSpace,
-    anchorClassName: root.tocAnchorClass,
-    anchorLinkSymbolClassName: root.tocAnchorLinkClass,
-    tocCallback: (tocMarkdown, tocArray, tocHtml) => {
-      if (tocHtml) {
-        if (root.tocId && document.getElementById(root.tocId))
-          document.getElementById(root.tocId).innerHTML = tocHtml
-        root.$dispatch('toc', tocHtml)
-      }
-    },
-  })
-  const outHtml = md.render(root.source)
-  if (root.show) root.$el.innerHTML = outHtml
-  root.$dispatch('parsed', outHtml)
+  if (root.toc) {
+    md.use(toc, {
+      tocClassName: root.tocClass,
+      tocFirstLevel: root.tocFirstLevel,
+      tocLastLevel: root.tocLastLevel,
+      anchorLink: root.tocAnchorLink,
+      anchorLinkSymbol: root.tocAnchorLinkSymbol,
+      anchorLinkSpace: root.tocAnchorLinkSpace,
+      anchorClassName: root.tocAnchorClass,
+      anchorLinkSymbolClassName: root.tocAnchorLinkClass,
+      tocCallback: (tocMarkdown, tocArray, tocHtml) => {
+        if (tocHtml) {
+          if (root.tocId && document.getElementById(root.tocId))
+            document.getElementById(root.tocId).innerHTML = tocHtml
+          root.$dispatch('toc-rendered', tocHtml)
+        }
+      },
+    })
+  } else if (root.tocId && document.getElementById(root.tocId))
+    document.getElementById(root.tocId).innerHTML = ''
+  const outHtml = root.show ? md.render(root.source) : ''
+  root.$el.innerHTML = outHtml
+  root.$dispatch('rendered', outHtml)
 }
 
 export default {
-  template: '<div v-on:click="rende" ></div>',
+  template: '<div></div>',
   props: {
+    watches: {
+      type: Array,
+      default: () => ['source', 'show', 'toc'],
+    },
     source: {
       type: String,
       default: ``,
@@ -70,6 +79,10 @@ export default {
       default: true,
     },
     linkify: {
+      type: Boolean,
+      default: true,
+    },
+    emoji: {
       type: Boolean,
       default: true,
     },
@@ -131,17 +144,10 @@ export default {
   data: () => ({
     msg: 'hello',
   }),
-  methods: {
-    rende: function () {
-      rende(this)
-    }
-  },
-  ready() {
-    rende(this)
-    this.$watch('source', function () {
-      const outHtml = md.render(this.source)
-      if (this.show) this.$el.innerHTML = outHtml
-      this.$dispatch('parsed', outHtml)
+  created() {
+    this.$watch('source', () => { rende(this) })
+    this.watches.forEach((v) => {
+      this.$watch(v, () => { rende(this) })
     })
   },
 }
