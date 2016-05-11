@@ -1,5 +1,5 @@
 /**
- * vue-helmet v1.0.1
+ * vue-helmet v1.1.0
  * https://github.com/miaolz123/vue-helmet
  * MIT License
  */
@@ -91,57 +91,94 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _markdownIt2 = _interopRequireDefault(_markdownIt);
 
-	var _markdownItSynapseTable = __webpack_require__(70);
-
-	var _markdownItSynapseTable2 = _interopRequireDefault(_markdownItSynapseTable);
-
-	var _markdownItEmoji = __webpack_require__(71);
+	var _markdownItEmoji = __webpack_require__(70);
 
 	var _markdownItEmoji2 = _interopRequireDefault(_markdownItEmoji);
 
-	var _markdownItSub = __webpack_require__(77);
+	var _markdownItSub = __webpack_require__(76);
 
 	var _markdownItSub2 = _interopRequireDefault(_markdownItSub);
 
-	var _markdownItSup = __webpack_require__(78);
+	var _markdownItSup = __webpack_require__(77);
 
 	var _markdownItSup2 = _interopRequireDefault(_markdownItSup);
 
-	var _markdownItFootnote = __webpack_require__(79);
+	var _markdownItFootnote = __webpack_require__(78);
 
 	var _markdownItFootnote2 = _interopRequireDefault(_markdownItFootnote);
 
-	var _markdownItDeflist = __webpack_require__(80);
+	var _markdownItDeflist = __webpack_require__(79);
 
 	var _markdownItDeflist2 = _interopRequireDefault(_markdownItDeflist);
 
-	var _markdownItAbbr = __webpack_require__(81);
+	var _markdownItAbbr = __webpack_require__(80);
 
 	var _markdownItAbbr2 = _interopRequireDefault(_markdownItAbbr);
 
-	var _markdownItIns = __webpack_require__(82);
+	var _markdownItIns = __webpack_require__(81);
 
 	var _markdownItIns2 = _interopRequireDefault(_markdownItIns);
 
-	var _markdownItMark = __webpack_require__(83);
+	var _markdownItMark = __webpack_require__(82);
 
 	var _markdownItMark2 = _interopRequireDefault(_markdownItMark);
 
-	var _markdownItTocAndAnchor = __webpack_require__(84);
+	var _markdownItTocAndAnchor = __webpack_require__(83);
 
 	var _markdownItTocAndAnchor2 = _interopRequireDefault(_markdownItTocAndAnchor);
 
-	var _prismjs = __webpack_require__(97);
-
-	var _prismjs2 = _interopRequireDefault(_prismjs);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var md = new _markdownIt2.default().use(_markdownItEmoji2.default).use(_markdownItSub2.default).use(_markdownItSup2.default).use(_markdownItFootnote2.default).use(_markdownItDeflist2.default).use(_markdownItAbbr2.default).use(_markdownItIns2.default).use(_markdownItMark2.default);
+	var md = new _markdownIt2.default();
+
+	var rende = function rende(root) {
+	  md = new _markdownIt2.default().use(_markdownItSub2.default).use(_markdownItSup2.default).use(_markdownItFootnote2.default).use(_markdownItDeflist2.default).use(_markdownItAbbr2.default).use(_markdownItIns2.default).use(_markdownItMark2.default);
+	  if (root.emoji) md.use(_markdownItEmoji2.default);
+	  md.set({
+	    html: root.html,
+	    xhtmlOut: root.xhtmlOut,
+	    breaks: root.breaks,
+	    linkify: root.linkify,
+	    typographer: root.typographer,
+	    langPrefix: root.langPrefix,
+	    quotes: root.quotes
+	  });
+	  md.renderer.rules.table_open = function () {
+	    return '<table class="' + root.tableClass + '">\n';
+	  };
+	  if (!root.tocLastLevel) root.tocLastLevel = root.tocFirstLevel + 1;
+	  if (root.toc) {
+	    md.use(_markdownItTocAndAnchor2.default, {
+	      tocClassName: root.tocClass,
+	      tocFirstLevel: root.tocFirstLevel,
+	      tocLastLevel: root.tocLastLevel,
+	      anchorLink: root.tocAnchorLink,
+	      anchorLinkSymbol: root.tocAnchorLinkSymbol,
+	      anchorLinkSpace: root.tocAnchorLinkSpace,
+	      anchorClassName: root.tocAnchorClass,
+	      anchorLinkSymbolClassName: root.tocAnchorLinkClass,
+	      tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
+	        if (tocHtml) {
+	          if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = tocHtml;
+	          root.$dispatch('toc-rendered', tocHtml);
+	        }
+	      }
+	    });
+	  } else if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = '';
+	  var outHtml = root.show ? md.render(root.source) : '';
+	  root.$el.innerHTML = outHtml;
+	  root.$dispatch('rendered', outHtml);
+	};
 
 	exports.default = {
 	  template: '<div></div>',
 	  props: {
+	    watches: {
+	      type: Array,
+	      default: function _default() {
+	        return ['source', 'show', 'toc'];
+	      }
+	    },
 	    source: {
 	      type: String,
 	      default: ''
@@ -166,9 +203,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      type: Boolean,
 	      default: true
 	    },
+	    emoji: {
+	      type: Boolean,
+	      default: true
+	    },
 	    typographer: {
 	      type: Boolean,
 	      default: true
+	    },
+	    langPrefix: {
+	      type: String,
+	      default: 'language-'
 	    },
 	    quotes: {
 	      type: String,
@@ -187,7 +232,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    tocClass: {
 	      type: String,
-	      default: 'section table-of-contents'
+	      default: 'table-of-contents'
 	    },
 	    tocFirstLevel: {
 	      type: Number,
@@ -217,49 +262,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: 'toc-anchor-link'
 	    }
 	  },
-	  ready: function ready() {
+	  data: function data() {
+	    return {
+	      msg: 'hello'
+	    };
+	  },
+	  created: function created() {
 	    var _this = this;
 
-	    md.set({
-	      html: this.html,
-	      xhtmlOut: this.xhtmlOut,
-	      breaks: this.breaks,
-	      linkify: this.linkify,
-	      typographer: this.typographer,
-	      quotes: this.quotes,
-	      highlight: function highlight(code, lang) {
-	        var l = _prismjs2.default.languages[lang];
-	        if (l) return _prismjs2.default.highlight(code, l);
-	        return '';
-	      }
-	    });
-	    md.renderer.rules.table_open = function () {
-	      return '<table class="' + _this.tableClass + '">\n';
-	    };
-	    if (!this.tocLastLevel) this.tocLastLevel = this.tocFirstLevel + 1;
-	    if (this.toc) md.use(_markdownItTocAndAnchor2.default, {
-	      tocClassName: this.tocClass,
-	      tocFirstLevel: this.tocFirstLevel,
-	      tocLastLevel: this.tocLastLevel,
-	      anchorLink: this.tocAnchorLink,
-	      anchorLinkSymbol: this.tocAnchorLinkSymbol,
-	      anchorLinkSpace: this.tocAnchorLinkSpace,
-	      anchorClassName: this.tocAnchorClass,
-	      anchorLinkSymbolClassName: this.tocAnchorLinkClass,
-	      tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
-	        if (tocHtml) {
-	          if (_this.tocId && document.getElementById(_this.tocId)) document.getElementById(_this.tocId).innerHTML = tocHtml;
-	          _this.$dispatch('toc', tocHtml);
-	        }
-	      }
-	    });
-	    var outHtml = md.render(this.source);
-	    if (this.show) this.$el.innerHTML = outHtml;
-	    this.$dispatch('parsed', outHtml);
 	    this.$watch('source', function () {
-	      var outHtml = md.render(this.source);
-	      if (this.show) this.$el.innerHTML = outHtml;
-	      this.$dispatch('parsed', outHtml);
+	      rende(_this);
+	    });
+	    this.watches.forEach(function (v) {
+	      _this.$watch(v, function () {
+	        rende(_this);
+	      });
 	    });
 	  }
 	};
@@ -10310,228 +10327,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 70 */
-/***/ function(module, exports) {
-
-	// Process '## headings'
-
-	'use strict';
-
-	module.exports = function synapse_table_plugin(md) {
-	    var tableClassStartRE = new RegExp(
-	            '^\\s*{[|]{1}\\s*class\\s*=\\s*"\\s*(.*)"\\s*');
-	    var tableClassEndRE = new RegExp('^\\s*[|]{1}}\\s*');
-	    var centerStartRE = new RegExp('^\s*[-]{1}[>]{1}.*');
-	    var centerEndRE = new RegExp('.*[<]{1}[-]{1}\s*$');
-	    var outerPipesRE = new RegExp('^\s*[|]{1}.+[|]{1}\s*$');
-	    function getLine(state, line) {
-	      var pos = state.bMarks[line] + state.blkIndent, max = state.eMarks[line];
-
-	      return state.src.substr(pos, max - pos);
-	    }
-
-	    function escapedSplit(str) {
-	      if (outerPipesRE.test(str)) {
-	        str = str.replace(/^\||\|$/g, '');
-	      }
-
-	      var result = [], pos = 0, max = str.length, ch, escapes = 0, lastPos = 0, backTicked = false, lastBackTick = 0;
-
-	      ch = str.charCodeAt(pos);
-
-	      while (pos < max) {
-	        if (ch === 0x60 && (escapes % 2 === 0)) { // `
-	          backTicked = !backTicked;
-	          lastBackTick = pos;
-	        } else if (ch === 0x7c && (escapes % 2 === 0) && !backTicked) { // |
-	          result.push(str.substring(lastPos, pos));
-	          lastPos = pos + 1;
-	        } else if (ch === 0x5c) { // \
-	          escapes++;
-	        } else {
-	          escapes = 0;
-	        }
-
-	        pos++;
-
-	        // If there was an un-closed backtick, go back to just after
-	        // the last backtick, but as if it was a normal character
-	        if (pos === max && backTicked) {
-	          backTicked = false;
-	          pos = lastBackTick + 1;
-	        }
-
-	        ch = str.charCodeAt(pos);
-	      }
-
-	      result.push(str.substring(lastPos));
-
-	      return result;
-	    }
-
-	    function table(state, startLine, endLine, silent) {
-	      var lineText, pos, i, nextLine, columns, columnCount, token,
-	        tableLines, tbodyLines, classNames, tableBodyStartLine, headerLine,
-	        isSpecialSyntaxTable = false, wrapWithDiv = false;
-	      // should have at least two lines
-	      // (!!! Synapse change, used to be 3 due to required ---|---|--- line).  Header and single row.
-	      if (startLine + 1 > endLine) {
-	        return false;
-	      }
-
-	      pos = state.bMarks[startLine] + state.tShift[startLine];
-	      if (pos >= state.eMarks[startLine]) {
-	        return false;
-	      }
-	      lineText = getLine(state, startLine);
-
-	      // look for optional class definition start, like '{| class="border"'
-	      if (tableClassStartRE.test(lineText)) {
-	        // this table definition includes class names, so the start marker is {| and end marker will be |}
-	        classNames = lineText.match(tableClassStartRE)[1];
-	        wrapWithDiv = classNames.indexOf('short') !== -1;
-	        headerLine = startLine + 1;
-	        // If tableClassStartRE passes, then it's definitely a table.
-	        isSpecialSyntaxTable = true;
-	      } else {
-	        headerLine = startLine;
-	      }
-
-	      if (state.sCount[headerLine] < state.blkIndent) {
-	        return false;
-	      }
-
-	      pos = state.bMarks[headerLine] + state.tShift[headerLine];
-	      if (pos >= state.eMarks[headerLine]) {
-	        return false;
-	      }
-
-	      // read column headers
-	      lineText = getLine(state, headerLine).trim();
-	      if (lineText.indexOf('|') === -1 && !isSpecialSyntaxTable) {
-	        return false;
-	      }
-
-	      // has a '|'.  If it looks like there is math on this line, skip it.
-	      if (lineText.indexOf('$$') !== -1) {
-	        return false;
-	      }
-	      columns = escapedSplit(lineText);
-	      // header row will define an amount of columns in the entire table,
-	      // and align row shouldn't be smaller than that (the rest of the rows can)
-	      columnCount = columns.length;
-
-	      if (silent) {
-	        return true;
-	      }
-
-	      if (wrapWithDiv) {
-	        token = state.push('div_wrapper', 'div', 1);
-	        token.attrs = [ [ 'class', ' markdowntableWrap ' ] ];
-	      }
-	      token = state.push('table_open', 'table', 1);
-	      token.map = tableLines = [ startLine, 0 ];
-	      if (classNames) {
-	        token.attrs = [ [ 'class', ' ' + classNames + ' ' ] ];
-	        // start line of the table (header) is really the second line.
-	        startLine++;
-	      }
-
-	      lineText = getLine(state, headerLine + 1).trim();
-
-	      // If this line is of the form ---|---|---, then we have column headers and we should skip this line.
-	      // Else, no column headers and we should skip to the body.
-	      if (/^[-:| ]+$/.test(lineText) && lineText.indexOf('|') !== -1) {
-	        // we have column headers
-	        tableBodyStartLine = headerLine + 2;
-	        token = state.push('thead_open', 'thead', 1);
-	        token.map = [ startLine, startLine + 1 ];
-
-	        token = state.push('tr_open', 'tr', 1);
-	        token.map = [ startLine, startLine + 1 ];
-
-	        for (i = 0; i < columns.length; i++) {
-	          token = state.push('th_open', 'th', 1);
-	          token.map = [ startLine, startLine + 1 ];
-
-	          token = state.push('inline', '', 0);
-	          token.content = columns[i].trim();
-	          token.map = [ startLine, startLine + 1 ];
-	          token.children = [];
-
-	          token = state.push('th_close', 'th', -1);
-	        }
-
-	        token = state.push('tr_close', 'tr', -1);
-	        token = state.push('thead_close', 'thead', -1);
-	      } else {
-	        // no column headers
-	        tableBodyStartLine = headerLine;
-	      }
-
-	      token = state.push('tbody_open', 'tbody', 1);
-	      token.map = tbodyLines = [ tableBodyStartLine, 0 ];
-
-	      for (nextLine = tableBodyStartLine; nextLine < endLine; nextLine++) {
-	        if (state.sCount[nextLine] < state.blkIndent) {
-	          break;
-	        }
-
-	        lineText = getLine(state, nextLine).trim();
-	        if (tableClassEndRE.test(lineText)) {
-	          // end of table with class definitions. Include this line in the table definition
-	          nextLine++;
-	          break;
-	        }
-	        if (lineText.indexOf('|') === -1 && !isSpecialSyntaxTable) {
-	          break;
-	        }
-	        columns = escapedSplit(lineText);
-
-	        token = state.push('tr_open', 'tr', 1);
-	        // if line starts with -> and ends with <-, then eat these characters (SWC-3000)
-	        if (centerStartRE.test(columns[0]) && centerEndRE.test(columns[columnCount - 1])) {
-	          columns[0] = columns[0].substring(columns[0].indexOf('->') + 2);
-	          columns[columnCount - 1] = columns[columnCount - 1].substring(0, columns[columnCount - 1].indexOf('<-'));
-	        }
-	        for (i = 0; i < columnCount; i++) {
-	          token = state.push('td_open', 'td', 1);
-
-	          token = state.push('inline', '', 0);
-	          token.content = columns[i] ? columns[i].trim() : '';
-	          token.children = [];
-
-	          token = state.push('td_close', 'td', -1);
-	        }
-	        token = state.push('tr_close', 'tr', -1);
-	      }
-	      token = state.push('tbody_close', 'tbody', -1);
-	      token = state.push('table_close', 'table', -1);
-
-	      if (wrapWithDiv) {
-	        token = state.push('div_wrapper', 'div', -1);
-	      }
-
-	      tableLines[1] = tbodyLines[1] = nextLine;
-	      state.line = nextLine;
-	      return true;
-	    }
-	    var rulesCanBeTerminated = [ 'paragraph', 'reference' ];
-	    md.block.ruler.at('table', table, { alt: (rulesCanBeTerminated).slice() });
-	  };
-
-
-/***/ },
-/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 
-	var emojies_defs      = __webpack_require__(72);
-	var emojies_shortcuts = __webpack_require__(73);
-	var emoji_html        = __webpack_require__(74);
-	var emoji_replace     = __webpack_require__(75);
-	var normalize_opts    = __webpack_require__(76);
+	var emojies_defs      = __webpack_require__(71);
+	var emojies_shortcuts = __webpack_require__(72);
+	var emoji_html        = __webpack_require__(73);
+	var emoji_replace     = __webpack_require__(74);
+	var normalize_opts    = __webpack_require__(75);
 
 
 	module.exports = function emoji_plugin(md, options) {
@@ -10550,7 +10355,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 72 */
+/* 71 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -11427,7 +11232,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 73 */
+/* 72 */
 /***/ function(module, exports) {
 
 	// Emoticons -> Emoji mapping.
@@ -11474,7 +11279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 74 */
+/* 73 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -11485,7 +11290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 75 */
+/* 74 */
 /***/ function(module, exports) {
 
 	// Emojies & shortcuts replacement logic.
@@ -11570,7 +11375,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 76 */
+/* 75 */
 /***/ function(module, exports) {
 
 	// Convert input options to more useable format
@@ -11634,7 +11439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 77 */
+/* 76 */
 /***/ function(module, exports) {
 
 	// Process ~subscript~
@@ -11706,7 +11511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 78 */
+/* 77 */
 /***/ function(module, exports) {
 
 	// Process ^superscript^
@@ -11777,7 +11582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 79 */
+/* 78 */
 /***/ function(module, exports) {
 
 	// Process footnotes
@@ -12109,7 +11914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 80 */
+/* 79 */
 /***/ function(module, exports) {
 
 	// Process definition lists
@@ -12340,7 +12145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 81 */
+/* 80 */
 /***/ function(module, exports) {
 
 	// Enclose abbreviations in <abbr> tags
@@ -12493,7 +12298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 82 */
+/* 81 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -12619,7 +12424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 83 */
+/* 82 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -12745,7 +12550,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 84 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -12940,11 +12745,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
-	var _clone = __webpack_require__(85);
+	var _clone = __webpack_require__(84);
 
 	var _clone2 = _interopRequireDefault(_clone);
 
-	var _uslug = __webpack_require__(90);
+	var _uslug = __webpack_require__(89);
 
 	var _uslug2 = _interopRequireDefault(_uslug);
 
@@ -13058,7 +12863,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 85 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var clone = (function() {
@@ -13222,10 +13027,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  module.exports = clone;
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(86).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(85).Buffer))
 
 /***/ },
-/* 86 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -13238,9 +13043,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict'
 
-	var base64 = __webpack_require__(87)
-	var ieee754 = __webpack_require__(88)
-	var isArray = __webpack_require__(89)
+	var base64 = __webpack_require__(86)
+	var ieee754 = __webpack_require__(87)
+	var isArray = __webpack_require__(88)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -14777,10 +14582,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return i
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(86).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(85).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 87 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -14910,7 +14715,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 88 */
+/* 87 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -15000,7 +14805,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 89 */
+/* 88 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -15011,21 +14816,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(90);
+
+/***/ },
 /* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(91);
-
-/***/ },
-/* 91 */
-/***/ function(module, exports, __webpack_require__) {
-
 	(function() {
-	  var L = __webpack_require__(92).L,
-	      N = __webpack_require__(93).N,
-	      Z = __webpack_require__(94).Z,
-	      M = __webpack_require__(95).M,
-	      unorm = __webpack_require__(96);
+	  var L = __webpack_require__(91).L,
+	      N = __webpack_require__(92).N,
+	      Z = __webpack_require__(93).Z,
+	      M = __webpack_require__(94).M,
+	      unorm = __webpack_require__(95);
 
 	  var _unicodeCategory = function(code) {
 	    if (~L.indexOf(code)) return 'L';
@@ -15080,7 +14885,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}());
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports) {
 
 	/* 
@@ -15101,7 +14906,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports) {
 
 	/*
@@ -15120,7 +14925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 94 */
+/* 93 */
 /***/ function(module, exports) {
 
 	/*
@@ -15139,7 +14944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 95 */
+/* 94 */
 /***/ function(module, exports) {
 
 	/*
@@ -15158,7 +14963,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 96 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (root) {
@@ -15604,730 +15409,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	   }
 	}(this));
 
-
-/***/ },
-/* 97 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {
-	/* **********************************************
-	     Begin prism-core.js
-	********************************************** */
-
-	var _self = (typeof window !== 'undefined')
-		? window   // if in browser
-		: (
-			(typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope)
-			? self // if in worker
-			: {}   // if in node js
-		);
-
-	/**
-	 * Prism: Lightweight, robust, elegant syntax highlighting
-	 * MIT license http://www.opensource.org/licenses/mit-license.php/
-	 * @author Lea Verou http://lea.verou.me
-	 */
-
-	var Prism = (function(){
-
-	// Private helper vars
-	var lang = /\blang(?:uage)?-(\w+)\b/i;
-	var uniqueId = 0;
-
-	var _ = _self.Prism = {
-		util: {
-			encode: function (tokens) {
-				if (tokens instanceof Token) {
-					return new Token(tokens.type, _.util.encode(tokens.content), tokens.alias);
-				} else if (_.util.type(tokens) === 'Array') {
-					return tokens.map(_.util.encode);
-				} else {
-					return tokens.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\u00a0/g, ' ');
-				}
-			},
-
-			type: function (o) {
-				return Object.prototype.toString.call(o).match(/\[object (\w+)\]/)[1];
-			},
-
-			objId: function (obj) {
-				if (!obj['__id']) {
-					Object.defineProperty(obj, '__id', { value: ++uniqueId });
-				}
-				return obj['__id'];
-			},
-
-			// Deep clone a language definition (e.g. to extend it)
-			clone: function (o) {
-				var type = _.util.type(o);
-
-				switch (type) {
-					case 'Object':
-						var clone = {};
-
-						for (var key in o) {
-							if (o.hasOwnProperty(key)) {
-								clone[key] = _.util.clone(o[key]);
-							}
-						}
-
-						return clone;
-
-					case 'Array':
-						// Check for existence for IE8
-						return o.map && o.map(function(v) { return _.util.clone(v); });
-				}
-
-				return o;
-			}
-		},
-
-		languages: {
-			extend: function (id, redef) {
-				var lang = _.util.clone(_.languages[id]);
-
-				for (var key in redef) {
-					lang[key] = redef[key];
-				}
-
-				return lang;
-			},
-
-			/**
-			 * Insert a token before another token in a language literal
-			 * As this needs to recreate the object (we cannot actually insert before keys in object literals),
-			 * we cannot just provide an object, we need anobject and a key.
-			 * @param inside The key (or language id) of the parent
-			 * @param before The key to insert before. If not provided, the function appends instead.
-			 * @param insert Object with the key/value pairs to insert
-			 * @param root The object that contains `inside`. If equal to Prism.languages, it can be omitted.
-			 */
-			insertBefore: function (inside, before, insert, root) {
-				root = root || _.languages;
-				var grammar = root[inside];
-				
-				if (arguments.length == 2) {
-					insert = arguments[1];
-					
-					for (var newToken in insert) {
-						if (insert.hasOwnProperty(newToken)) {
-							grammar[newToken] = insert[newToken];
-						}
-					}
-					
-					return grammar;
-				}
-				
-				var ret = {};
-
-				for (var token in grammar) {
-
-					if (grammar.hasOwnProperty(token)) {
-
-						if (token == before) {
-
-							for (var newToken in insert) {
-
-								if (insert.hasOwnProperty(newToken)) {
-									ret[newToken] = insert[newToken];
-								}
-							}
-						}
-
-						ret[token] = grammar[token];
-					}
-				}
-				
-				// Update references in other language definitions
-				_.languages.DFS(_.languages, function(key, value) {
-					if (value === root[inside] && key != inside) {
-						this[key] = ret;
-					}
-				});
-
-				return root[inside] = ret;
-			},
-
-			// Traverse a language definition with Depth First Search
-			DFS: function(o, callback, type, visited) {
-				visited = visited || {};
-				for (var i in o) {
-					if (o.hasOwnProperty(i)) {
-						callback.call(o, i, o[i], type || i);
-
-						if (_.util.type(o[i]) === 'Object' && !visited[_.util.objId(o[i])]) {
-							visited[_.util.objId(o[i])] = true;
-							_.languages.DFS(o[i], callback, null, visited);
-						}
-						else if (_.util.type(o[i]) === 'Array' && !visited[_.util.objId(o[i])]) {
-							visited[_.util.objId(o[i])] = true;
-							_.languages.DFS(o[i], callback, i, visited);
-						}
-					}
-				}
-			}
-		},
-		plugins: {},
-		
-		highlightAll: function(async, callback) {
-			var elements = document.querySelectorAll('code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code');
-
-			for (var i=0, element; element = elements[i++];) {
-				_.highlightElement(element, async === true, callback);
-			}
-		},
-
-		highlightElement: function(element, async, callback) {
-			// Find language
-			var language, grammar, parent = element;
-
-			while (parent && !lang.test(parent.className)) {
-				parent = parent.parentNode;
-			}
-
-			if (parent) {
-				language = (parent.className.match(lang) || [,''])[1];
-				grammar = _.languages[language];
-			}
-
-			// Set language on the element, if not present
-			element.className = element.className.replace(lang, '').replace(/\s+/g, ' ') + ' language-' + language;
-
-			// Set language on the parent, for styling
-			parent = element.parentNode;
-
-			if (/pre/i.test(parent.nodeName)) {
-				parent.className = parent.className.replace(lang, '').replace(/\s+/g, ' ') + ' language-' + language;
-			}
-
-			var code = element.textContent;
-
-			var env = {
-				element: element,
-				language: language,
-				grammar: grammar,
-				code: code
-			};
-
-			if (!code || !grammar) {
-				_.hooks.run('complete', env);
-				return;
-			}
-
-			_.hooks.run('before-highlight', env);
-
-			if (async && _self.Worker) {
-				var worker = new Worker(_.filename);
-
-				worker.onmessage = function(evt) {
-					env.highlightedCode = evt.data;
-
-					_.hooks.run('before-insert', env);
-
-					env.element.innerHTML = env.highlightedCode;
-
-					callback && callback.call(env.element);
-					_.hooks.run('after-highlight', env);
-					_.hooks.run('complete', env);
-				};
-
-				worker.postMessage(JSON.stringify({
-					language: env.language,
-					code: env.code,
-					immediateClose: true
-				}));
-			}
-			else {
-				env.highlightedCode = _.highlight(env.code, env.grammar, env.language);
-
-				_.hooks.run('before-insert', env);
-
-				env.element.innerHTML = env.highlightedCode;
-
-				callback && callback.call(element);
-
-				_.hooks.run('after-highlight', env);
-				_.hooks.run('complete', env);
-			}
-		},
-
-		highlight: function (text, grammar, language) {
-			var tokens = _.tokenize(text, grammar);
-			return Token.stringify(_.util.encode(tokens), language);
-		},
-
-		tokenize: function(text, grammar, language) {
-			var Token = _.Token;
-
-			var strarr = [text];
-
-			var rest = grammar.rest;
-
-			if (rest) {
-				for (var token in rest) {
-					grammar[token] = rest[token];
-				}
-
-				delete grammar.rest;
-			}
-
-			tokenloop: for (var token in grammar) {
-				if(!grammar.hasOwnProperty(token) || !grammar[token]) {
-					continue;
-				}
-
-				var patterns = grammar[token];
-				patterns = (_.util.type(patterns) === "Array") ? patterns : [patterns];
-
-				for (var j = 0; j < patterns.length; ++j) {
-					var pattern = patterns[j],
-						inside = pattern.inside,
-						lookbehind = !!pattern.lookbehind,
-						lookbehindLength = 0,
-						alias = pattern.alias;
-
-					pattern = pattern.pattern || pattern;
-
-					for (var i=0; i<strarr.length; i++) { // Don’t cache length as it changes during the loop
-
-						var str = strarr[i];
-
-						if (strarr.length > text.length) {
-							// Something went terribly wrong, ABORT, ABORT!
-							break tokenloop;
-						}
-
-						if (str instanceof Token) {
-							continue;
-						}
-
-						pattern.lastIndex = 0;
-
-						var match = pattern.exec(str);
-
-						if (match) {
-							if(lookbehind) {
-								lookbehindLength = match[1].length;
-							}
-
-							var from = match.index - 1 + lookbehindLength,
-								match = match[0].slice(lookbehindLength),
-								len = match.length,
-								to = from + len,
-								before = str.slice(0, from + 1),
-								after = str.slice(to + 1);
-
-							var args = [i, 1];
-
-							if (before) {
-								args.push(before);
-							}
-
-							var wrapped = new Token(token, inside? _.tokenize(match, inside) : match, alias);
-
-							args.push(wrapped);
-
-							if (after) {
-								args.push(after);
-							}
-
-							Array.prototype.splice.apply(strarr, args);
-						}
-					}
-				}
-			}
-
-			return strarr;
-		},
-
-		hooks: {
-			all: {},
-
-			add: function (name, callback) {
-				var hooks = _.hooks.all;
-
-				hooks[name] = hooks[name] || [];
-
-				hooks[name].push(callback);
-			},
-
-			run: function (name, env) {
-				var callbacks = _.hooks.all[name];
-
-				if (!callbacks || !callbacks.length) {
-					return;
-				}
-
-				for (var i=0, callback; callback = callbacks[i++];) {
-					callback(env);
-				}
-			}
-		}
-	};
-
-	var Token = _.Token = function(type, content, alias) {
-		this.type = type;
-		this.content = content;
-		this.alias = alias;
-	};
-
-	Token.stringify = function(o, language, parent) {
-		if (typeof o == 'string') {
-			return o;
-		}
-
-		if (_.util.type(o) === 'Array') {
-			return o.map(function(element) {
-				return Token.stringify(element, language, o);
-			}).join('');
-		}
-
-		var env = {
-			type: o.type,
-			content: Token.stringify(o.content, language, parent),
-			tag: 'span',
-			classes: ['token', o.type],
-			attributes: {},
-			language: language,
-			parent: parent
-		};
-
-		if (env.type == 'comment') {
-			env.attributes['spellcheck'] = 'true';
-		}
-
-		if (o.alias) {
-			var aliases = _.util.type(o.alias) === 'Array' ? o.alias : [o.alias];
-			Array.prototype.push.apply(env.classes, aliases);
-		}
-
-		_.hooks.run('wrap', env);
-
-		var attributes = '';
-
-		for (var name in env.attributes) {
-			attributes += (attributes ? ' ' : '') + name + '="' + (env.attributes[name] || '') + '"';
-		}
-
-		return '<' + env.tag + ' class="' + env.classes.join(' ') + '" ' + attributes + '>' + env.content + '</' + env.tag + '>';
-
-	};
-
-	if (!_self.document) {
-		if (!_self.addEventListener) {
-			// in Node.js
-			return _self.Prism;
-		}
-	 	// In worker
-		_self.addEventListener('message', function(evt) {
-			var message = JSON.parse(evt.data),
-			    lang = message.language,
-			    code = message.code,
-			    immediateClose = message.immediateClose;
-
-			_self.postMessage(_.highlight(code, _.languages[lang], lang));
-			if (immediateClose) {
-				_self.close();
-			}
-		}, false);
-
-		return _self.Prism;
-	}
-
-	//Get current script and highlight
-	var script = document.currentScript || [].slice.call(document.getElementsByTagName("script")).pop();
-
-	if (script) {
-		_.filename = script.src;
-
-		if (document.addEventListener && !script.hasAttribute('data-manual')) {
-			document.addEventListener('DOMContentLoaded', _.highlightAll);
-		}
-	}
-
-	return _self.Prism;
-
-	})();
-
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = Prism;
-	}
-
-	// hack for components to work correctly in node.js
-	if (typeof global !== 'undefined') {
-		global.Prism = Prism;
-	}
-
-
-	/* **********************************************
-	     Begin prism-markup.js
-	********************************************** */
-
-	Prism.languages.markup = {
-		'comment': /<!--[\w\W]*?-->/,
-		'prolog': /<\?[\w\W]+?\?>/,
-		'doctype': /<!DOCTYPE[\w\W]+?>/,
-		'cdata': /<!\[CDATA\[[\w\W]*?]]>/i,
-		'tag': {
-			pattern: /<\/?(?!\d)[^\s>\/=.$<]+(?:\s+[^\s>\/=]+(?:=(?:("|')(?:\\\1|\\?(?!\1)[\w\W])*\1|[^\s'">=]+))?)*\s*\/?>/i,
-			inside: {
-				'tag': {
-					pattern: /^<\/?[^\s>\/]+/i,
-					inside: {
-						'punctuation': /^<\/?/,
-						'namespace': /^[^\s>\/:]+:/
-					}
-				},
-				'attr-value': {
-					pattern: /=(?:('|")[\w\W]*?(\1)|[^\s>]+)/i,
-					inside: {
-						'punctuation': /[=>"']/
-					}
-				},
-				'punctuation': /\/?>/,
-				'attr-name': {
-					pattern: /[^\s>\/]+/,
-					inside: {
-						'namespace': /^[^\s>\/:]+:/
-					}
-				}
-
-			}
-		},
-		'entity': /&#?[\da-z]{1,8};/i
-	};
-
-	// Plugin to make entity title show the real entity, idea by Roman Komarov
-	Prism.hooks.add('wrap', function(env) {
-
-		if (env.type === 'entity') {
-			env.attributes['title'] = env.content.replace(/&amp;/, '&');
-		}
-	});
-
-	Prism.languages.xml = Prism.languages.markup;
-	Prism.languages.html = Prism.languages.markup;
-	Prism.languages.mathml = Prism.languages.markup;
-	Prism.languages.svg = Prism.languages.markup;
-
-
-	/* **********************************************
-	     Begin prism-css.js
-	********************************************** */
-
-	Prism.languages.css = {
-		'comment': /\/\*[\w\W]*?\*\//,
-		'atrule': {
-			pattern: /@[\w-]+?.*?(;|(?=\s*\{))/i,
-			inside: {
-				'rule': /@[\w-]+/
-				// See rest below
-			}
-		},
-		'url': /url\((?:(["'])(\\(?:\r\n|[\w\W])|(?!\1)[^\\\r\n])*\1|.*?)\)/i,
-		'selector': /[^\{\}\s][^\{\};]*?(?=\s*\{)/,
-		'string': /("|')(\\(?:\r\n|[\w\W])|(?!\1)[^\\\r\n])*\1/,
-		'property': /(\b|\B)[\w-]+(?=\s*:)/i,
-		'important': /\B!important\b/i,
-		'function': /[-a-z0-9]+(?=\()/i,
-		'punctuation': /[(){};:]/
-	};
-
-	Prism.languages.css['atrule'].inside.rest = Prism.util.clone(Prism.languages.css);
-
-	if (Prism.languages.markup) {
-		Prism.languages.insertBefore('markup', 'tag', {
-			'style': {
-				pattern: /(<style[\w\W]*?>)[\w\W]*?(?=<\/style>)/i,
-				lookbehind: true,
-				inside: Prism.languages.css,
-				alias: 'language-css'
-			}
-		});
-		
-		Prism.languages.insertBefore('inside', 'attr-value', {
-			'style-attr': {
-				pattern: /\s*style=("|').*?\1/i,
-				inside: {
-					'attr-name': {
-						pattern: /^\s*style/i,
-						inside: Prism.languages.markup.tag.inside
-					},
-					'punctuation': /^\s*=\s*['"]|['"]\s*$/,
-					'attr-value': {
-						pattern: /.+/i,
-						inside: Prism.languages.css
-					}
-				},
-				alias: 'language-css'
-			}
-		}, Prism.languages.markup.tag);
-	}
-
-	/* **********************************************
-	     Begin prism-clike.js
-	********************************************** */
-
-	Prism.languages.clike = {
-		'comment': [
-			{
-				pattern: /(^|[^\\])\/\*[\w\W]*?\*\//,
-				lookbehind: true
-			},
-			{
-				pattern: /(^|[^\\:])\/\/.*/,
-				lookbehind: true
-			}
-		],
-		'string': /(["'])(\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
-		'class-name': {
-			pattern: /((?:\b(?:class|interface|extends|implements|trait|instanceof|new)\s+)|(?:catch\s+\())[a-z0-9_\.\\]+/i,
-			lookbehind: true,
-			inside: {
-				punctuation: /(\.|\\)/
-			}
-		},
-		'keyword': /\b(if|else|while|do|for|return|in|instanceof|function|new|try|throw|catch|finally|null|break|continue)\b/,
-		'boolean': /\b(true|false)\b/,
-		'function': /[a-z0-9_]+(?=\()/i,
-		'number': /\b-?(?:0x[\da-f]+|\d*\.?\d+(?:e[+-]?\d+)?)\b/i,
-		'operator': /--?|\+\+?|!=?=?|<=?|>=?|==?=?|&&?|\|\|?|\?|\*|\/|~|\^|%/,
-		'punctuation': /[{}[\];(),.:]/
-	};
-
-
-	/* **********************************************
-	     Begin prism-javascript.js
-	********************************************** */
-
-	Prism.languages.javascript = Prism.languages.extend('clike', {
-		'keyword': /\b(as|async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|finally|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|set|static|super|switch|this|throw|try|typeof|var|void|while|with|yield)\b/,
-		'number': /\b-?(0x[\dA-Fa-f]+|0b[01]+|0o[0-7]+|\d*\.?\d+([Ee][+-]?\d+)?|NaN|Infinity)\b/,
-		// Allow for all non-ASCII characters (See http://stackoverflow.com/a/2008444)
-		'function': /[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*(?=\()/i
-	});
-
-	Prism.languages.insertBefore('javascript', 'keyword', {
-		'regex': {
-			pattern: /(^|[^/])\/(?!\/)(\[.+?]|\\.|[^/\\\r\n])+\/[gimyu]{0,5}(?=\s*($|[\r\n,.;})]))/,
-			lookbehind: true
-		}
-	});
-
-	Prism.languages.insertBefore('javascript', 'class-name', {
-		'template-string': {
-			pattern: /`(?:\\`|\\?[^`])*`/,
-			inside: {
-				'interpolation': {
-					pattern: /\$\{[^}]+\}/,
-					inside: {
-						'interpolation-punctuation': {
-							pattern: /^\$\{|\}$/,
-							alias: 'punctuation'
-						},
-						rest: Prism.languages.javascript
-					}
-				},
-				'string': /[\s\S]+/
-			}
-		}
-	});
-
-	if (Prism.languages.markup) {
-		Prism.languages.insertBefore('markup', 'tag', {
-			'script': {
-				pattern: /(<script[\w\W]*?>)[\w\W]*?(?=<\/script>)/i,
-				lookbehind: true,
-				inside: Prism.languages.javascript,
-				alias: 'language-javascript'
-			}
-		});
-	}
-
-	Prism.languages.js = Prism.languages.javascript;
-
-	/* **********************************************
-	     Begin prism-file-highlight.js
-	********************************************** */
-
-	(function () {
-		if (typeof self === 'undefined' || !self.Prism || !self.document || !document.querySelector) {
-			return;
-		}
-
-		self.Prism.fileHighlight = function() {
-
-			var Extensions = {
-				'js': 'javascript',
-				'html': 'markup',
-				'svg': 'markup',
-				'xml': 'markup',
-				'py': 'python',
-				'rb': 'ruby',
-				'ps1': 'powershell',
-				'psm1': 'powershell'
-			};
-
-			if(Array.prototype.forEach) { // Check to prevent error in IE8
-				Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
-					var src = pre.getAttribute('data-src');
-
-					var language, parent = pre;
-					var lang = /\blang(?:uage)?-(?!\*)(\w+)\b/i;
-					while (parent && !lang.test(parent.className)) {
-						parent = parent.parentNode;
-					}
-
-					if (parent) {
-						language = (pre.className.match(lang) || [, ''])[1];
-					}
-
-					if (!language) {
-						var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-						language = Extensions[extension] || extension;
-					}
-
-					var code = document.createElement('code');
-					code.className = 'language-' + language;
-
-					pre.textContent = '';
-
-					code.textContent = 'Loading…';
-
-					pre.appendChild(code);
-
-					var xhr = new XMLHttpRequest();
-
-					xhr.open('GET', src, true);
-
-					xhr.onreadystatechange = function () {
-						if (xhr.readyState == 4) {
-
-							if (xhr.status < 400 && xhr.responseText) {
-								code.textContent = xhr.responseText;
-
-								Prism.highlightElement(code);
-							}
-							else if (xhr.status >= 400) {
-								code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-							}
-							else {
-								code.textContent = '✖ Error: File does not exist or is empty';
-							}
-						}
-					};
-
-					xhr.send(null);
-				});
-			}
-
-		};
-
-		document.addEventListener('DOMContentLoaded', self.Prism.fileHighlight);
-
-	})();
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }
 /******/ ])

@@ -1,4 +1,4 @@
-var webpack = require("webpack");
+var webpack = require('webpack');
 var version = require("./package.json").version;
 var banner =
   "/**\n" +
@@ -8,29 +8,30 @@ var banner =
   " */\n";
 
 module.exports = {
-  entry: "./src/VueMarkdown.js",
-  target: "node",
+  entry: './src/build.js',
   output: {
-    path: "./dist",
-    filename: "vue-markdown.common.js",
-    library: "VueMarkdown",
-    libraryTarget: "umd"
+    path: './dist',
+    filename: 'vue-markdown.js',
+    library: 'VueMarkdown',
+    libraryTarget: 'umd'
   },
-  externals: /^[^.]/,
   plugins: [
     new webpack.BannerPlugin(banner, { raw: true })
   ],
   module: {
     loaders: [{
       test: /\.vue$/,
-      loader: "vue"
+      loader: 'vue'
     }, {
+        test: /\.css$/,
+        loader: "style!css"
+      }, {
         test: /\.js$/,
-        loader: "babel",
+        loader: 'babel',
         exclude: /node_modules/
       }, {
         test: /\.json$/,
-        loader: "json-loader"
+        loader: 'json-loader'
       }]
   },
 }

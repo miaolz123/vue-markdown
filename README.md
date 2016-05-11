@@ -21,7 +21,7 @@ Supported Markdown Syntax:
 * [x] emoji
 * [x] mark
 
-`*SyntaxHighlighter` work with [Prism.css](http://prismjs.com/themes/prism.css) default
+`*SyntaxHighlighter` work with [Prism.css](http://prismjs.com) default
 
 # Instllation
 
@@ -77,19 +77,20 @@ new Vue({
 
 [Live Demo](http://miaolz123.github.io/vue-markdown/)
 
-[TOC Demo](http://miaolz123.github.io/vue-markdown/toc.html)
-
 # Props
 
 | Prop | Type | Default | Describe |
 | ---- | ---- | ------- | ------- |
+| watches | Array | `["source", "show", "toc"]` | HTML refresh automatically when the prop in this array changed |
 | source | String | `null` | the markdown source code |
 | show | Boolean | `true` | enable render to the default slot automatically |
 | html | Boolean | `true` | enable HTML syntax in source |
 | xhtml-out | Boolean | `true` | `<br></br>` => `<br />` |
 | breaks | Boolean | `true` | `\n` => `<br>` |
 | linkify | Boolean | `true` | autoconvert URL-like text to link |
+| emoji | Boolean | `true` | `:)` => `😃` |
 | typographer | Boolean | `true` | enable some language-neutral replacement and quotes beautification |
+| langPrefix | String | `language-` | CSS language prefix for fenced blocks |
 | quotes | String | `“”‘’` | use `“”‘’` for Chinese, `„“‚‘` for German, `«»„“` for Russian |
 | table-class | String | `table` | customize html class of the `<table>` |
 | toc | Boolean | `false` | enable automatic table of contents |
@@ -102,6 +103,13 @@ new Vue({
 | toc-anchor-link-symbol | String | `#` | customize the anchor link symbol |
 | toc-anchor-link-space | Boolean | `true` | enable inserting a space between the anchor link and heading |
 | toc-anchor-link-class | String | `toc-anchor-link` | customize the anchor link symbol class name |
+
+# Events
+
+| Name | Param[Type] | Describe |
+| ---- | --------- | -------- |
+| rendered | outHtml[String] | dispatch when render finish |
+| toc-rendered | tocHtml[String] | dispatch when TOC render finish, never dispatch if the toc[prop] is `false` |
 
 # License
 

@@ -8,14 +8,56 @@ import abbreviation from 'markdown-it-abbr'
 import insert from 'markdown-it-ins'
 import mark from 'markdown-it-mark'
 import toc from 'markdown-it-toc-and-anchor'
-import Prism from 'prismjs'
 
-const md = new markdownIt().use(emoji).use(subscript).use(superscript)
-  .use(footnote).use(deflist).use(abbreviation).use(insert).use(mark)
+let md = new markdownIt()
+
+const rende = (root) => {
+  md = new markdownIt().use(subscript).use(superscript)
+    .use(footnote).use(deflist).use(abbreviation).use(insert).use(mark)
+  if (root.emoji) md.use(emoji)
+  md.set({
+    html: root.html,
+    xhtmlOut: root.xhtmlOut,
+    breaks: root.breaks,
+    linkify: root.linkify,
+    typographer: root.typographer,
+    langPrefix: root.langPrefix,
+    quotes: root.quotes,
+  })
+  md.renderer.rules.table_open = () => `<table class="${root.tableClass}">\n`
+  if (!root.tocLastLevel) root.tocLastLevel = root.tocFirstLevel + 1
+  if (root.toc) {
+    md.use(toc, {
+      tocClassName: root.tocClass,
+      tocFirstLevel: root.tocFirstLevel,
+      tocLastLevel: root.tocLastLevel,
+      anchorLink: root.tocAnchorLink,
+      anchorLinkSymbol: root.tocAnchorLinkSymbol,
+      anchorLinkSpace: root.tocAnchorLinkSpace,
+      anchorClassName: root.tocAnchorClass,
+      anchorLinkSymbolClassName: root.tocAnchorLinkClass,
+      tocCallback: (tocMarkdown, tocArray, tocHtml) => {
+        if (tocHtml) {
+          if (root.tocId && document.getElementById(root.tocId))
+            document.getElementById(root.tocId).innerHTML = tocHtml
+          root.$dispatch('toc-rendered', tocHtml)
+        }
+      },
+    })
+  } else if (root.tocId && document.getElementById(root.tocId))
+    document.getElementById(root.tocId).innerHTML = ''
+  const outHtml = root.show ? md.render(root.source) : ''
+  root.$el.innerHTML = outHtml
+  root.$dispatch('rendered', outHtml)
+}
 
 export default {
   template: '<div></div>',
   props: {
+    watches: {
+      type: Array,
+      default: () => ['source', 'show', 'toc'],
+    },
     source: {
       type: String,
       default: ``,
@@ -40,9 +82,17 @@ export default {
       type: Boolean,
       default: true,
     },
+    emoji: {
+      type: Boolean,
+      default: true,
+    },
     typographer: {
       type: Boolean,
       default: true,
+    },
+    langPrefix: {
+      type: String,
+      default: 'language-',
     },
     quotes: {
       type: String,
@@ -61,7 +111,7 @@ export default {
     },
     tocClass: {
       type: String,
-      default: 'section table-of-contents',
+      default: 'table-of-contents',
     },
     tocFirstLevel: {
       type: Number,
@@ -91,46 +141,13 @@ export default {
       default: 'toc-anchor-link',
     },
   },
-  ready() {
-    md.set({
-      html: this.html,
-      xhtmlOut: this.xhtmlOut,
-      breaks: this.breaks,
-      linkify: this.linkify,
-      typographer: this.typographer,
-      quotes: this.quotes,
-      highlight: (code, lang) => {
-        const l = Prism.languages[lang]
-        if (l) return Prism.highlight(code, l)
-        return ''
-      },
-    })
-    md.renderer.rules.table_open = () => `<table class="${this.tableClass}">\n`
-    if (!this.tocLastLevel) this.tocLastLevel = this.tocFirstLevel + 1
-    if (this.toc) md.use(toc, {
-      tocClassName: this.tocClass,
-      tocFirstLevel: this.tocFirstLevel,
-      tocLastLevel: this.tocLastLevel,
-      anchorLink: this.tocAnchorLink,
-      anchorLinkSymbol: this.tocAnchorLinkSymbol,
-      anchorLinkSpace: this.tocAnchorLinkSpace,
-      anchorClassName: this.tocAnchorClass,
-      anchorLinkSymbolClassName: this.tocAnchorLinkClass,
-      tocCallback: (tocMarkdown, tocArray, tocHtml) => {
-        if (tocHtml) {
-          if (this.tocId && document.getElementById(this.tocId))
-            document.getElementById(this.tocId).innerHTML = tocHtml
-          this.$dispatch('toc', tocHtml)
-        }
-      },
-    })
-    const outHtml = md.render(this.source)
-    if (this.show) this.$el.innerHTML = outHtml
-    this.$dispatch('parsed', outHtml)
-    this.$watch('source', function () {
-      const outHtml = md.render(this.source)
-      if (this.show) this.$el.innerHTML = outHtml
-      this.$dispatch('parsed', outHtml)
+  data: () => ({
+    msg: 'hello',
+  }),
+  created() {
+    this.$watch('source', () => { rende(this) })
+    this.watches.forEach((v) => {
+      this.$watch(v, () => { rende(this) })
     })
   },
 }

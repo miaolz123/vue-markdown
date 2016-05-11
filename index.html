@@ -5,23 +5,45 @@
   <title>vue-markdown</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="dist/css/main.css">
   <link rel="stylesheet" href="dist/css/prism.css">
 </head>
 
 <body>
   <div class="container full-height">
-    <h2>VueMarkdown Live Demo <small><a href="toc.html" >TOC Demo</a></small></h2>
+    <h2>VueMarkdown Live Demo</h2>
+    <div class="form-inline">
+      <div class="checkbox">
+        <label><input v-model="show" type="checkbox">show</label>
+      </div>
+      <div class="checkbox">
+        <label><input v-model="html" type="checkbox">html</label>
+      </div>
+      <div class="checkbox">
+        <label><input v-model="breaks" type="checkbox">breaks</label>
+      </div>
+      <div class="checkbox">
+        <label><input v-model="linkify" type="checkbox">linkify</label>
+      </div>
+      <div class="checkbox">
+        <label><input v-model="emoji" type="checkbox">emoji</label>
+      </div>
+      <div class="checkbox">
+        <label><input v-model="typographer" type="checkbox">typographer</label>
+      </div>
+      <div class="checkbox">
+        <label><input v-model="toc" type="checkbox">toc</label>
+      </div>
+    </div>
+    <div id="toc"></div>
     <div class="row full-height">
       <div class="col-xs-6 full-height">
         <textarea class="source full-height" v-model="source"># h1 Heading 8-)
+<h2> h2 Heading by HTML</h2>
 ## h2 Heading
 ### h3 Heading
-#### h4 Heading
-##### h5 Heading
-###### h6 Heading
 
-<h2>Horizontal Rules</h2>
+## Horizontal Rules
 
 ___
 
@@ -110,12 +132,22 @@ Sample text here...
 ```
 Syntax highlighting
 
-``` js
+``` javascript
 var foo = function (bar) {
   return bar++;
 };
 
 console.log(foo(5));
+```
+
+``` go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, world!")
+}
 ```
 
 ## Tables
@@ -230,20 +262,39 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 *[HTML]: Hyper Text Markup Language</textarea>
       </div>
       <section class="col-xs-6 full-height">
-        <vue-markdown class="result-html full-height" :toc="true" :source="source"></vue-markdown>
+        <vue-markdown class="result-html full-height" :watches="['show','html','breaks','linkify','emoji','typographer','toc']"
+          :source="source" :show="show" :html="html" :breaks="breaks" :linkify="linkify"
+          :emoji="emoji" :typographer="typographer" :toc="toc" v-on:rendered="allRight"
+          v-on:toc-rendered="tocAllRight" toc-id="toc"></vue-markdown>
       </section>
     </div>
   </div>
   <div class="gh-ribbon"><a href="https://github.com/miaolz123/vue-markdown" target="_blank">Fork me on GitHub</a></div>
   <script src="dist/js/vue.js"></script>
-  <script src="dist/vue-markdown.js"></script>
+  <script src="dist/vue-markdown.min.js"></script>
   <script src="dist/js/main.js"></script>
+  <script src="dist/js/prism.js"></script>
   <script>
     Vue.use(VueMarkdown);
     var vm = new Vue({
       el: "body",
       data: {
-        source: ""
+        source: "",
+        show: true,
+        html: false,
+        breaks: true,
+        linkify: false,
+        emoji: true,
+        typographer: true,
+        toc: false
+      },
+      methods: {
+        allRight: function (htmlStr) {
+          console.log("markdown is parsed !");
+        },
+        tocAllRight: function (tocHtmlStr) {
+          console.log("toc is parsed :", tocHtmlStr);
+        }
       }
     });
   </script>
