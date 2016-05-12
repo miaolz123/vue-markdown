@@ -144,7 +144,8 @@ export default {
   data: () => ({
     msg: 'hello',
   }),
-  created() {
+  ready() {
+    rende(this)
     this.$watch('source', () => { rende(this) })
     this.watches.forEach((v) => {
       this.$watch(v, () => { rende(this) })

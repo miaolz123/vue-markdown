@@ -267,9 +267,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      msg: 'hello'
 	    };
 	  },
-	  created: function created() {
+	  ready: function ready() {
 	    var _this = this;
 
+	    rende(this);
 	    this.$watch('source', function () {
 	      rende(_this);
 	    });
