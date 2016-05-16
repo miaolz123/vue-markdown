@@ -2,8 +2,8 @@ var webpack = require("webpack");
 var version = require("./package.json").version;
 var banner =
   "/**\n" +
-  " * vue-helmet v" + version + "\n" +
-  " * https://github.com/miaolz123/vue-helmet\n" +
+  " * vue-markdown v" + version + "\n" +
+  " * https://github.com/miaolz123/vue-markdown\n" +
   " * MIT License\n" +
   " */\n";
 
