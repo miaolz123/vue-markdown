@@ -1,19 +1,19 @@
 /**
- * vue-helmet v1.1.0
- * https://github.com/miaolz123/vue-helmet
+ * vue-markdown v1.2.0
+ * https://github.com/miaolz123/vue-markdown
  * MIT License
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("markdown-it"), require("markdown-it-emoji"), require("markdown-it-sub"), require("markdown-it-sup"), require("markdown-it-footnote"), require("markdown-it-deflist"), require("markdown-it-abbr"), require("markdown-it-ins"), require("markdown-it-mark"), require("markdown-it-toc-and-anchor"));
+		module.exports = factory(require("babel-runtime/core-js/get-iterator"), require("markdown-it"), require("markdown-it-emoji"), require("markdown-it-sub"), require("markdown-it-sup"), require("markdown-it-footnote"), require("markdown-it-deflist"), require("markdown-it-abbr"), require("markdown-it-ins"), require("markdown-it-mark"), require("markdown-it-toc-and-anchor"));
 	else if(typeof define === 'function' && define.amd)
-		define(["markdown-it", "markdown-it-emoji", "markdown-it-sub", "markdown-it-sup", "markdown-it-footnote", "markdown-it-deflist", "markdown-it-abbr", "markdown-it-ins", "markdown-it-mark", "markdown-it-toc-and-anchor"], factory);
+		define(["babel-runtime/core-js/get-iterator", "markdown-it", "markdown-it-emoji", "markdown-it-sub", "markdown-it-sup", "markdown-it-footnote", "markdown-it-deflist", "markdown-it-abbr", "markdown-it-ins", "markdown-it-mark", "markdown-it-toc-and-anchor"], factory);
 	else if(typeof exports === 'object')
-		exports["VueMarkdown"] = factory(require("markdown-it"), require("markdown-it-emoji"), require("markdown-it-sub"), require("markdown-it-sup"), require("markdown-it-footnote"), require("markdown-it-deflist"), require("markdown-it-abbr"), require("markdown-it-ins"), require("markdown-it-mark"), require("markdown-it-toc-and-anchor"));
+		exports["VueMarkdown"] = factory(require("babel-runtime/core-js/get-iterator"), require("markdown-it"), require("markdown-it-emoji"), require("markdown-it-sub"), require("markdown-it-sup"), require("markdown-it-footnote"), require("markdown-it-deflist"), require("markdown-it-abbr"), require("markdown-it-ins"), require("markdown-it-mark"), require("markdown-it-toc-and-anchor"));
 	else
-		root["VueMarkdown"] = factory(root["markdown-it"], root["markdown-it-emoji"], root["markdown-it-sub"], root["markdown-it-sup"], root["markdown-it-footnote"], root["markdown-it-deflist"], root["markdown-it-abbr"], root["markdown-it-ins"], root["markdown-it-mark"], root["markdown-it-toc-and-anchor"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_10__) {
+		root["VueMarkdown"] = factory(root["babel-runtime/core-js/get-iterator"], root["markdown-it"], root["markdown-it-emoji"], root["markdown-it-sub"], root["markdown-it-sup"], root["markdown-it-footnote"], root["markdown-it-deflist"], root["markdown-it-abbr"], root["markdown-it-ins"], root["markdown-it-mark"], root["markdown-it-toc-and-anchor"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_11__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -66,43 +66,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _markdownIt = __webpack_require__(1);
+	var _getIterator2 = __webpack_require__(1);
+
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+	var _markdownIt = __webpack_require__(2);
 
 	var _markdownIt2 = _interopRequireDefault(_markdownIt);
 
-	var _markdownItEmoji = __webpack_require__(2);
+	var _markdownItEmoji = __webpack_require__(3);
 
 	var _markdownItEmoji2 = _interopRequireDefault(_markdownItEmoji);
 
-	var _markdownItSub = __webpack_require__(3);
+	var _markdownItSub = __webpack_require__(4);
 
 	var _markdownItSub2 = _interopRequireDefault(_markdownItSub);
 
-	var _markdownItSup = __webpack_require__(4);
+	var _markdownItSup = __webpack_require__(5);
 
 	var _markdownItSup2 = _interopRequireDefault(_markdownItSup);
 
-	var _markdownItFootnote = __webpack_require__(5);
+	var _markdownItFootnote = __webpack_require__(6);
 
 	var _markdownItFootnote2 = _interopRequireDefault(_markdownItFootnote);
 
-	var _markdownItDeflist = __webpack_require__(6);
+	var _markdownItDeflist = __webpack_require__(7);
 
 	var _markdownItDeflist2 = _interopRequireDefault(_markdownItDeflist);
 
-	var _markdownItAbbr = __webpack_require__(7);
+	var _markdownItAbbr = __webpack_require__(8);
 
 	var _markdownItAbbr2 = _interopRequireDefault(_markdownItAbbr);
 
-	var _markdownItIns = __webpack_require__(8);
+	var _markdownItIns = __webpack_require__(9);
 
 	var _markdownItIns2 = _interopRequireDefault(_markdownItIns);
 
-	var _markdownItMark = __webpack_require__(9);
+	var _markdownItMark = __webpack_require__(10);
 
 	var _markdownItMark2 = _interopRequireDefault(_markdownItMark);
 
-	var _markdownItTocAndAnchor = __webpack_require__(10);
+	var _markdownItTocAndAnchor = __webpack_require__(11);
 
 	var _markdownItTocAndAnchor2 = _interopRequireDefault(_markdownItTocAndAnchor);
 
@@ -150,7 +154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.default = {
-	  template: '<div></div>',
+	  template: '<div><slot></slot></div>',
 	  props: {
 	    watches: {
 	      type: Array,
@@ -241,14 +245,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: 'toc-anchor-link'
 	    }
 	  },
-	  data: function data() {
-	    return {
-	      msg: 'hello'
-	    };
-	  },
 	  ready: function ready() {
 	    var _this = this;
 
+	    if (this.$el.childNodes.length > 0) {
+	      this.source = '';
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+
+	      try {
+	        for (var _iterator = (0, _getIterator3.default)(this.$el.childNodes), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var el = _step.value;
+
+	          var ext = el.outerHTML ? el.outerHTML : el.textContent;
+	          this.source += ext;
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	    }
 	    rende(this);
 	    this.$watch('source', function () {
 	      rende(_this);
@@ -320,6 +347,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_10__;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 
 /***/ }
 /******/ ])

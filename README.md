@@ -6,6 +6,8 @@
 
 A Powerful and Highspeed Markdown Parser for Vue.
 
+Quick start: `<vue-markdown>i am a ~~tast~~ **test**.</vue-markdown>`
+
 Supported Markdown Syntax:
 
 * [x] automatic table of contents
@@ -21,7 +23,7 @@ Supported Markdown Syntax:
 * [x] emoji
 * [x] mark
 
-`*SyntaxHighlighter` work with [Prism.css](http://prismjs.com) default
+`*SyntaxHighlighter` work with [Prism](http://prismjs.com) recommend
 
 # Instllation
 
@@ -31,7 +33,7 @@ Supported Markdown Syntax:
 
 ```html
 <body>
-  <vue-markdown source="i am a ~~tast~~ **test**."></vue-markdown>
+  <vue-markdown>i am a ~~tast~~ **test**.</vue-markdown>
 </body>
 <script src="path/to/vue.js"></script>
 <script src="path/to/vue-markdown.js"></script>
@@ -77,6 +79,16 @@ new Vue({
 
 [Live Demo](http://miaolz123.github.io/vue-markdown/)
 
+# Slots
+
+```html
+<vue-markdown>this is the default slot</vue-markdown>
+```
+
+VueMarkdown has a default slot which used to write `markdown` source.
+
+TIP: The default slot only render **once** at the beginning, and it will overwrite the prop of `source`!
+
 # Props
 
 | Prop | Type | Default | Describe |
@@ -90,7 +102,7 @@ new Vue({
 | linkify | Boolean | `true` | autoconvert URL-like text to link |
 | emoji | Boolean | `true` | `:)` => `😃` |
 | typographer | Boolean | `true` | enable some language-neutral replacement and quotes beautification |
-| langPrefix | String | `language-` | CSS language prefix for fenced blocks |
+| lang-prefix | String | `language-` | CSS language prefix for fenced blocks |
 | quotes | String | `“”‘’` | use `“”‘’` for Chinese, `„“‚‘` for German, `«»„“` for Russian |
 | table-class | String | `table` | customize html class of the `<table>` |
 | toc | Boolean | `false` | enable automatic table of contents |
@@ -110,6 +122,11 @@ new Vue({
 | ---- | --------- | -------- |
 | rendered | outHtml[String] | dispatch when render finish |
 | toc-rendered | tocHtml[String] | dispatch when TOC render finish, never dispatch if the toc[prop] is `false` |
+
+# Thanks
+
+- [markdown-it](https://github.com/markdown-it/markdown-it)
+- [transtone](https://github.com/transtone)
 
 # License
 

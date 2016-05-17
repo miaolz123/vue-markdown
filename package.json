@@ -1,6 +1,6 @@
 {
   "name": "vue-markdown",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A Powerful and Highspeed Markdown Parser for Vue",
   "main": "dist/vue-markdown.common.js",
   "files": [

@@ -52,7 +52,7 @@ const rende = (root) => {
 }
 
 export default {
-  template: '<div></div>',
+  template: '<div><slot></slot></div>',
   props: {
     watches: {
       type: Array,
@@ -141,10 +141,14 @@ export default {
       default: 'toc-anchor-link',
     },
   },
-  data: () => ({
-    msg: 'hello',
-  }),
   ready() {
+    if (this.$el.childNodes.length > 0) {
+      this.source = ''
+      for (let el of this.$el.childNodes) {
+        const ext = el.outerHTML ? el.outerHTML : el.textContent
+        this.source += ext
+      }
+    }
     rende(this)
     this.$watch('source', () => { rende(this) })
     this.watches.forEach((v) => {
