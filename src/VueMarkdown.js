@@ -25,12 +25,11 @@ const rende = (root) => {
     quotes: root.quotes,
   })
   md.renderer.rules.table_open = () => `<table class="${root.tableClass}">\n`
-  if (!root.tocLastLevel) root.tocLastLevel = root.tocFirstLevel + 1
   if (root.toc) {
     md.use(toc, {
       tocClassName: root.tocClass,
       tocFirstLevel: root.tocFirstLevel,
-      tocLastLevel: root.tocLastLevel,
+      tocLastLevel: root.tocLastLevelComputed,
       anchorLink: root.tocAnchorLink,
       anchorLinkSymbol: root.tocAnchorLinkSymbol,
       anchorLinkSpace: root.tocAnchorLinkSpace,
@@ -40,19 +39,24 @@ const rende = (root) => {
         if (tocHtml) {
           if (root.tocId && document.getElementById(root.tocId))
             document.getElementById(root.tocId).innerHTML = tocHtml
-          root.$dispatch('toc-rendered', tocHtml)
+          root.$emit('toc-rendered', tocHtml)
         }
       },
     })
   } else if (root.tocId && document.getElementById(root.tocId))
     document.getElementById(root.tocId).innerHTML = ''
-  const outHtml = root.show ? md.render(root.source) : ''
+  const outHtml = root.show ? md.render(root.sourceOut) : ''
   root.$el.innerHTML = outHtml
-  root.$dispatch('rendered', outHtml)
+  root.$emit('rendered', outHtml)
 }
 
 export default {
   template: '<div><slot></slot></div>',
+  data() {
+    return {
+      sourceOut: ''
+    }
+  },
   props: {
     watches: {
       type: Array,
@@ -141,12 +145,17 @@ export default {
       default: 'toc-anchor-link',
     },
   },
-  ready() {
+  computed: {
+    tocLastLevelComputed() {
+      return (! this.tockLastLevel) ? this.tocFirstLevel + 1 : this.tocLastLevel;
+    }
+  },
+  mounted() {
     if (this.$el.childNodes.length > 0) {
       this.source = ''
       for (let el of this.$el.childNodes) {
         const ext = el.outerHTML ? el.outerHTML : el.textContent
-        this.source += ext
+        this.sourceOut += ext
       }
     }
     rende(this)

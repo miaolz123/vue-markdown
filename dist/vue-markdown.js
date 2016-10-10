@@ -150,12 +150,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  md.renderer.rules.table_open = function () {
 	    return '<table class="' + root.tableClass + '">\n';
 	  };
-	  if (!root.tocLastLevel) root.tocLastLevel = root.tocFirstLevel + 1;
 	  if (root.toc) {
 	    md.use(_markdownItTocAndAnchor2.default, {
 	      tocClassName: root.tocClass,
 	      tocFirstLevel: root.tocFirstLevel,
-	      tocLastLevel: root.tocLastLevel,
+	      tocLastLevel: root.tocLastLevelComputed,
 	      anchorLink: root.tocAnchorLink,
 	      anchorLinkSymbol: root.tocAnchorLinkSymbol,
 	      anchorLinkSpace: root.tocAnchorLinkSpace,
@@ -164,18 +163,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
 	        if (tocHtml) {
 	          if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = tocHtml;
-	          root.$dispatch('toc-rendered', tocHtml);
+	          root.$emit('toc-rendered', tocHtml);
 	        }
 	      }
 	    });
 	  } else if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = '';
-	  var outHtml = root.show ? md.render(root.source) : '';
+	  var outHtml = root.show ? md.render(root.sourceOut) : '';
 	  root.$el.innerHTML = outHtml;
-	  root.$dispatch('rendered', outHtml);
+	  root.$emit('rendered', outHtml);
 	};
 
 	exports.default = {
 	  template: '<div><slot></slot></div>',
+	  data: function data() {
+	    return {
+	      sourceOut: ''
+	    };
+	  },
+
 	  props: {
 	    watches: {
 	      type: Array,
@@ -266,7 +271,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: 'toc-anchor-link'
 	    }
 	  },
-	  ready: function ready() {
+	  computed: {
+	    tocLastLevelComputed: function tocLastLevelComputed() {
+	      return !this.tockLastLevel ? this.tocFirstLevel + 1 : this.tocLastLevel;
+	    }
+	  },
+	  mounted: function mounted() {
 	    var _this = this;
 
 	    if (this.$el.childNodes.length > 0) {
@@ -280,7 +290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var el = _step.value;
 
 	          var ext = el.outerHTML ? el.outerHTML : el.textContent;
-	          this.source += ext;
+	          this.sourceOut += ext;
 	        }
 	      } catch (err) {
 	        _didIteratorError = true;
@@ -811,6 +821,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Thrash, waste and sodomy: IE GC bug
 	  var iframe = __webpack_require__(27)('iframe')
 	    , i      = enumBugKeys.length
+	    , lt     = '<'
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
@@ -820,7 +831,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // html.removeChild(iframe);
 	  iframeDocument = iframe.contentWindow.document;
 	  iframeDocument.open();
-	  iframeDocument.write('<script>document.F=Object</script' + gt);
+	  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
 	  iframeDocument.close();
 	  createDict = iframeDocument.F;
 	  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
@@ -838,6 +849,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else result = createDict();
 	  return Properties === undefined ? result : dPs(result, Properties);
 	};
+
 
 /***/ },
 /* 34 */
@@ -4172,7 +4184,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 60 */
 /***/ function(module, exports) {
 
-	module.exports=/[!-#%-\*,-/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u0AF0\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E42\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC8\uDDCD\uDE38-\uDE3D]|\uD805[\uDCC6\uDDC1-\uDDC9\uDE41-\uDE43]|\uD809[\uDC70-\uDC74]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD82F\uDC9F/
+	module.exports=/[!-#%-\*,-/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u0AF0\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E44\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC9\uDDCD\uDDDB\uDDDD-\uDDDF\uDE38-\uDE3D\uDEA9]|\uD805[\uDC4B-\uDC4F\uDC5B\uDC5D\uDCC6\uDDC1-\uDDD7\uDE41-\uDE43\uDE60-\uDE6C\uDF3C-\uDF3E]|\uD807[\uDC41-\uDC45\uDC70\uDC71]|\uD809[\uDC70-\uDC74]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD82F\uDC9F|\uD836[\uDE87-\uDE8B]|\uD83A[\uDD5E\uDD5F]/
 
 /***/ },
 /* 61 */
@@ -4772,19 +4784,20 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
-	module.exports.Any = __webpack_require__(67);
-	module.exports.Cc  = __webpack_require__(68);
-	module.exports.Cf  = __webpack_require__(69);
-	module.exports.P   = __webpack_require__(60);
-	module.exports.Z   = __webpack_require__(70);
+	'use strict';
+
+	exports.Any = __webpack_require__(67);
+	exports.Cc  = __webpack_require__(68);
+	exports.Cf  = __webpack_require__(69);
+	exports.P   = __webpack_require__(60);
+	exports.Z   = __webpack_require__(70);
 
 
 /***/ },
 /* 67 */
 /***/ function(module, exports) {
 
-	module.exports=/[\0-\uD7FF\uDC00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF]/
+	module.exports=/[\0-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
 
 /***/ },
 /* 68 */
@@ -4796,13 +4809,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 69 */
 /***/ function(module, exports) {
 
-	module.exports=/[\xAD\u0600-\u0605\u061C\u06DD\u070F\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF\uFFF9-\uFFFB]|\uD804\uDCBD|\uD82F[\uDCA0-\uDCA3]|\uD834[\uDD73-\uDD7A]|\uDB40[\uDC01\uDC20-\uDC7F]/
+	module.exports=/[\xAD\u0600-\u0605\u061C\u06DD\u070F\u08E2\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF\uFFF9-\uFFFB]|\uD804\uDCBD|\uD82F[\uDCA0-\uDCA3]|\uD834[\uDD73-\uDD7A]|\uDB40[\uDC01\uDC20-\uDC7F]/
 
 /***/ },
 /* 70 */
 /***/ function(module, exports) {
 
-	module.exports=/[ \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]/
+	module.exports=/[ \xA0\u1680\u2000-\u200A\u202F\u205F\u3000]/
 
 /***/ },
 /* 71 */
@@ -5040,13 +5053,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	var default_rules = {};
 
 
-	default_rules.code_inline = function (tokens, idx /*, options, env */) {
-	  return '<code>' + escapeHtml(tokens[idx].content) + '</code>';
+	default_rules.code_inline = function (tokens, idx, options, env, slf) {
+	  var token = tokens[idx],
+	      attrs = slf.renderAttrs(token);
+
+	  return  '<code' + (attrs ? ' ' + attrs : '') + '>' +
+	          escapeHtml(tokens[idx].content) +
+	          '</code>';
 	};
 
 
-	default_rules.code_block = function (tokens, idx /*, options, env */) {
-	  return '<pre><code>' + escapeHtml(tokens[idx].content) + '</code></pre>\n';
+	default_rules.code_block = function (tokens, idx, options, env, slf) {
+	  var token = tokens[idx],
+	      attrs = slf.renderAttrs(token);
+
+	  return  '<pre' + (attrs ? ' ' + attrs : '') + '><code>' +
+	          escapeHtml(tokens[idx].content) +
+	          '</code></pre>\n';
 	};
 
 
@@ -5054,11 +5077,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var token = tokens[idx],
 	      info = token.info ? unescapeAll(token.info).trim() : '',
 	      langName = '',
-	      highlighted;
+	      highlighted, i, tmpAttrs, tmpToken;
 
 	  if (info) {
 	    langName = info.split(/\s+/g)[0];
-	    token.attrJoin('class', options.langPrefix + langName);
 	  }
 
 	  if (options.highlight) {
@@ -5070,6 +5092,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (highlighted.indexOf('<pre') === 0) {
 	    return highlighted + '\n';
 	  }
+
+	  // If language exists, inject class gently, without mudofying original token.
+	  // May be, one day we will add .clone() for token and simplify this part, but
+	  // now we prefer to keep things local.
+	  if (info) {
+	    i        = token.attrIndex('class');
+	    tmpAttrs = token.attrs ? token.attrs.slice() : [];
+
+	    if (i < 0) {
+	      tmpAttrs.push([ 'class', options.langPrefix + langName ]);
+	    } else {
+	      tmpAttrs[i] += ' ' + options.langPrefix + langName;
+	    }
+
+	    // Fake token just to render attributes
+	    tmpToken = {
+	      attrs: tmpAttrs
+	    };
+
+	    return  '<pre><code' + slf.renderAttrs(tmpToken) + '>'
+	          + highlighted
+	          + '</code></pre>\n';
+	  }
+
 
 	  return  '<pre><code' + slf.renderAttrs(token) + '>'
 	        + highlighted
@@ -5280,12 +5326,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * instead of simple escaping.
 	 **/
 	Renderer.prototype.renderInlineAsText = function (tokens, options, env) {
-	  var result = '',
-	      rules = this.rules;
+	  var result = '';
 
 	  for (var i = 0, len = tokens.length; i < len; i++) {
 	    if (tokens[i].type === 'text') {
-	      result += rules.text(tokens, i, options, env, this);
+	      result += tokens[i].content;
 	    } else if (tokens[i].type === 'image') {
 	      result += this.renderInlineAsText(tokens[i].children, options, env);
 	    }
@@ -5758,7 +5803,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 
-	var NEWLINES_RE  = /\r[\n\u0085]|[\u2424\u2028\u0085]/g;
+	var NEWLINES_RE  = /\r[\n\u0085]?|[\u2424\u2028\u0085]/g;
 	var NULL_RE      = /\u0000/g;
 
 
@@ -6441,6 +6486,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    this.attrs[idx] = attrData;
 	  }
+	};
+
+
+	/**
+	 * Token.attrGet(name)
+	 *
+	 * Get the value of attribute `name`, or null if it does not exist.
+	 **/
+	Token.prototype.attrGet = function attrGet(name) {
+	  var idx = this.attrIndex(name), value = null;
+	  if (idx >= 0) {
+	    value = this.attrs[idx][1];
+	  }
+	  return value;
 	};
 
 
@@ -9727,15 +9786,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var tail = text.slice(pos);
 
 	      if (!self.re.no_http) {
-	      // compile lazily, becayse "host"-containing variables can change on tlds update.
+	      // compile lazily, because "host"-containing variables can change on tlds update.
 	        self.re.no_http =  new RegExp(
-	          '^' + self.re.src_auth + self.re.src_host_port_strict + self.re.src_path, 'i'
+	          '^' +
+	          self.re.src_auth +
+	          // Don't allow single-level domains, because of false positives like '//test'
+	          // with code comments
+	          '(?:localhost|(?:(?:' + self.re.src_domain + ')\\.)+' + self.re.src_domain_root + ')' +
+	          self.re.src_port +
+	          self.re.src_host_terminator +
+	          self.re.src_path,
+
+	          'i'
 	        );
 	      }
 
 	      if (self.re.no_http.test(tail)) {
-	        // should not be `://`, that protects from errors in protocol name
+	        // should not be `://` & `///`, that protects from errors in protocol name
 	        if (pos >= 3 && text[pos - 3] === ':') { return 0; }
+	        if (pos >= 3 && text[pos - 3] === '/') { return 0; }
 	        return tail.match(self.re.no_http)[0].length;
 	      }
 	      return 0;
@@ -9899,8 +9968,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                      .map(escapeRE)
 	                      .join('|');
 	  // (?!_) cause 1.5x slowdown
-	  self.re.schema_test   = RegExp('(^|(?!_)(?:>|' + re.src_ZPCc + '))(' + slist + ')', 'i');
-	  self.re.schema_search = RegExp('(^|(?!_)(?:>|' + re.src_ZPCc + '))(' + slist + ')', 'ig');
+	  self.re.schema_test   = RegExp('(^|(?!_)(?:[><]|' + re.src_ZPCc + '))(' + slist + ')', 'i');
+	  self.re.schema_search = RegExp('(^|(?!_)(?:[><]|' + re.src_ZPCc + '))(' + slist + ')', 'ig');
 
 	  self.re.pretest       = RegExp(
 	                            '(' + self.re.schema_test.source + ')|' +
@@ -10294,9 +10363,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	// All possible word characters (everything without punctuation, spaces & controls)
 	// Defined via punctuation & spaces to save space
 	// Should be something like \p{\L\N\S\M} (\w but without `_`)
-	var src_pseudo_letter       = '(?:(?!' + src_ZPCc + ')' + src_Any + ')';
+	var src_pseudo_letter       = '(?:(?!>|<|' + src_ZPCc + ')' + src_Any + ')';
 	// The same as abothe but without [0-9]
-	var src_pseudo_letter_non_d = '(?:(?![0-9]|' + src_ZPCc + ')' + src_Any + ')';
+	// var src_pseudo_letter_non_d = '(?:(?![0-9]|' + src_ZPCc + ')' + src_Any + ')';
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -10304,7 +10373,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  '(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
 
-	exports.src_auth    = '(?:(?:(?!' + src_ZCc + ').)+@)?';
+	// Prohibit [@/] in user/pass to avoid wrong domain fetch.
+	exports.src_auth    = '(?:(?:(?!' + src_ZCc + '|[@/]).)+@)?';
 
 	var src_port = exports.src_port =
 
@@ -10312,14 +10382,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var src_host_terminator = exports.src_host_terminator =
 
-	  '(?=$|' + src_ZPCc + ')(?!-|_|:\\d|\\.-|\\.(?!$|' + src_ZPCc + '))';
+	  '(?=$|>|<|' + src_ZPCc + ')(?!-|_|:\\d|\\.-|\\.(?!$|' + src_ZPCc + '))';
 
 	var src_path = exports.src_path =
 
 	  '(?:' +
 	    '[/?#]' +
 	      '(?:' +
-	        '(?!' + src_ZCc + '|[()[\\]{}.,"\'?!\\-]).|' +
+	        '(?!' + src_ZCc + '|[()[\\]{}.,"\'?!\\-<>]).|' +
 	        '\\[(?:(?!' + src_ZCc + '|\\]).)*\\]|' +
 	        '\\((?:(?!' + src_ZCc + '|[)]).)*\\)|' +
 	        '\\{(?:(?!' + src_ZCc + '|[}]).)*\\}|' +
@@ -10353,11 +10423,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var src_domain_root = exports.src_domain_root =
 
-	  // Can't have digits and dashes
+	  // Allow letters & digits (http://test1)
 	  '(?:' +
 	    src_xn +
 	    '|' +
-	    src_pseudo_letter_non_d + '{1,63}' +
+	    src_pseudo_letter + '{1,63}' +
 	  ')';
 
 	var src_domain = exports.src_domain =
@@ -10376,8 +10446,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var src_host = exports.src_host =
 
 	  '(?:' +
-	    src_ip4 +
-	  '|' +
+	  // Don't need IP check, because digits are already allowed in normal domain names
+	  //   src_ip4 +
+	  // '|' +
 	    '(?:(?:(?:' + src_domain + ')\\.)*' + src_domain_root + ')' +
 	  ')';
 
@@ -10420,11 +10491,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Rude test fuzzy links by host, for quick deny
 	exports.tpl_host_fuzzy_test =
 
-	  'localhost|\\.\\d{1,3}\\.|(?:\\.(?:%TLDS%)(?:' + src_ZPCc + '|$))';
+	  'localhost|www\\.|\\.\\d{1,3}\\.|(?:\\.(?:%TLDS%)(?:' + src_ZPCc + '|>|$))';
 
 	exports.tpl_email_fuzzy =
 
-	    '(^|>|\\(|' + src_ZCc + ')(' + src_email_name + '@' + tpl_host_fuzzy_strict + ')';
+	    '(^|<|>|\\(|' + src_ZCc + ')(' + src_email_name + '@' + tpl_host_fuzzy_strict + ')';
 
 	exports.tpl_link_fuzzy =
 	    // Fuzzy link can't be prepended with .:/\- and non punctuation.
@@ -11219,7 +11290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  md.renderer.rules.emoji = emoji_html;
 
-	  md.core.ruler.push('emoji', emoji_replace(md, opts.defs, opts.shortcuts, opts.scanRE));
+	  md.core.ruler.push('emoji', emoji_replace(md, opts.defs, opts.shortcuts, opts.scanRE, opts.replaceRE));
 	};
 
 
@@ -11230,666 +11301,991 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = {
 		"100": "💯",
 		"1234": "🔢",
-		"smile": "😄",
-		"smiley": "😃",
 		"grinning": "😀",
-		"blush": "😊",
-		"relaxed": "☺️",
+		"grimacing": "😬",
+		"grin": "😁",
+		"joy": "😂",
+		"smiley": "😃",
+		"smile": "😄",
+		"sweat_smile": "😅",
+		"laughing": "😆",
+		"satisfied": "😆",
+		"innocent": "😇",
 		"wink": "😉",
+		"blush": "😊",
+		"slightly_smiling_face": "🙂",
+		"upside_down_face": "🙃",
+		"relaxed": "☺️",
+		"yum": "😋",
+		"relieved": "😌",
 		"heart_eyes": "😍",
 		"kissing_heart": "😘",
-		"kissing_closed_eyes": "😚",
 		"kissing": "😗",
 		"kissing_smiling_eyes": "😙",
+		"kissing_closed_eyes": "😚",
 		"stuck_out_tongue_winking_eye": "😜",
 		"stuck_out_tongue_closed_eyes": "😝",
 		"stuck_out_tongue": "😛",
-		"flushed": "😳",
-		"grin": "😁",
-		"pensive": "😔",
-		"relieved": "😌",
+		"money_mouth_face": "🤑",
+		"nerd_face": "🤓",
+		"sunglasses": "😎",
+		"hugs": "🤗",
+		"smirk": "😏",
+		"no_mouth": "😶",
+		"neutral_face": "😐",
+		"expressionless": "😑",
 		"unamused": "😒",
+		"roll_eyes": "🙄",
+		"thinking": "🤔",
+		"flushed": "😳",
 		"disappointed": "😞",
-		"persevere": "😣",
-		"cry": "😢",
-		"joy": "😂",
-		"sob": "😭",
-		"sleepy": "😪",
-		"disappointed_relieved": "😥",
-		"cold_sweat": "😰",
-		"sweat_smile": "😅",
-		"sweat": "😓",
-		"weary": "😩",
-		"tired_face": "😫",
-		"fearful": "😨",
-		"scream": "😱",
+		"worried": "😟",
 		"angry": "😠",
 		"rage": "😡",
-		"triumph": "😤",
+		"pout": "😡",
+		"pensive": "😔",
+		"confused": "😕",
+		"slightly_frowning_face": "🙁",
+		"frowning_face": "☹️",
+		"persevere": "😣",
 		"confounded": "😖",
-		"laughing": "😆",
-		"satisfied": "😆",
-		"yum": "😋",
-		"mask": "😷",
-		"sunglasses": "😎",
-		"sleeping": "😴",
-		"dizzy_face": "😵",
-		"astonished": "😲",
-		"worried": "😟",
+		"tired_face": "😫",
+		"weary": "😩",
+		"triumph": "😤",
+		"open_mouth": "😮",
+		"scream": "😱",
+		"fearful": "😨",
+		"cold_sweat": "😰",
+		"hushed": "😯",
 		"frowning": "😦",
 		"anguished": "😧",
+		"cry": "😢",
+		"disappointed_relieved": "😥",
+		"sleepy": "😪",
+		"sweat": "😓",
+		"sob": "😭",
+		"dizzy_face": "😵",
+		"astonished": "😲",
+		"zipper_mouth_face": "🤐",
+		"mask": "😷",
+		"face_with_thermometer": "🤒",
+		"face_with_head_bandage": "🤕",
+		"sleeping": "😴",
+		"zzz": "💤",
+		"hankey": "💩",
+		"poop": "💩",
+		"shit": "💩",
 		"smiling_imp": "😈",
 		"imp": "👿",
-		"open_mouth": "😮",
-		"grimacing": "😬",
-		"neutral_face": "😐",
-		"confused": "😕",
-		"hushed": "😯",
-		"no_mouth": "😶",
-		"innocent": "😇",
-		"smirk": "😏",
-		"expressionless": "😑",
-		"man_with_gua_pi_mao": "👲",
-		"man_with_turban": "👳",
-		"cop": "👮",
-		"construction_worker": "👷",
-		"guardsman": "💂",
+		"japanese_ogre": "👹",
+		"japanese_goblin": "👺",
+		"ghost": "👻",
+		"skull": "💀",
+		"skull_and_crossbones": "☠️",
+		"alien": "👽",
+		"space_invader": "👾",
+		"robot": "🤖",
+		"smiley_cat": "😺",
+		"smile_cat": "😸",
+		"joy_cat": "😹",
+		"heart_eyes_cat": "😻",
+		"smirk_cat": "😼",
+		"kissing_cat": "😽",
+		"scream_cat": "🙀",
+		"crying_cat_face": "😿",
+		"pouting_cat": "😾",
+		"raised_hands": "🙌",
+		"clap": "👏",
+		"+1": "👍",
+		"thumbsup": "👍",
+		"-1": "👎",
+		"thumbsdown": "👎",
+		"facepunch": "👊",
+		"punch": "👊",
+		"fist": "✊",
+		"wave": "👋",
+		"point_left": "👈",
+		"point_right": "👉",
+		"point_up_2": "👆",
+		"point_down": "👇",
+		"ok_hand": "👌",
+		"point_up": "☝️",
+		"v": "✌️",
+		"hand": "✋",
+		"raised_hand": "✋",
+		"raised_hand_with_fingers_splayed": "🖐",
+		"open_hands": "👐",
+		"muscle": "💪",
+		"pray": "🙏",
+		"vulcan_salute": "🖖",
+		"metal": "🤘",
+		"middle_finger": "🖕",
+		"fu": "🖕",
+		"writing_hand": "✍️",
+		"nail_care": "💅",
+		"lips": "👄",
+		"tongue": "👅",
+		"ear": "👂",
+		"nose": "👃",
+		"eye": "👁",
+		"eyes": "👀",
+		"speaking_head": "🗣",
+		"bust_in_silhouette": "👤",
+		"busts_in_silhouette": "👥",
 		"baby": "👶",
 		"boy": "👦",
 		"girl": "👧",
 		"man": "👨",
 		"woman": "👩",
+		"blonde_woman": "👱‍♀️",
+		"blonde_man": "👱",
+		"person_with_blond_hair": "👱",
 		"older_man": "👴",
 		"older_woman": "👵",
-		"person_with_blond_hair": "👱",
-		"angel": "👼",
+		"man_with_gua_pi_mao": "👲",
+		"woman_with_turban": "👳‍♀️",
+		"man_with_turban": "👳",
+		"policewoman": "👮‍♀️",
+		"policeman": "👮",
+		"cop": "👮",
+		"construction_worker_woman": "👷‍♀️",
+		"construction_worker_man": "👷",
+		"construction_worker": "👷",
+		"guardswoman": "💂‍♀️",
+		"guardsman": "💂",
+		"female_detective": "🕵️‍♀️",
+		"male_detective": "🕵️",
+		"detective": "🕵️",
+		"santa": "🎅",
 		"princess": "👸",
-		"smiley_cat": "😺",
-		"smile_cat": "😸",
-		"heart_eyes_cat": "😻",
-		"kissing_cat": "😽",
-		"smirk_cat": "😼",
-		"scream_cat": "🙀",
-		"crying_cat_face": "😿",
-		"joy_cat": "😹",
-		"pouting_cat": "😾",
-		"japanese_ogre": "👹",
-		"japanese_goblin": "👺",
-		"see_no_evil": "🙈",
-		"hear_no_evil": "🙉",
-		"speak_no_evil": "🙊",
-		"skull": "💀",
-		"alien": "👽",
-		"hankey": "💩",
-		"poop": "💩",
-		"shit": "💩",
-		"fire": "🔥",
-		"sparkles": "✨",
-		"star2": "🌟",
-		"dizzy": "💫",
-		"boom": "💥",
-		"collision": "💥",
-		"anger": "💢",
-		"sweat_drops": "💦",
-		"droplet": "💧",
-		"zzz": "💤",
-		"dash": "💨",
-		"ear": "👂",
-		"eyes": "👀",
-		"nose": "👃",
-		"tongue": "👅",
-		"lips": "👄",
-		"+1": "👍",
-		"thumbsup": "👍",
-		"-1": "👎",
-		"thumbsdown": "👎",
-		"ok_hand": "👌",
-		"facepunch": "👊",
-		"punch": "👊",
-		"fist": "✊",
-		"v": "✌️",
-		"wave": "👋",
-		"hand": "✋",
-		"raised_hand": "✋",
-		"open_hands": "👐",
-		"point_up_2": "👆",
-		"point_down": "👇",
-		"point_right": "👉",
-		"point_left": "👈",
-		"raised_hands": "🙌",
-		"pray": "🙏",
-		"point_up": "☝️",
-		"clap": "👏",
-		"muscle": "💪",
+		"bride_with_veil": "👰",
+		"angel": "👼",
+		"bowing_woman": "🙇‍♀️",
+		"bowing_man": "🙇",
+		"bow": "🙇",
+		"tipping_hand_woman": "💁",
+		"information_desk_person": "💁",
+		"tipping_hand_man": "💁‍♂️",
+		"no_good_woman": "🙅",
+		"no_good": "🙅",
+		"ng_woman": "🙅",
+		"no_good_man": "🙅‍♂️",
+		"ng_man": "🙅‍♂️",
+		"ok_woman": "🙆",
+		"ok_man": "🙆‍♂️",
+		"raising_hand_woman": "🙋",
+		"raising_hand": "🙋",
+		"raising_hand_man": "🙋‍♂️",
+		"pouting_woman": "🙎",
+		"person_with_pouting_face": "🙎",
+		"pouting_man": "🙎‍♂️",
+		"frowning_woman": "🙍",
+		"person_frowning": "🙍",
+		"frowning_man": "🙍‍♂️",
+		"haircut_woman": "💇",
+		"haircut": "💇",
+		"haircut_man": "💇‍♂️",
+		"massage_woman": "💆",
+		"massage": "💆",
+		"massage_man": "💆‍♂️",
+		"dancer": "💃",
+		"dancing_women": "👯",
+		"dancers": "👯",
+		"dancing_men": "👯‍♂️",
+		"walking_woman": "🚶‍♀️",
+		"walking_man": "🚶",
 		"walking": "🚶",
+		"running_woman": "🏃‍♀️",
+		"running_man": "🏃",
 		"runner": "🏃",
 		"running": "🏃",
-		"dancer": "💃",
 		"couple": "👫",
-		"family": "👪",
-		"two_men_holding_hands": "👬",
 		"two_women_holding_hands": "👭",
-		"couplekiss": "💏",
+		"two_men_holding_hands": "👬",
+		"couple_with_heart_woman_man": "💑",
 		"couple_with_heart": "💑",
-		"dancers": "👯",
-		"ok_woman": "🙆",
-		"no_good": "🙅",
-		"information_desk_person": "💁",
-		"raising_hand": "🙋",
-		"massage": "💆",
-		"haircut": "💇",
-		"nail_care": "💅",
-		"bride_with_veil": "👰",
-		"person_with_pouting_face": "🙎",
-		"person_frowning": "🙍",
-		"bow": "🙇",
-		"tophat": "🎩",
-		"crown": "👑",
-		"womans_hat": "👒",
-		"athletic_shoe": "👟",
-		"mans_shoe": "👞",
-		"shoe": "👞",
-		"sandal": "👡",
-		"high_heel": "👠",
-		"boot": "👢",
+		"couple_with_heart_woman_woman": "👩‍❤️‍👩",
+		"couple_with_heart_man_man": "👨‍❤️‍👨",
+		"couplekiss_man_woman": "💏",
+		"couplekiss_woman_woman": "👩‍❤️‍💋‍👩",
+		"couplekiss_man_man": "👨‍❤️‍💋‍👨",
+		"family_man_woman_boy": "👪",
+		"family": "👪",
+		"family_man_woman_girl": "👨‍👩‍👧",
+		"family_man_woman_girl_boy": "👨‍👩‍👧‍👦",
+		"family_man_woman_boy_boy": "👨‍👩‍👦‍👦",
+		"family_man_woman_girl_girl": "👨‍👩‍👧‍👧",
+		"family_woman_woman_boy": "👩‍👩‍👦",
+		"family_woman_woman_girl": "👩‍👩‍👧",
+		"family_woman_woman_girl_boy": "👩‍👩‍👧‍👦",
+		"family_woman_woman_boy_boy": "👩‍👩‍👦‍👦",
+		"family_woman_woman_girl_girl": "👩‍👩‍👧‍👧",
+		"family_man_man_boy": "👨‍👨‍👦",
+		"family_man_man_girl": "👨‍👨‍👧",
+		"family_man_man_girl_boy": "👨‍👨‍👧‍👦",
+		"family_man_man_boy_boy": "👨‍👨‍👦‍👦",
+		"family_man_man_girl_girl": "👨‍👨‍👧‍👧",
+		"family_woman_boy": "👩‍👦",
+		"family_woman_girl": "👩‍👧",
+		"family_woman_girl_boy": "👩‍👧‍👦",
+		"family_woman_boy_boy": "👩‍👦‍👦",
+		"family_woman_girl_girl": "👩‍👧‍👧",
+		"family_man_boy": "👨‍👦",
+		"family_man_girl": "👨‍👧",
+		"family_man_girl_boy": "👨‍👧‍👦",
+		"family_man_boy_boy": "👨‍👦‍👦",
+		"family_man_girl_girl": "👨‍👧‍👧",
+		"womans_clothes": "👚",
 		"shirt": "👕",
 		"tshirt": "👕",
-		"necktie": "👔",
-		"womans_clothes": "👚",
-		"dress": "👗",
-		"running_shirt_with_sash": "🎽",
 		"jeans": "👖",
-		"kimono": "👘",
+		"necktie": "👔",
+		"dress": "👗",
 		"bikini": "👙",
-		"briefcase": "💼",
-		"handbag": "👜",
+		"kimono": "👘",
+		"lipstick": "💄",
+		"kiss": "💋",
+		"footprints": "👣",
+		"high_heel": "👠",
+		"sandal": "👡",
+		"boot": "👢",
+		"mans_shoe": "👞",
+		"shoe": "👞",
+		"athletic_shoe": "👟",
+		"womans_hat": "👒",
+		"tophat": "🎩",
+		"mortar_board": "🎓",
+		"crown": "👑",
+		"rescue_worker_helmet": "⛑",
+		"school_satchel": "🎒",
 		"pouch": "👝",
 		"purse": "👛",
+		"handbag": "👜",
+		"briefcase": "💼",
 		"eyeglasses": "👓",
-		"ribbon": "🎀",
-		"closed_umbrella": "🌂",
-		"lipstick": "💄",
-		"yellow_heart": "💛",
-		"blue_heart": "💙",
-		"purple_heart": "💜",
-		"green_heart": "💚",
-		"heart": "❤️",
-		"broken_heart": "💔",
-		"heartpulse": "💗",
-		"heartbeat": "💓",
-		"two_hearts": "💕",
-		"sparkling_heart": "💖",
-		"revolving_hearts": "💞",
-		"cupid": "💘",
-		"love_letter": "💌",
-		"kiss": "💋",
+		"dark_sunglasses": "🕶",
 		"ring": "💍",
-		"gem": "💎",
-		"bust_in_silhouette": "👤",
-		"busts_in_silhouette": "👥",
-		"speech_balloon": "💬",
-		"footprints": "👣",
-		"thought_balloon": "💭",
+		"closed_umbrella": "🌂",
 		"dog": "🐶",
-		"wolf": "🐺",
 		"cat": "🐱",
 		"mouse": "🐭",
 		"hamster": "🐹",
 		"rabbit": "🐰",
-		"frog": "🐸",
-		"tiger": "🐯",
-		"koala": "🐨",
 		"bear": "🐻",
+		"panda_face": "🐼",
+		"koala": "🐨",
+		"tiger": "🐯",
+		"lion": "🦁",
+		"cow": "🐮",
 		"pig": "🐷",
 		"pig_nose": "🐽",
-		"cow": "🐮",
-		"boar": "🐗",
+		"frog": "🐸",
+		"octopus": "🐙",
 		"monkey_face": "🐵",
+		"see_no_evil": "🙈",
+		"hear_no_evil": "🙉",
+		"speak_no_evil": "🙊",
 		"monkey": "🐒",
-		"horse": "🐴",
-		"sheep": "🐑",
-		"elephant": "🐘",
-		"panda_face": "🐼",
+		"chicken": "🐔",
 		"penguin": "🐧",
 		"bird": "🐦",
 		"baby_chick": "🐤",
-		"hatched_chick": "🐥",
 		"hatching_chick": "🐣",
-		"chicken": "🐔",
-		"snake": "🐍",
-		"turtle": "🐢",
-		"bug": "🐛",
+		"hatched_chick": "🐥",
+		"wolf": "🐺",
+		"boar": "🐗",
+		"horse": "🐴",
+		"unicorn": "🦄",
 		"bee": "🐝",
 		"honeybee": "🐝",
-		"ant": "🐜",
-		"beetle": "🐞",
+		"bug": "🐛",
 		"snail": "🐌",
-		"octopus": "🐙",
-		"shell": "🐚",
+		"beetle": "🐞",
+		"ant": "🐜",
+		"spider": "🕷",
+		"scorpion": "🦂",
+		"crab": "🦀",
+		"snake": "🐍",
+		"turtle": "🐢",
 		"tropical_fish": "🐠",
 		"fish": "🐟",
+		"blowfish": "🐡",
 		"dolphin": "🐬",
 		"flipper": "🐬",
 		"whale": "🐳",
 		"whale2": "🐋",
-		"cow2": "🐄",
-		"ram": "🐏",
-		"rat": "🐀",
-		"water_buffalo": "🐃",
-		"tiger2": "🐅",
-		"rabbit2": "🐇",
-		"dragon": "🐉",
-		"racehorse": "🐎",
-		"goat": "🐐",
-		"rooster": "🐓",
-		"dog2": "🐕",
-		"pig2": "🐖",
-		"mouse2": "🐁",
-		"ox": "🐂",
-		"dragon_face": "🐲",
-		"blowfish": "🐡",
 		"crocodile": "🐊",
-		"camel": "🐫",
-		"dromedary_camel": "🐪",
 		"leopard": "🐆",
-		"cat2": "🐈",
+		"tiger2": "🐅",
+		"water_buffalo": "🐃",
+		"ox": "🐂",
+		"cow2": "🐄",
+		"dromedary_camel": "🐪",
+		"camel": "🐫",
+		"elephant": "🐘",
+		"goat": "🐐",
+		"ram": "🐏",
+		"sheep": "🐑",
+		"racehorse": "🐎",
+		"pig2": "🐖",
+		"rat": "🐀",
+		"mouse2": "🐁",
+		"rooster": "🐓",
+		"turkey": "🦃",
+		"dove": "🕊",
+		"dog2": "🐕",
 		"poodle": "🐩",
+		"cat2": "🐈",
+		"rabbit2": "🐇",
+		"chipmunk": "🐿",
 		"feet": "🐾",
 		"paw_prints": "🐾",
-		"bouquet": "💐",
-		"cherry_blossom": "🌸",
-		"tulip": "🌷",
-		"four_leaf_clover": "🍀",
-		"rose": "🌹",
-		"sunflower": "🌻",
-		"hibiscus": "🌺",
-		"maple_leaf": "🍁",
-		"leaves": "🍃",
-		"fallen_leaf": "🍂",
-		"herb": "🌿",
-		"ear_of_rice": "🌾",
-		"mushroom": "🍄",
+		"dragon": "🐉",
+		"dragon_face": "🐲",
 		"cactus": "🌵",
-		"palm_tree": "🌴",
+		"christmas_tree": "🎄",
 		"evergreen_tree": "🌲",
 		"deciduous_tree": "🌳",
-		"chestnut": "🌰",
+		"palm_tree": "🌴",
 		"seedling": "🌱",
+		"herb": "🌿",
+		"shamrock": "☘",
+		"four_leaf_clover": "🍀",
+		"bamboo": "🎍",
+		"tanabata_tree": "🎋",
+		"leaves": "🍃",
+		"fallen_leaf": "🍂",
+		"maple_leaf": "🍁",
+		"ear_of_rice": "🌾",
+		"hibiscus": "🌺",
+		"sunflower": "🌻",
+		"rose": "🌹",
+		"tulip": "🌷",
 		"blossom": "🌼",
-		"globe_with_meridians": "🌐",
-		"sun_with_face": "🌞",
-		"full_moon_with_face": "🌝",
-		"new_moon_with_face": "🌚",
+		"cherry_blossom": "🌸",
+		"bouquet": "💐",
+		"mushroom": "🍄",
+		"chestnut": "🌰",
+		"jack_o_lantern": "🎃",
+		"shell": "🐚",
+		"spider_web": "🕸",
+		"earth_americas": "🌎",
+		"earth_africa": "🌍",
+		"earth_asia": "🌏",
+		"full_moon": "🌕",
+		"waning_gibbous_moon": "🌖",
+		"last_quarter_moon": "🌗",
+		"waning_crescent_moon": "🌘",
 		"new_moon": "🌑",
 		"waxing_crescent_moon": "🌒",
 		"first_quarter_moon": "🌓",
 		"moon": "🌔",
 		"waxing_gibbous_moon": "🌔",
-		"full_moon": "🌕",
-		"waning_gibbous_moon": "🌖",
-		"last_quarter_moon": "🌗",
-		"waning_crescent_moon": "🌘",
-		"last_quarter_moon_with_face": "🌜",
+		"new_moon_with_face": "🌚",
+		"full_moon_with_face": "🌝",
 		"first_quarter_moon_with_face": "🌛",
+		"last_quarter_moon_with_face": "🌜",
+		"sun_with_face": "🌞",
 		"crescent_moon": "🌙",
-		"earth_africa": "🌍",
-		"earth_americas": "🌎",
-		"earth_asia": "🌏",
-		"volcano": "🌋",
-		"milky_way": "🌌",
-		"stars": "🌠",
-		"star": "⭐",
+		"star": "⭐️",
+		"star2": "🌟",
+		"dizzy": "💫",
+		"sparkles": "✨",
+		"comet": "☄️",
 		"sunny": "☀️",
-		"partly_sunny": "⛅",
+		"sun_behind_small_cloud": "🌤",
+		"partly_sunny": "⛅️",
+		"sun_behind_large_cloud": "🌥",
+		"sun_behind_rain_cloud": "🌦",
 		"cloud": "☁️",
-		"zap": "⚡",
-		"umbrella": "☔",
+		"cloud_with_rain": "🌧",
+		"cloud_with_lightning_and_rain": "⛈",
+		"cloud_with_lightning": "🌩",
+		"zap": "⚡️",
+		"fire": "🔥",
+		"boom": "💥",
+		"collision": "💥",
 		"snowflake": "❄️",
-		"snowman": "⛄",
-		"cyclone": "🌀",
-		"foggy": "🌁",
-		"rainbow": "🌈",
+		"cloud_with_snow": "🌨",
+		"snowman_with_snow": "☃️",
+		"snowman": "⛄️",
+		"wind_face": "🌬",
+		"dash": "💨",
+		"tornado": "🌪",
+		"fog": "🌫",
+		"open_umbrella": "☂️",
+		"umbrella": "☔️",
+		"droplet": "💧",
+		"sweat_drops": "💦",
 		"ocean": "🌊",
-		"bamboo": "🎍",
-		"gift_heart": "💝",
-		"dolls": "🎎",
-		"school_satchel": "🎒",
-		"mortar_board": "🎓",
-		"flags": "🎏",
-		"fireworks": "🎆",
-		"sparkler": "🎇",
-		"wind_chime": "🎐",
-		"rice_scene": "🎑",
-		"jack_o_lantern": "🎃",
-		"ghost": "👻",
-		"santa": "🎅",
-		"christmas_tree": "🎄",
-		"gift": "🎁",
-		"tanabata_tree": "🎋",
-		"tada": "🎉",
-		"confetti_ball": "🎊",
-		"balloon": "🎈",
-		"crossed_flags": "🎌",
-		"crystal_ball": "🔮",
-		"movie_camera": "🎥",
-		"camera": "📷",
-		"video_camera": "📹",
-		"vhs": "📼",
-		"cd": "💿",
-		"dvd": "📀",
-		"minidisc": "💽",
-		"floppy_disk": "💾",
-		"computer": "💻",
-		"iphone": "📱",
-		"phone": "☎️",
-		"telephone": "☎️",
-		"telephone_receiver": "📞",
-		"pager": "📟",
-		"fax": "📠",
-		"satellite": "📡",
-		"tv": "📺",
-		"radio": "📻",
-		"loud_sound": "🔊",
-		"sound": "🔉",
-		"speaker": "🔈",
-		"mute": "🔇",
-		"bell": "🔔",
-		"no_bell": "🔕",
-		"loudspeaker": "📢",
-		"mega": "📣",
-		"hourglass_flowing_sand": "⏳",
-		"hourglass": "⌛",
-		"alarm_clock": "⏰",
-		"watch": "⌚",
-		"unlock": "🔓",
-		"lock": "🔒",
-		"lock_with_ink_pen": "🔏",
-		"closed_lock_with_key": "🔐",
-		"key": "🔑",
-		"mag_right": "🔎",
-		"bulb": "💡",
-		"flashlight": "🔦",
-		"high_brightness": "🔆",
-		"low_brightness": "🔅",
-		"electric_plug": "🔌",
-		"battery": "🔋",
-		"mag": "🔍",
-		"bathtub": "🛁",
+		"green_apple": "🍏",
+		"apple": "🍎",
+		"pear": "🍐",
+		"tangerine": "🍊",
+		"orange": "🍊",
+		"mandarin": "🍊",
+		"lemon": "🍋",
+		"banana": "🍌",
+		"watermelon": "🍉",
+		"grapes": "🍇",
+		"strawberry": "🍓",
+		"melon": "🍈",
+		"cherries": "🍒",
+		"peach": "🍑",
+		"pineapple": "🍍",
+		"tomato": "🍅",
+		"eggplant": "🍆",
+		"hot_pepper": "🌶",
+		"corn": "🌽",
+		"sweet_potato": "🍠",
+		"honey_pot": "🍯",
+		"bread": "🍞",
+		"cheese": "🧀",
+		"poultry_leg": "🍗",
+		"meat_on_bone": "🍖",
+		"fried_shrimp": "🍤",
+		"egg": "🍳",
+		"hamburger": "🍔",
+		"fries": "🍟",
+		"hotdog": "🌭",
+		"pizza": "🍕",
+		"spaghetti": "🍝",
+		"taco": "🌮",
+		"burrito": "🌯",
+		"ramen": "🍜",
+		"stew": "🍲",
+		"fish_cake": "🍥",
+		"sushi": "🍣",
+		"bento": "🍱",
+		"curry": "🍛",
+		"rice_ball": "🍙",
+		"rice": "🍚",
+		"rice_cracker": "🍘",
+		"oden": "🍢",
+		"dango": "🍡",
+		"shaved_ice": "🍧",
+		"ice_cream": "🍨",
+		"icecream": "🍦",
+		"cake": "🍰",
+		"birthday": "🎂",
+		"custard": "🍮",
+		"candy": "🍬",
+		"lollipop": "🍭",
+		"chocolate_bar": "🍫",
+		"popcorn": "🍿",
+		"doughnut": "🍩",
+		"cookie": "🍪",
+		"beer": "🍺",
+		"beers": "🍻",
+		"wine_glass": "🍷",
+		"cocktail": "🍸",
+		"tropical_drink": "🍹",
+		"champagne": "🍾",
+		"sake": "🍶",
+		"tea": "🍵",
+		"coffee": "☕️",
+		"baby_bottle": "🍼",
+		"fork_and_knife": "🍴",
+		"plate_with_cutlery": "🍽",
+		"soccer": "⚽️",
+		"basketball": "🏀",
+		"football": "🏈",
+		"baseball": "⚾️",
+		"tennis": "🎾",
+		"volleyball": "🏐",
+		"rugby_football": "🏉",
+		"8ball": "🎱",
+		"ping_pong": "🏓",
+		"badminton": "🏸",
+		"ice_hockey": "🏒",
+		"field_hockey": "🏑",
+		"cricket": "🏏",
+		"bow_and_arrow": "🏹",
+		"golf": "⛳️",
+		"fishing_pole_and_fish": "🎣",
+		"ice_skate": "⛸",
+		"ski": "🎿",
+		"skier": "⛷",
+		"snowboarder": "🏂",
+		"weight_lifting_woman": "🏋️‍♀️",
+		"weight_lifting_man": "🏋️",
+		"basketball_woman": "⛹️‍♀️",
+		"basketball_man": "⛹️",
+		"golfing_woman": "🏌️‍♀️",
+		"golfing_man": "🏌️",
+		"surfing_woman": "🏄‍♀️",
+		"surfing_man": "🏄",
+		"surfer": "🏄",
+		"swimming_woman": "🏊‍♀️",
+		"swimming_man": "🏊",
+		"swimmer": "🏊",
+		"rowing_woman": "🚣‍♀️",
+		"rowing_man": "🚣",
+		"rowboat": "🚣",
+		"horse_racing": "🏇",
+		"biking_woman": "🚴‍♀️",
+		"biking_man": "🚴",
+		"bicyclist": "🚴",
+		"mountain_biking_woman": "🚵‍♀️",
+		"mountain_biking_man": "🚵",
+		"mountain_bicyclist": "🚵",
 		"bath": "🛀",
-		"shower": "🚿",
-		"toilet": "🚽",
-		"wrench": "🔧",
-		"nut_and_bolt": "🔩",
-		"hammer": "🔨",
-		"door": "🚪",
-		"smoking": "🚬",
-		"bomb": "💣",
-		"gun": "🔫",
-		"hocho": "🔪",
-		"knife": "🔪",
-		"pill": "💊",
-		"syringe": "💉",
-		"moneybag": "💰",
-		"yen": "💴",
-		"dollar": "💵",
-		"pound": "💷",
-		"euro": "💶",
-		"credit_card": "💳",
-		"money_with_wings": "💸",
-		"calling": "📲",
-		"e-mail": "📧",
-		"inbox_tray": "📥",
-		"outbox_tray": "📤",
-		"email": "✉️",
-		"envelope": "✉️",
-		"envelope_with_arrow": "📩",
-		"incoming_envelope": "📨",
-		"postal_horn": "📯",
-		"mailbox": "📫",
-		"mailbox_closed": "📪",
-		"mailbox_with_mail": "📬",
-		"mailbox_with_no_mail": "📭",
-		"postbox": "📮",
-		"package": "📦",
-		"memo": "📝",
-		"pencil": "📝",
-		"page_facing_up": "📄",
-		"page_with_curl": "📃",
-		"bookmark_tabs": "📑",
-		"bar_chart": "📊",
-		"chart_with_upwards_trend": "📈",
-		"chart_with_downwards_trend": "📉",
-		"scroll": "📜",
-		"clipboard": "📋",
-		"date": "📅",
-		"calendar": "📆",
-		"card_index": "📇",
-		"file_folder": "📁",
-		"open_file_folder": "📂",
-		"scissors": "✂️",
-		"pushpin": "📌",
-		"paperclip": "📎",
-		"black_nib": "✒️",
-		"pencil2": "✏️",
-		"straight_ruler": "📏",
-		"triangular_ruler": "📐",
-		"closed_book": "📕",
-		"green_book": "📗",
-		"blue_book": "📘",
-		"orange_book": "📙",
-		"notebook": "📓",
-		"notebook_with_decorative_cover": "📔",
-		"ledger": "📒",
-		"books": "📚",
-		"book": "📖",
-		"open_book": "📖",
-		"bookmark": "🔖",
-		"name_badge": "📛",
-		"microscope": "🔬",
-		"telescope": "🔭",
-		"newspaper": "📰",
+		"business_suit_levitating": "🕴",
+		"reminder_ribbon": "🎗",
+		"running_shirt_with_sash": "🎽",
+		"medal_sports": "🏅",
+		"medal_military": "🎖",
+		"trophy": "🏆",
+		"rosette": "🏵",
+		"dart": "🎯",
+		"ticket": "🎫",
+		"tickets": "🎟",
+		"performing_arts": "🎭",
 		"art": "🎨",
+		"circus_tent": "🎪",
 		"clapper": "🎬",
 		"microphone": "🎤",
 		"headphones": "🎧",
 		"musical_score": "🎼",
-		"musical_note": "🎵",
-		"notes": "🎶",
 		"musical_keyboard": "🎹",
-		"violin": "🎻",
-		"trumpet": "🎺",
 		"saxophone": "🎷",
+		"trumpet": "🎺",
 		"guitar": "🎸",
-		"space_invader": "👾",
+		"violin": "🎻",
 		"video_game": "🎮",
-		"black_joker": "🃏",
-		"flower_playing_cards": "🎴",
-		"mahjong": "🀄",
+		"slot_machine": "🎰",
 		"game_die": "🎲",
-		"dart": "🎯",
-		"football": "🏈",
-		"basketball": "🏀",
-		"soccer": "⚽",
-		"baseball": "⚾️",
-		"tennis": "🎾",
-		"8ball": "🎱",
-		"rugby_football": "🏉",
 		"bowling": "🎳",
-		"golf": "⛳",
-		"mountain_bicyclist": "🚵",
-		"bicyclist": "🚴",
-		"checkered_flag": "🏁",
-		"horse_racing": "🏇",
-		"trophy": "🏆",
-		"ski": "🎿",
-		"snowboarder": "🏂",
-		"swimmer": "🏊",
-		"surfer": "🏄",
-		"fishing_pole_and_fish": "🎣",
-		"coffee": "☕",
-		"tea": "🍵",
-		"sake": "🍶",
-		"baby_bottle": "🍼",
-		"beer": "🍺",
-		"beers": "🍻",
-		"cocktail": "🍸",
-		"tropical_drink": "🍹",
-		"wine_glass": "🍷",
-		"fork_and_knife": "🍴",
-		"pizza": "🍕",
-		"hamburger": "🍔",
-		"fries": "🍟",
-		"poultry_leg": "🍗",
-		"meat_on_bone": "🍖",
-		"spaghetti": "🍝",
-		"curry": "🍛",
-		"fried_shrimp": "🍤",
-		"bento": "🍱",
-		"sushi": "🍣",
-		"fish_cake": "🍥",
-		"rice_ball": "🍙",
-		"rice_cracker": "🍘",
-		"rice": "🍚",
-		"ramen": "🍜",
-		"stew": "🍲",
-		"oden": "🍢",
-		"dango": "🍡",
-		"egg": "🍳",
-		"bread": "🍞",
-		"doughnut": "🍩",
-		"custard": "🍮",
-		"icecream": "🍦",
-		"ice_cream": "🍨",
-		"shaved_ice": "🍧",
-		"birthday": "🎂",
-		"cake": "🍰",
-		"cookie": "🍪",
-		"chocolate_bar": "🍫",
-		"candy": "🍬",
-		"lollipop": "🍭",
-		"honey_pot": "🍯",
-		"apple": "🍎",
-		"green_apple": "🍏",
-		"tangerine": "🍊",
-		"lemon": "🍋",
-		"cherries": "🍒",
-		"grapes": "🍇",
-		"watermelon": "🍉",
-		"strawberry": "🍓",
-		"peach": "🍑",
-		"melon": "🍈",
-		"banana": "🍌",
-		"pear": "🍐",
-		"pineapple": "🍍",
-		"sweet_potato": "🍠",
-		"eggplant": "🍆",
-		"tomato": "🍅",
-		"corn": "🌽",
-		"house": "🏠",
-		"house_with_garden": "🏡",
-		"school": "🏫",
-		"office": "🏢",
-		"post_office": "🏣",
-		"hospital": "🏥",
-		"bank": "🏦",
-		"convenience_store": "🏪",
-		"love_hotel": "🏩",
-		"hotel": "🏨",
-		"wedding": "💒",
-		"church": "⛪",
-		"department_store": "🏬",
-		"european_post_office": "🏤",
-		"city_sunrise": "🌇",
-		"city_sunset": "🌆",
-		"japanese_castle": "🏯",
-		"european_castle": "🏰",
-		"tent": "⛺",
-		"factory": "🏭",
-		"tokyo_tower": "🗼",
-		"japan": "🗾",
-		"mount_fuji": "🗻",
-		"sunrise_over_mountains": "🌄",
-		"sunrise": "🌅",
-		"night_with_stars": "🌃",
-		"statue_of_liberty": "🗽",
-		"bridge_at_night": "🌉",
-		"carousel_horse": "🎠",
-		"ferris_wheel": "🎡",
-		"fountain": "⛲",
-		"roller_coaster": "🎢",
-		"ship": "🚢",
-		"boat": "⛵",
-		"sailboat": "⛵",
-		"speedboat": "🚤",
-		"rowboat": "🚣",
-		"anchor": "⚓",
-		"rocket": "🚀",
-		"airplane": "✈️",
-		"seat": "💺",
-		"helicopter": "🚁",
-		"steam_locomotive": "🚂",
-		"tram": "🚊",
-		"station": "🚉",
-		"mountain_railway": "🚞",
-		"train2": "🚆",
-		"bullettrain_side": "🚄",
-		"bullettrain_front": "🚅",
-		"light_rail": "🚈",
-		"metro": "🚇",
-		"monorail": "🚝",
-		"train": "🚋",
-		"railway_car": "🚃",
-		"trolleybus": "🚎",
-		"bus": "🚌",
-		"oncoming_bus": "🚍",
-		"blue_car": "🚙",
-		"oncoming_automobile": "🚘",
 		"car": "🚗",
 		"red_car": "🚗",
 		"taxi": "🚕",
-		"oncoming_taxi": "🚖",
-		"articulated_lorry": "🚛",
-		"truck": "🚚",
-		"rotating_light": "🚨",
+		"blue_car": "🚙",
+		"bus": "🚌",
+		"trolleybus": "🚎",
+		"racing_car": "🏎",
 		"police_car": "🚓",
-		"oncoming_police_car": "🚔",
-		"fire_engine": "🚒",
 		"ambulance": "🚑",
+		"fire_engine": "🚒",
 		"minibus": "🚐",
-		"bike": "🚲",
-		"aerial_tramway": "🚡",
-		"suspension_railway": "🚟",
-		"mountain_cableway": "🚠",
+		"truck": "🚚",
+		"articulated_lorry": "🚛",
 		"tractor": "🚜",
-		"barber": "💈",
+		"motorcycle": "🏍",
+		"bike": "🚲",
+		"rotating_light": "🚨",
+		"oncoming_police_car": "🚔",
+		"oncoming_bus": "🚍",
+		"oncoming_automobile": "🚘",
+		"oncoming_taxi": "🚖",
+		"aerial_tramway": "🚡",
+		"mountain_cableway": "🚠",
+		"suspension_railway": "🚟",
+		"railway_car": "🚃",
+		"train": "🚋",
+		"monorail": "🚝",
+		"bullettrain_side": "🚄",
+		"bullettrain_front": "🚅",
+		"light_rail": "🚈",
+		"mountain_railway": "🚞",
+		"steam_locomotive": "🚂",
+		"train2": "🚆",
+		"metro": "🚇",
+		"tram": "🚊",
+		"station": "🚉",
+		"helicopter": "🚁",
+		"small_airplane": "🛩",
+		"airplane": "✈️",
+		"flight_departure": "🛫",
+		"flight_arrival": "🛬",
+		"boat": "⛵️",
+		"sailboat": "⛵️",
+		"motor_boat": "🛥",
+		"speedboat": "🚤",
+		"ferry": "⛴",
+		"passenger_ship": "🛳",
+		"rocket": "🚀",
+		"artificial_satellite": "🛰",
+		"seat": "💺",
+		"anchor": "⚓️",
+		"construction": "🚧",
+		"fuelpump": "⛽️",
 		"busstop": "🚏",
-		"ticket": "🎫",
 		"vertical_traffic_light": "🚦",
 		"traffic_light": "🚥",
-		"warning": "⚠️",
-		"construction": "🚧",
-		"beginner": "🔰",
-		"fuelpump": "⛽",
+		"world_map": "🗺",
+		"ship": "🚢",
+		"ferris_wheel": "🎡",
+		"roller_coaster": "🎢",
+		"carousel_horse": "🎠",
+		"building_construction": "🏗",
+		"foggy": "🌁",
+		"tokyo_tower": "🗼",
+		"factory": "🏭",
+		"fountain": "⛲️",
+		"rice_scene": "🎑",
+		"mountain": "⛰",
+		"mountain_snow": "🏔",
+		"mount_fuji": "🗻",
+		"volcano": "🌋",
+		"japan": "🗾",
+		"camping": "🏕",
+		"tent": "⛺️",
+		"national_park": "🏞",
+		"motorway": "🛣",
+		"railway_track": "🛤",
+		"sunrise": "🌅",
+		"sunrise_over_mountains": "🌄",
+		"desert": "🏜",
+		"beach_umbrella": "🏖",
+		"desert_island": "🏝",
+		"city_sunrise": "🌇",
+		"city_sunset": "🌆",
+		"cityscape": "🏙",
+		"night_with_stars": "🌃",
+		"bridge_at_night": "🌉",
+		"milky_way": "🌌",
+		"stars": "🌠",
+		"sparkler": "🎇",
+		"fireworks": "🎆",
+		"rainbow": "🌈",
+		"houses": "🏘",
+		"european_castle": "🏰",
+		"japanese_castle": "🏯",
+		"stadium": "🏟",
+		"statue_of_liberty": "🗽",
+		"house": "🏠",
+		"house_with_garden": "🏡",
+		"derelict_house": "🏚",
+		"office": "🏢",
+		"department_store": "🏬",
+		"post_office": "🏣",
+		"european_post_office": "🏤",
+		"hospital": "🏥",
+		"bank": "🏦",
+		"hotel": "🏨",
+		"convenience_store": "🏪",
+		"school": "🏫",
+		"love_hotel": "🏩",
+		"wedding": "💒",
+		"classical_building": "🏛",
+		"church": "⛪️",
+		"mosque": "🕌",
+		"synagogue": "🕍",
+		"kaaba": "🕋",
+		"shinto_shrine": "⛩",
+		"watch": "⌚️",
+		"iphone": "📱",
+		"calling": "📲",
+		"computer": "💻",
+		"keyboard": "⌨️",
+		"desktop_computer": "🖥",
+		"printer": "🖨",
+		"computer_mouse": "🖱",
+		"trackball": "🖲",
+		"joystick": "🕹",
+		"clamp": "🗜",
+		"minidisc": "💽",
+		"floppy_disk": "💾",
+		"cd": "💿",
+		"dvd": "📀",
+		"vhs": "📼",
+		"camera": "📷",
+		"camera_flash": "📸",
+		"video_camera": "📹",
+		"movie_camera": "🎥",
+		"film_projector": "📽",
+		"film_strip": "🎞",
+		"telephone_receiver": "📞",
+		"phone": "☎️",
+		"telephone": "☎️",
+		"pager": "📟",
+		"fax": "📠",
+		"tv": "📺",
+		"radio": "📻",
+		"studio_microphone": "🎙",
+		"level_slider": "🎚",
+		"control_knobs": "🎛",
+		"stopwatch": "⏱",
+		"timer_clock": "⏲",
+		"alarm_clock": "⏰",
+		"mantelpiece_clock": "🕰",
+		"hourglass_flowing_sand": "⏳",
+		"hourglass": "⌛️",
+		"satellite": "📡",
+		"battery": "🔋",
+		"electric_plug": "🔌",
+		"bulb": "💡",
+		"flashlight": "🔦",
+		"candle": "🕯",
+		"wastebasket": "🗑",
+		"oil_drum": "🛢",
+		"money_with_wings": "💸",
+		"dollar": "💵",
+		"yen": "💴",
+		"euro": "💶",
+		"pound": "💷",
+		"moneybag": "💰",
+		"credit_card": "💳",
+		"gem": "💎",
+		"balance_scale": "⚖",
+		"wrench": "🔧",
+		"hammer": "🔨",
+		"hammer_and_pick": "⚒",
+		"hammer_and_wrench": "🛠",
+		"pick": "⛏",
+		"nut_and_bolt": "🔩",
+		"gear": "⚙",
+		"chains": "⛓",
+		"gun": "🔫",
+		"bomb": "💣",
+		"hocho": "🔪",
+		"knife": "🔪",
+		"dagger": "🗡",
+		"crossed_swords": "⚔",
+		"shield": "🛡",
+		"smoking": "🚬",
+		"coffin": "⚰",
+		"funeral_urn": "⚱",
+		"amphora": "🏺",
+		"crystal_ball": "🔮",
+		"prayer_beads": "📿",
+		"barber": "💈",
+		"alembic": "⚗",
+		"telescope": "🔭",
+		"microscope": "🔬",
+		"hole": "🕳",
+		"pill": "💊",
+		"syringe": "💉",
+		"thermometer": "🌡",
+		"toilet": "🚽",
+		"shower": "🚿",
+		"bathtub": "🛁",
+		"bellhop_bell": "🛎",
+		"key": "🔑",
+		"old_key": "🗝",
+		"door": "🚪",
+		"couch_and_lamp": "🛋",
+		"sleeping_bed": "🛌",
+		"bed": "🛏",
+		"framed_picture": "🖼",
+		"parasol_on_ground": "⛱",
+		"moyai": "🗿",
+		"shopping": "🛍",
+		"gift": "🎁",
+		"balloon": "🎈",
+		"flags": "🎏",
+		"ribbon": "🎀",
+		"confetti_ball": "🎊",
+		"tada": "🎉",
+		"wind_chime": "🎐",
 		"izakaya_lantern": "🏮",
 		"lantern": "🏮",
-		"slot_machine": "🎰",
-		"hotsprings": "♨️",
-		"moyai": "🗿",
-		"circus_tent": "🎪",
-		"performing_arts": "🎭",
+		"dolls": "🎎",
+		"email": "✉️",
+		"envelope": "✉️",
+		"envelope_with_arrow": "📩",
+		"incoming_envelope": "📨",
+		"e-mail": "📧",
+		"love_letter": "💌",
+		"inbox_tray": "📥",
+		"outbox_tray": "📤",
+		"package": "📦",
+		"label": "🏷",
+		"bookmark": "🔖",
+		"mailbox_closed": "📪",
+		"mailbox": "📫",
+		"mailbox_with_mail": "📬",
+		"mailbox_with_no_mail": "📭",
+		"postbox": "📮",
+		"postal_horn": "📯",
+		"scroll": "📜",
+		"page_with_curl": "📃",
+		"page_facing_up": "📄",
+		"bookmark_tabs": "📑",
+		"bar_chart": "📊",
+		"chart_with_upwards_trend": "📈",
+		"chart_with_downwards_trend": "📉",
+		"spiral_notepad": "🗒",
+		"spiral_calendar": "🗓",
+		"calendar": "📆",
+		"date": "📅",
+		"card_index": "📇",
+		"card_file_box": "🗃",
+		"ballot_box": "🗳",
+		"file_cabinet": "🗄",
+		"clipboard": "📋",
+		"file_folder": "📁",
+		"open_file_folder": "📂",
+		"card_index_dividers": "🗂",
+		"newspaper_roll": "🗞",
+		"newspaper": "📰",
+		"notebook": "📓",
+		"notebook_with_decorative_cover": "📔",
+		"ledger": "📒",
+		"closed_book": "📕",
+		"green_book": "📗",
+		"blue_book": "📘",
+		"orange_book": "📙",
+		"books": "📚",
+		"book": "📖",
+		"open_book": "📖",
+		"link": "🔗",
+		"paperclip": "📎",
+		"paperclips": "🖇",
+		"triangular_ruler": "📐",
+		"straight_ruler": "📏",
+		"scissors": "✂️",
+		"pushpin": "📌",
 		"round_pushpin": "📍",
 		"triangular_flag_on_post": "🚩",
-		"jp": "🇯🇵",
-		"kr": "🇰🇷",
-		"de": "🇩🇪",
-		"cn": "🇨🇳",
-		"us": "🇺🇸",
-		"fr": "🇫🇷",
-		"es": "🇪🇸",
-		"it": "🇮🇹",
-		"ru": "🇷🇺",
-		"gb": "🇬🇧",
-		"uk": "🇬🇧",
+		"crossed_flags": "🎌",
+		"white_flag": "🏳️",
+		"black_flag": "🏴",
+		"checkered_flag": "🏁",
+		"rainbow_flag": "🏳️‍🌈",
+		"paintbrush": "🖌",
+		"crayon": "🖍",
+		"pen": "🖊",
+		"fountain_pen": "🖋",
+		"black_nib": "✒️",
+		"memo": "📝",
+		"pencil": "📝",
+		"pencil2": "✏️",
+		"lock_with_ink_pen": "🔏",
+		"closed_lock_with_key": "🔐",
+		"lock": "🔒",
+		"unlock": "🔓",
+		"mag": "🔍",
+		"mag_right": "🔎",
+		"heart": "❤️",
+		"yellow_heart": "💛",
+		"green_heart": "💚",
+		"blue_heart": "💙",
+		"purple_heart": "💜",
+		"broken_heart": "💔",
+		"heavy_heart_exclamation": "❣️",
+		"two_hearts": "💕",
+		"revolving_hearts": "💞",
+		"heartbeat": "💓",
+		"heartpulse": "💗",
+		"sparkling_heart": "💖",
+		"cupid": "💘",
+		"gift_heart": "💝",
+		"heart_decoration": "💟",
+		"peace_symbol": "☮️",
+		"latin_cross": "✝️",
+		"star_and_crescent": "☪️",
+		"om": "🕉",
+		"wheel_of_dharma": "☸️",
+		"star_of_david": "✡️",
+		"six_pointed_star": "🔯",
+		"menorah": "🕎",
+		"yin_yang": "☯️",
+		"orthodox_cross": "☦️",
+		"place_of_worship": "🛐",
+		"ophiuchus": "⛎",
+		"aries": "♈️",
+		"taurus": "♉️",
+		"gemini": "♊️",
+		"cancer": "♋️",
+		"leo": "♌️",
+		"virgo": "♍️",
+		"libra": "♎️",
+		"scorpius": "♏️",
+		"sagittarius": "♐️",
+		"capricorn": "♑️",
+		"aquarius": "♒️",
+		"pisces": "♓️",
+		"id": "🆔",
+		"atom_symbol": "⚛",
+		"radioactive": "☢️",
+		"biohazard": "☣️",
+		"mobile_phone_off": "📴",
+		"vibration_mode": "📳",
+		"eight_pointed_black_star": "✴️",
+		"vs": "🆚",
+		"accept": "🉑",
+		"white_flower": "💮",
+		"ideograph_advantage": "🉐",
+		"secret": "㊙️",
+		"congratulations": "㊗️",
+		"u6e80": "🈵",
+		"a": "🅰️",
+		"b": "🅱️",
+		"ab": "🆎",
+		"cl": "🆑",
+		"o2": "🅾️",
+		"sos": "🆘",
+		"no_entry": "⛔️",
+		"name_badge": "📛",
+		"no_entry_sign": "🚫",
+		"x": "❌",
+		"o": "⭕️",
+		"anger": "💢",
+		"hotsprings": "♨️",
+		"no_pedestrians": "🚷",
+		"do_not_litter": "🚯",
+		"no_bicycles": "🚳",
+		"non-potable_water": "🚱",
+		"underage": "🔞",
+		"no_mobile_phones": "📵",
+		"exclamation": "❗️",
+		"heavy_exclamation_mark": "❗️",
+		"grey_exclamation": "❕",
+		"question": "❓",
+		"grey_question": "❔",
+		"bangbang": "‼️",
+		"interrobang": "⁉️",
+		"low_brightness": "🔅",
+		"high_brightness": "🔆",
+		"trident": "🔱",
+		"fleur_de_lis": "⚜",
+		"part_alternation_mark": "〽️",
+		"warning": "⚠️",
+		"children_crossing": "🚸",
+		"beginner": "🔰",
+		"recycle": "♻️",
+		"chart": "💹",
+		"sparkle": "❇️",
+		"eight_spoked_asterisk": "✳️",
+		"negative_squared_cross_mark": "❎",
+		"white_check_mark": "✅",
+		"globe_with_meridians": "🌐",
+		"m": "Ⓜ️",
+		"diamond_shape_with_a_dot_inside": "💠",
+		"cyclone": "🌀",
+		"loop": "➿",
+		"atm": "🏧",
+		"sa": "🈂️",
+		"passport_control": "🛂",
+		"customs": "🛃",
+		"baggage_claim": "🛄",
+		"left_luggage": "🛅",
+		"wheelchair": "♿️",
+		"no_smoking": "🚭",
+		"wc": "🚾",
+		"parking": "🅿️",
+		"potable_water": "🚰",
+		"mens": "🚹",
+		"womens": "🚺",
+		"baby_symbol": "🚼",
+		"restroom": "🚻",
+		"put_litter_in_its_place": "🚮",
+		"cinema": "🎦",
+		"signal_strength": "📶",
+		"koko": "🈁",
+		"abc": "🔤",
+		"abcd": "🔡",
+		"capital_abcd": "🔠",
+		"symbols": "🔣",
+		"information_source": "ℹ️",
+		"ng": "🆖",
+		"ok": "🆗",
+		"up": "🆙",
+		"cool": "🆒",
+		"new": "🆕",
+		"free": "🆓",
+		"zero": "0️⃣",
 		"one": "1️⃣",
 		"two": "2️⃣",
 		"three": "3️⃣",
@@ -11899,205 +12295,375 @@ return /******/ (function(modules) { // webpackBootstrap
 		"seven": "7️⃣",
 		"eight": "8️⃣",
 		"nine": "9️⃣",
-		"zero": "0️⃣",
 		"keycap_ten": "🔟",
 		"hash": "#️⃣",
-		"symbols": "🔣",
-		"arrow_up": "⬆️",
-		"arrow_down": "⬇️",
-		"arrow_left": "⬅️",
-		"arrow_right": "➡️",
-		"capital_abcd": "🔠",
-		"abcd": "🔡",
-		"abc": "🔤",
-		"arrow_upper_right": "↗️",
-		"arrow_upper_left": "↖️",
-		"arrow_lower_right": "↘️",
-		"arrow_lower_left": "↙️",
-		"left_right_arrow": "↔️",
-		"arrow_up_down": "↕️",
-		"arrows_counterclockwise": "🔄",
-		"arrow_backward": "◀️",
+		"asterisk": "*️⃣",
 		"arrow_forward": "▶️",
-		"arrow_up_small": "🔼",
-		"arrow_down_small": "🔽",
-		"leftwards_arrow_with_hook": "↩️",
-		"arrow_right_hook": "↪️",
-		"information_source": "ℹ️",
-		"rewind": "⏪",
+		"pause_button": "⏸",
+		"play_or_pause_button": "⏯",
+		"stop_button": "⏹",
+		"record_button": "⏺",
+		"next_track_button": "⏭",
+		"previous_track_button": "⏮",
 		"fast_forward": "⏩",
+		"rewind": "⏪",
 		"arrow_double_up": "⏫",
 		"arrow_double_down": "⏬",
-		"arrow_heading_down": "⤵️",
+		"arrow_backward": "◀️",
+		"arrow_up_small": "🔼",
+		"arrow_down_small": "🔽",
+		"arrow_right": "➡️",
+		"arrow_left": "⬅️",
+		"arrow_up": "⬆️",
+		"arrow_down": "⬇️",
+		"arrow_upper_right": "↗️",
+		"arrow_lower_right": "↘️",
+		"arrow_lower_left": "↙️",
+		"arrow_upper_left": "↖️",
+		"arrow_up_down": "↕️",
+		"left_right_arrow": "↔️",
+		"arrow_right_hook": "↪️",
+		"leftwards_arrow_with_hook": "↩️",
 		"arrow_heading_up": "⤴️",
-		"ok": "🆗",
+		"arrow_heading_down": "⤵️",
 		"twisted_rightwards_arrows": "🔀",
 		"repeat": "🔁",
 		"repeat_one": "🔂",
-		"new": "🆕",
-		"up": "🆙",
-		"cool": "🆒",
-		"free": "🆓",
-		"ng": "🆖",
-		"signal_strength": "📶",
-		"cinema": "🎦",
-		"koko": "🈁",
-		"u6307": "🈯",
-		"u7a7a": "🈳",
-		"u6e80": "🈵",
-		"u5408": "🈴",
-		"u7981": "🈲",
-		"ideograph_advantage": "🉐",
-		"u5272": "🈹",
-		"u55b6": "🈺",
-		"u6709": "🈶",
-		"u7121": "🈚",
-		"restroom": "🚻",
-		"mens": "🚹",
-		"womens": "🚺",
-		"baby_symbol": "🚼",
-		"wc": "🚾",
-		"potable_water": "🚰",
-		"put_litter_in_its_place": "🚮",
-		"parking": "🅿️",
-		"wheelchair": "♿",
-		"no_smoking": "🚭",
-		"u6708": "🈷️",
-		"u7533": "🈸",
-		"sa": "🈂️",
-		"m": "Ⓜ️",
-		"passport_control": "🛂",
-		"baggage_claim": "🛄",
-		"left_luggage": "🛅",
-		"customs": "🛃",
-		"accept": "🉑",
-		"secret": "㊙️",
-		"congratulations": "㊗️",
-		"cl": "🆑",
-		"sos": "🆘",
-		"id": "🆔",
-		"no_entry_sign": "🚫",
-		"underage": "🔞",
-		"no_mobile_phones": "📵",
-		"do_not_litter": "🚯",
-		"non-potable_water": "🚱",
-		"no_bicycles": "🚳",
-		"no_pedestrians": "🚷",
-		"children_crossing": "🚸",
-		"no_entry": "⛔",
-		"eight_spoked_asterisk": "✳️",
-		"sparkle": "❇️",
-		"negative_squared_cross_mark": "❎",
-		"white_check_mark": "✅",
-		"eight_pointed_black_star": "✴️",
-		"heart_decoration": "💟",
-		"vs": "🆚",
-		"vibration_mode": "📳",
-		"mobile_phone_off": "📴",
-		"a": "🅰️",
-		"b": "🅱️",
-		"ab": "🆎",
-		"o2": "🅾️",
-		"diamond_shape_with_a_dot_inside": "💠",
-		"loop": "➿",
-		"recycle": "♻️",
-		"aries": "♈",
-		"taurus": "♉",
-		"gemini": "♊",
-		"cancer": "♋",
-		"leo": "♌",
-		"virgo": "♍",
-		"libra": "♎",
-		"scorpius": "♏",
-		"sagittarius": "♐",
-		"capricorn": "♑",
-		"aquarius": "♒",
-		"pisces": "♓",
-		"ophiuchus": "⛎",
-		"six_pointed_star": "🔯",
-		"atm": "🏧",
-		"chart": "💹",
+		"arrows_counterclockwise": "🔄",
+		"arrows_clockwise": "🔃",
+		"musical_note": "🎵",
+		"notes": "🎶",
+		"wavy_dash": "〰️",
+		"curly_loop": "➰",
+		"heavy_check_mark": "✔️",
+		"heavy_plus_sign": "➕",
+		"heavy_minus_sign": "➖",
+		"heavy_division_sign": "➗",
+		"heavy_multiplication_x": "✖️",
 		"heavy_dollar_sign": "💲",
 		"currency_exchange": "💱",
+		"tm": "™️",
 		"copyright": "©️",
 		"registered": "®️",
-		"tm": "™️",
-		"x": "❌",
-		"bangbang": "‼️",
-		"interrobang": "⁉️",
-		"exclamation": "❗",
-		"heavy_exclamation_mark": "❗",
-		"question": "❓",
-		"grey_exclamation": "❕",
-		"grey_question": "❔",
-		"o": "⭕",
-		"top": "🔝",
 		"end": "🔚",
 		"back": "🔙",
 		"on": "🔛",
+		"top": "🔝",
 		"soon": "🔜",
-		"arrows_clockwise": "🔃",
-		"clock12": "🕛",
-		"clock1230": "🕧",
+		"ballot_box_with_check": "☑️",
+		"radio_button": "🔘",
+		"white_circle": "⚪️",
+		"black_circle": "⚫️",
+		"red_circle": "🔴",
+		"large_blue_circle": "🔵",
+		"small_red_triangle": "🔺",
+		"small_red_triangle_down": "🔻",
+		"small_orange_diamond": "🔸",
+		"small_blue_diamond": "🔹",
+		"large_orange_diamond": "🔶",
+		"large_blue_diamond": "🔷",
+		"white_square_button": "🔳",
+		"black_square_button": "🔲",
+		"black_small_square": "▪️",
+		"white_small_square": "▫️",
+		"black_medium_small_square": "◾️",
+		"white_medium_small_square": "◽️",
+		"black_medium_square": "◼️",
+		"white_medium_square": "◻️",
+		"black_large_square": "⬛️",
+		"white_large_square": "⬜️",
+		"mute": "🔇",
+		"speaker": "🔈",
+		"sound": "🔉",
+		"loud_sound": "🔊",
+		"no_bell": "🔕",
+		"bell": "🔔",
+		"mega": "📣",
+		"loudspeaker": "📢",
+		"eye_speech_bubble": "👁‍🗨",
+		"speech_balloon": "💬",
+		"thought_balloon": "💭",
+		"right_anger_bubble": "🗯",
+		"black_joker": "🃏",
+		"mahjong": "🀄️",
+		"flower_playing_cards": "🎴",
+		"spades": "♠️",
+		"clubs": "♣️",
+		"hearts": "♥️",
+		"diamonds": "♦️",
 		"clock1": "🕐",
-		"clock130": "🕜",
 		"clock2": "🕑",
-		"clock230": "🕝",
 		"clock3": "🕒",
-		"clock330": "🕞",
 		"clock4": "🕓",
-		"clock430": "🕟",
 		"clock5": "🕔",
-		"clock530": "🕠",
 		"clock6": "🕕",
 		"clock7": "🕖",
 		"clock8": "🕗",
 		"clock9": "🕘",
 		"clock10": "🕙",
 		"clock11": "🕚",
+		"clock12": "🕛",
+		"clock130": "🕜",
+		"clock230": "🕝",
+		"clock330": "🕞",
+		"clock430": "🕟",
+		"clock530": "🕠",
 		"clock630": "🕡",
 		"clock730": "🕢",
 		"clock830": "🕣",
 		"clock930": "🕤",
 		"clock1030": "🕥",
 		"clock1130": "🕦",
-		"heavy_multiplication_x": "✖️",
-		"heavy_plus_sign": "➕",
-		"heavy_minus_sign": "➖",
-		"heavy_division_sign": "➗",
-		"spades": "♠️",
-		"hearts": "♥️",
-		"clubs": "♣️",
-		"diamonds": "♦️",
-		"white_flower": "💮",
-		"heavy_check_mark": "✔️",
-		"ballot_box_with_check": "☑️",
-		"radio_button": "🔘",
-		"link": "🔗",
-		"curly_loop": "➰",
-		"wavy_dash": "〰️",
-		"part_alternation_mark": "〽️",
-		"trident": "🔱",
-		"black_medium_square": "◼️",
-		"white_medium_square": "◻️",
-		"black_medium_small_square": "◾",
-		"white_medium_small_square": "◽",
-		"black_small_square": "▪️",
-		"white_small_square": "▫️",
-		"small_red_triangle": "🔺",
-		"black_square_button": "🔲",
-		"white_square_button": "🔳",
-		"black_circle": "⚫",
-		"white_circle": "⚪",
-		"red_circle": "🔴",
-		"large_blue_circle": "🔵",
-		"small_red_triangle_down": "🔻",
-		"white_large_square": "⬜",
-		"black_large_square": "⬛",
-		"large_orange_diamond": "🔶",
-		"large_blue_diamond": "🔷",
-		"small_orange_diamond": "🔸",
-		"small_blue_diamond": "🔹"
+		"clock1230": "🕧",
+		"afghanistan": "🇦🇫",
+		"aland_islands": "🇦🇽",
+		"albania": "🇦🇱",
+		"algeria": "🇩🇿",
+		"american_samoa": "🇦🇸",
+		"andorra": "🇦🇩",
+		"angola": "🇦🇴",
+		"anguilla": "🇦🇮",
+		"antarctica": "🇦🇶",
+		"antigua_barbuda": "🇦🇬",
+		"argentina": "🇦🇷",
+		"armenia": "🇦🇲",
+		"aruba": "🇦🇼",
+		"australia": "🇦🇺",
+		"austria": "🇦🇹",
+		"azerbaijan": "🇦🇿",
+		"bahamas": "🇧🇸",
+		"bahrain": "🇧🇭",
+		"bangladesh": "🇧🇩",
+		"barbados": "🇧🇧",
+		"belarus": "🇧🇾",
+		"belgium": "🇧🇪",
+		"belize": "🇧🇿",
+		"benin": "🇧🇯",
+		"bermuda": "🇧🇲",
+		"bhutan": "🇧🇹",
+		"bolivia": "🇧🇴",
+		"caribbean_netherlands": "🇧🇶",
+		"bosnia_herzegovina": "🇧🇦",
+		"botswana": "🇧🇼",
+		"brazil": "🇧🇷",
+		"british_indian_ocean_territory": "🇮🇴",
+		"british_virgin_islands": "🇻🇬",
+		"brunei": "🇧🇳",
+		"bulgaria": "🇧🇬",
+		"burkina_faso": "🇧🇫",
+		"burundi": "🇧🇮",
+		"cape_verde": "🇨🇻",
+		"cambodia": "🇰🇭",
+		"cameroon": "🇨🇲",
+		"canada": "🇨🇦",
+		"canary_islands": "🇮🇨",
+		"cayman_islands": "🇰🇾",
+		"central_african_republic": "🇨🇫",
+		"chad": "🇹🇩",
+		"chile": "🇨🇱",
+		"cn": "🇨🇳",
+		"christmas_island": "🇨🇽",
+		"cocos_islands": "🇨🇨",
+		"colombia": "🇨🇴",
+		"comoros": "🇰🇲",
+		"congo_brazzaville": "🇨🇬",
+		"congo_kinshasa": "🇨🇩",
+		"cook_islands": "🇨🇰",
+		"costa_rica": "🇨🇷",
+		"croatia": "🇭🇷",
+		"cuba": "🇨🇺",
+		"curacao": "🇨🇼",
+		"cyprus": "🇨🇾",
+		"czech_republic": "🇨🇿",
+		"denmark": "🇩🇰",
+		"djibouti": "🇩🇯",
+		"dominica": "🇩🇲",
+		"dominican_republic": "🇩🇴",
+		"ecuador": "🇪🇨",
+		"egypt": "🇪🇬",
+		"el_salvador": "🇸🇻",
+		"equatorial_guinea": "🇬🇶",
+		"eritrea": "🇪🇷",
+		"estonia": "🇪🇪",
+		"ethiopia": "🇪🇹",
+		"eu": "🇪🇺",
+		"european_union": "🇪🇺",
+		"falkland_islands": "🇫🇰",
+		"faroe_islands": "🇫🇴",
+		"fiji": "🇫🇯",
+		"finland": "🇫🇮",
+		"fr": "🇫🇷",
+		"french_guiana": "🇬🇫",
+		"french_polynesia": "🇵🇫",
+		"french_southern_territories": "🇹🇫",
+		"gabon": "🇬🇦",
+		"gambia": "🇬🇲",
+		"georgia": "🇬🇪",
+		"de": "🇩🇪",
+		"ghana": "🇬🇭",
+		"gibraltar": "🇬🇮",
+		"greece": "🇬🇷",
+		"greenland": "🇬🇱",
+		"grenada": "🇬🇩",
+		"guadeloupe": "🇬🇵",
+		"guam": "🇬🇺",
+		"guatemala": "🇬🇹",
+		"guernsey": "🇬🇬",
+		"guinea": "🇬🇳",
+		"guinea_bissau": "🇬🇼",
+		"guyana": "🇬🇾",
+		"haiti": "🇭🇹",
+		"honduras": "🇭🇳",
+		"hong_kong": "🇭🇰",
+		"hungary": "🇭🇺",
+		"iceland": "🇮🇸",
+		"india": "🇮🇳",
+		"indonesia": "🇮🇩",
+		"iran": "🇮🇷",
+		"iraq": "🇮🇶",
+		"ireland": "🇮🇪",
+		"isle_of_man": "🇮🇲",
+		"israel": "🇮🇱",
+		"it": "🇮🇹",
+		"cote_divoire": "🇨🇮",
+		"jamaica": "🇯🇲",
+		"jp": "🇯🇵",
+		"jersey": "🇯🇪",
+		"jordan": "🇯🇴",
+		"kazakhstan": "🇰🇿",
+		"kenya": "🇰🇪",
+		"kiribati": "🇰🇮",
+		"kosovo": "🇽🇰",
+		"kuwait": "🇰🇼",
+		"kyrgyzstan": "🇰🇬",
+		"laos": "🇱🇦",
+		"latvia": "🇱🇻",
+		"lebanon": "🇱🇧",
+		"lesotho": "🇱🇸",
+		"liberia": "🇱🇷",
+		"libya": "🇱🇾",
+		"liechtenstein": "🇱🇮",
+		"lithuania": "🇱🇹",
+		"luxembourg": "🇱🇺",
+		"macau": "🇲🇴",
+		"macedonia": "🇲🇰",
+		"madagascar": "🇲🇬",
+		"malawi": "🇲🇼",
+		"malaysia": "🇲🇾",
+		"maldives": "🇲🇻",
+		"mali": "🇲🇱",
+		"malta": "🇲🇹",
+		"marshall_islands": "🇲🇭",
+		"martinique": "🇲🇶",
+		"mauritania": "🇲🇷",
+		"mauritius": "🇲🇺",
+		"mayotte": "🇾🇹",
+		"mexico": "🇲🇽",
+		"micronesia": "🇫🇲",
+		"moldova": "🇲🇩",
+		"monaco": "🇲🇨",
+		"mongolia": "🇲🇳",
+		"montenegro": "🇲🇪",
+		"montserrat": "🇲🇸",
+		"morocco": "🇲🇦",
+		"mozambique": "🇲🇿",
+		"myanmar": "🇲🇲",
+		"namibia": "🇳🇦",
+		"nauru": "🇳🇷",
+		"nepal": "🇳🇵",
+		"netherlands": "🇳🇱",
+		"new_caledonia": "🇳🇨",
+		"new_zealand": "🇳🇿",
+		"nicaragua": "🇳🇮",
+		"niger": "🇳🇪",
+		"nigeria": "🇳🇬",
+		"niue": "🇳🇺",
+		"norfolk_island": "🇳🇫",
+		"northern_mariana_islands": "🇲🇵",
+		"north_korea": "🇰🇵",
+		"norway": "🇳🇴",
+		"oman": "🇴🇲",
+		"pakistan": "🇵🇰",
+		"palau": "🇵🇼",
+		"palestinian_territories": "🇵🇸",
+		"panama": "🇵🇦",
+		"papua_new_guinea": "🇵🇬",
+		"paraguay": "🇵🇾",
+		"peru": "🇵🇪",
+		"philippines": "🇵🇭",
+		"pitcairn_islands": "🇵🇳",
+		"poland": "🇵🇱",
+		"portugal": "🇵🇹",
+		"puerto_rico": "🇵🇷",
+		"qatar": "🇶🇦",
+		"reunion": "🇷🇪",
+		"romania": "🇷🇴",
+		"ru": "🇷🇺",
+		"rwanda": "🇷🇼",
+		"st_barthelemy": "🇧🇱",
+		"st_helena": "🇸🇭",
+		"st_kitts_nevis": "🇰🇳",
+		"st_lucia": "🇱🇨",
+		"st_pierre_miquelon": "🇵🇲",
+		"st_vincent_grenadines": "🇻🇨",
+		"samoa": "🇼🇸",
+		"san_marino": "🇸🇲",
+		"sao_tome_principe": "🇸🇹",
+		"saudi_arabia": "🇸🇦",
+		"senegal": "🇸🇳",
+		"serbia": "🇷🇸",
+		"seychelles": "🇸🇨",
+		"sierra_leone": "🇸🇱",
+		"singapore": "🇸🇬",
+		"sint_maarten": "🇸🇽",
+		"slovakia": "🇸🇰",
+		"slovenia": "🇸🇮",
+		"solomon_islands": "🇸🇧",
+		"somalia": "🇸🇴",
+		"south_africa": "🇿🇦",
+		"south_georgia_south_sandwich_islands": "🇬🇸",
+		"kr": "🇰🇷",
+		"south_sudan": "🇸🇸",
+		"es": "🇪🇸",
+		"sri_lanka": "🇱🇰",
+		"sudan": "🇸🇩",
+		"suriname": "🇸🇷",
+		"swaziland": "🇸🇿",
+		"sweden": "🇸🇪",
+		"switzerland": "🇨🇭",
+		"syria": "🇸🇾",
+		"taiwan": "🇹🇼",
+		"tajikistan": "🇹🇯",
+		"tanzania": "🇹🇿",
+		"thailand": "🇹🇭",
+		"timor_leste": "🇹🇱",
+		"togo": "🇹🇬",
+		"tokelau": "🇹🇰",
+		"tonga": "🇹🇴",
+		"trinidad_tobago": "🇹🇹",
+		"tunisia": "🇹🇳",
+		"tr": "🇹🇷",
+		"turkmenistan": "🇹🇲",
+		"turks_caicos_islands": "🇹🇨",
+		"tuvalu": "🇹🇻",
+		"uganda": "🇺🇬",
+		"ukraine": "🇺🇦",
+		"united_arab_emirates": "🇦🇪",
+		"gb": "🇬🇧",
+		"uk": "🇬🇧",
+		"us": "🇺🇸",
+		"us_virgin_islands": "🇻🇮",
+		"uruguay": "🇺🇾",
+		"uzbekistan": "🇺🇿",
+		"vanuatu": "🇻🇺",
+		"vatican_city": "🇻🇦",
+		"venezuela": "🇻🇪",
+		"vietnam": "🇻🇳",
+		"wallis_futuna": "🇼🇫",
+		"western_sahara": "🇪🇭",
+		"yemen": "🇾🇪",
+		"zambia": "🇿🇲",
+		"zimbabwe": "🇿🇼"
 	};
 
 /***/ },
@@ -12171,7 +12737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 
-	module.exports = function create_rule(md, emojies, shortcuts, compiledRE) {
+	module.exports = function create_rule(md, emojies, shortcuts, scanRE, replaceRE) {
 	  var arrayReplaceAt = md.utils.arrayReplaceAt,
 	      ucm = md.utils.lib.ucmicro,
 	      ZPCc = new RegExp([ ucm.Z.source, ucm.P.source, ucm.Cc.source ].join('|'));
@@ -12179,17 +12745,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function splitTextToken(text, level, Token) {
 	    var token, last_pos = 0, nodes = [];
 
-	    text.replace(compiledRE, function(match, offset, src) {
-	      // Don't allow letters before :/ shortcut.
-	      if (match === ':/' && offset > 0 && !ZPCc.test(src[offset - 1])) {
-	        return;
-	      }
-
+	    text.replace(replaceRE, function (match, offset, src) {
 	      var emoji_name;
 	      // Validate emoji name
 	      if (shortcuts.hasOwnProperty(match)) {
 	        // replace shortcut with full name
 	        emoji_name = shortcuts[match];
+
+	        // Don't allow letters before any shortcut (as in no ":/" in http://)
+	        if (offset > 0 && !ZPCc.test(src[offset - 1])) {
+	          return;
+	        }
+
+	        // Don't allow letters after any shortcut
+	        if (offset + match.length < src.length && !ZPCc.test(src[offset + match.length])) {
+	          return;
+	        }
 	      } else {
 	        emoji_name = match.slice(1, -1);
 	      }
@@ -12220,7 +12791,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  return function emoji_replace(state) {
 	    var i, j, l, tokens, token,
-	        blockTokens = state.tokens;
+	        blockTokens = state.tokens,
+	        autolinkLevel = 0;
 
 	    for (j = 0, l = blockTokens.length; j < l; j++) {
 	      if (blockTokens[j].type !== 'inline') { continue; }
@@ -12231,7 +12803,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      for (i = tokens.length - 1; i >= 0; i--) {
 	        token = tokens[i];
 
-	        if (token.type === 'text' && compiledRE.test(token.content)) {
+	        if (token.type === 'link_open' || token.type === 'link_close') {
+	          if (token.info === 'auto') { autolinkLevel -= token.nesting; }
+	        }
+
+	        if (token.type === 'text' && scanRE.test(token.content) && autolinkLevel === 0) {
 	          // replace current node
 	          blockTokens[j].children = tokens = arrayReplaceAt(
 	            tokens, i, splitTextToken(token.content, token.level, state.Token)
@@ -12253,7 +12829,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 
-	function quoteRE (str) {
+	function quoteRE(str) {
 	  return str.replace(/[.?*+^$[\]\\(){}|-]/g, '\\$&');
 	}
 
@@ -12296,13 +12872,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                .reverse()
 	                .map(function (name) { return quoteRE(name); })
 	                .join('|');
-	  var scanRE = RegExp(names, 'g');
-
+	  var scanRE = RegExp(names);
+	  var replaceRE = RegExp(names, 'g');
 
 	  return {
 	    defs: emojies,
 	    shortcuts: shortcuts,
-	    scanRE: scanRE
+	    scanRE: scanRE,
+	    replaceRE: replaceRE
 	  };
 	};
 
@@ -13067,6 +13644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    label = state.src.slice(labelStart, labelEnd).replace(/\\(.)/g, '$1');
 	    title = state.src.slice(labelEnd + 2, max).trim();
+	    if (label.length === 0) { return false; }
 	    if (title.length === 0) { return false; }
 	    if (!state.env.abbreviations) { state.env.abbreviations = {}; }
 	    // prepend ':' to avoid conflict with Object.prototype members
@@ -13919,9 +14497,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
 	exports.INSPECT_MAX_BYTES = 50
-	Buffer.poolSize = 8192 // not used by this implementation
-
-	var rootParent = {}
 
 	/**
 	 * If `Buffer.TYPED_ARRAY_SUPPORT`:
@@ -13939,9 +14514,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
 	 *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
 	 *
-	 *   - Safari 5-7 lacks support for changing the `Object.prototype.constructor` property
-	 *     on objects.
-	 *
 	 *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
 	 *
 	 *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
@@ -13954,14 +14526,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  ? global.TYPED_ARRAY_SUPPORT
 	  : typedArraySupport()
 
+	/*
+	 * Export kMaxLength after typed array support is determined.
+	 */
+	exports.kMaxLength = kMaxLength()
+
 	function typedArraySupport () {
-	  function Bar () {}
 	  try {
 	    var arr = new Uint8Array(1)
-	    arr.foo = function () { return 42 }
-	    arr.constructor = Bar
+	    arr.__proto__ = {__proto__: Uint8Array.prototype, foo: function () { return 42 }}
 	    return arr.foo() === 42 && // typed array instances can be augmented
-	        arr.constructor === Bar && // constructor can be set
 	        typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
 	        arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
 	  } catch (e) {
@@ -13975,184 +14549,252 @@ return /******/ (function(modules) { // webpackBootstrap
 	    : 0x3fffffff
 	}
 
-	/**
-	 * Class: Buffer
-	 * =============
-	 *
-	 * The Buffer constructor returns instances of `Uint8Array` that are augmented
-	 * with function properties for all the node `Buffer` API functions. We use
-	 * `Uint8Array` so that square bracket notation works as expected -- it returns
-	 * a single octet.
-	 *
-	 * By augmenting the instances, we can avoid modifying the `Uint8Array`
-	 * prototype.
-	 */
-	function Buffer (arg) {
-	  if (!(this instanceof Buffer)) {
-	    // Avoid going through an ArgumentsAdaptorTrampoline in the common case.
-	    if (arguments.length > 1) return new Buffer(arg, arguments[1])
-	    return new Buffer(arg)
+	function createBuffer (that, length) {
+	  if (kMaxLength() < length) {
+	    throw new RangeError('Invalid typed array length')
+	  }
+	  if (Buffer.TYPED_ARRAY_SUPPORT) {
+	    // Return an augmented `Uint8Array` instance, for best performance
+	    that = new Uint8Array(length)
+	    that.__proto__ = Buffer.prototype
+	  } else {
+	    // Fallback: Return an object instance of the Buffer class
+	    if (that === null) {
+	      that = new Buffer(length)
+	    }
+	    that.length = length
 	  }
 
-	  if (!Buffer.TYPED_ARRAY_SUPPORT) {
-	    this.length = 0
-	    this.parent = undefined
+	  return that
+	}
+
+	/**
+	 * The Buffer constructor returns instances of `Uint8Array` that have their
+	 * prototype changed to `Buffer.prototype`. Furthermore, `Buffer` is a subclass of
+	 * `Uint8Array`, so the returned instances will have all the node `Buffer` methods
+	 * and the `Uint8Array` methods. Square bracket notation works as expected -- it
+	 * returns a single octet.
+	 *
+	 * The `Uint8Array` prototype remains unmodified.
+	 */
+
+	function Buffer (arg, encodingOrOffset, length) {
+	  if (!Buffer.TYPED_ARRAY_SUPPORT && !(this instanceof Buffer)) {
+	    return new Buffer(arg, encodingOrOffset, length)
 	  }
 
 	  // Common case.
 	  if (typeof arg === 'number') {
-	    return fromNumber(this, arg)
+	    if (typeof encodingOrOffset === 'string') {
+	      throw new Error(
+	        'If encoding is specified then the first argument must be a string'
+	      )
+	    }
+	    return allocUnsafe(this, arg)
 	  }
-
-	  // Slightly less common case.
-	  if (typeof arg === 'string') {
-	    return fromString(this, arg, arguments.length > 1 ? arguments[1] : 'utf8')
-	  }
-
-	  // Unusual.
-	  return fromObject(this, arg)
+	  return from(this, arg, encodingOrOffset, length)
 	}
 
-	function fromNumber (that, length) {
-	  that = allocate(that, length < 0 ? 0 : checked(length) | 0)
+	Buffer.poolSize = 8192 // not used by this implementation
+
+	// TODO: Legacy, not needed anymore. Remove in next major version.
+	Buffer._augment = function (arr) {
+	  arr.__proto__ = Buffer.prototype
+	  return arr
+	}
+
+	function from (that, value, encodingOrOffset, length) {
+	  if (typeof value === 'number') {
+	    throw new TypeError('"value" argument must not be a number')
+	  }
+
+	  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
+	    return fromArrayBuffer(that, value, encodingOrOffset, length)
+	  }
+
+	  if (typeof value === 'string') {
+	    return fromString(that, value, encodingOrOffset)
+	  }
+
+	  return fromObject(that, value)
+	}
+
+	/**
+	 * Functionally equivalent to Buffer(arg, encoding) but throws a TypeError
+	 * if value is a number.
+	 * Buffer.from(str[, encoding])
+	 * Buffer.from(array)
+	 * Buffer.from(buffer)
+	 * Buffer.from(arrayBuffer[, byteOffset[, length]])
+	 **/
+	Buffer.from = function (value, encodingOrOffset, length) {
+	  return from(null, value, encodingOrOffset, length)
+	}
+
+	if (Buffer.TYPED_ARRAY_SUPPORT) {
+	  Buffer.prototype.__proto__ = Uint8Array.prototype
+	  Buffer.__proto__ = Uint8Array
+	  if (typeof Symbol !== 'undefined' && Symbol.species &&
+	      Buffer[Symbol.species] === Buffer) {
+	    // Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
+	    Object.defineProperty(Buffer, Symbol.species, {
+	      value: null,
+	      configurable: true
+	    })
+	  }
+	}
+
+	function assertSize (size) {
+	  if (typeof size !== 'number') {
+	    throw new TypeError('"size" argument must be a number')
+	  } else if (size < 0) {
+	    throw new RangeError('"size" argument must not be negative')
+	  }
+	}
+
+	function alloc (that, size, fill, encoding) {
+	  assertSize(size)
+	  if (size <= 0) {
+	    return createBuffer(that, size)
+	  }
+	  if (fill !== undefined) {
+	    // Only pay attention to encoding if it's a string. This
+	    // prevents accidentally sending in a number that would
+	    // be interpretted as a start offset.
+	    return typeof encoding === 'string'
+	      ? createBuffer(that, size).fill(fill, encoding)
+	      : createBuffer(that, size).fill(fill)
+	  }
+	  return createBuffer(that, size)
+	}
+
+	/**
+	 * Creates a new filled Buffer instance.
+	 * alloc(size[, fill[, encoding]])
+	 **/
+	Buffer.alloc = function (size, fill, encoding) {
+	  return alloc(null, size, fill, encoding)
+	}
+
+	function allocUnsafe (that, size) {
+	  assertSize(size)
+	  that = createBuffer(that, size < 0 ? 0 : checked(size) | 0)
 	  if (!Buffer.TYPED_ARRAY_SUPPORT) {
-	    for (var i = 0; i < length; i++) {
+	    for (var i = 0; i < size; ++i) {
 	      that[i] = 0
 	    }
 	  }
 	  return that
 	}
 
+	/**
+	 * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
+	 * */
+	Buffer.allocUnsafe = function (size) {
+	  return allocUnsafe(null, size)
+	}
+	/**
+	 * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
+	 */
+	Buffer.allocUnsafeSlow = function (size) {
+	  return allocUnsafe(null, size)
+	}
+
 	function fromString (that, string, encoding) {
-	  if (typeof encoding !== 'string' || encoding === '') encoding = 'utf8'
+	  if (typeof encoding !== 'string' || encoding === '') {
+	    encoding = 'utf8'
+	  }
 
-	  // Assumption: byteLength() return value is always < kMaxLength.
+	  if (!Buffer.isEncoding(encoding)) {
+	    throw new TypeError('"encoding" must be a valid string encoding')
+	  }
+
 	  var length = byteLength(string, encoding) | 0
-	  that = allocate(that, length)
+	  that = createBuffer(that, length)
 
-	  that.write(string, encoding)
-	  return that
-	}
+	  var actual = that.write(string, encoding)
 
-	function fromObject (that, object) {
-	  if (Buffer.isBuffer(object)) return fromBuffer(that, object)
-
-	  if (isArray(object)) return fromArray(that, object)
-
-	  if (object == null) {
-	    throw new TypeError('must start with number, buffer, array or string')
+	  if (actual !== length) {
+	    // Writing a hex string, for example, that contains invalid characters will
+	    // cause everything after the first invalid character to be ignored. (e.g.
+	    // 'abxxcd' will be treated as 'ab')
+	    that = that.slice(0, actual)
 	  }
 
-	  if (typeof ArrayBuffer !== 'undefined') {
-	    if (object.buffer instanceof ArrayBuffer) {
-	      return fromTypedArray(that, object)
-	    }
-	    if (object instanceof ArrayBuffer) {
-	      return fromArrayBuffer(that, object)
-	    }
-	  }
-
-	  if (object.length) return fromArrayLike(that, object)
-
-	  return fromJsonObject(that, object)
-	}
-
-	function fromBuffer (that, buffer) {
-	  var length = checked(buffer.length) | 0
-	  that = allocate(that, length)
-	  buffer.copy(that, 0, 0, length)
-	  return that
-	}
-
-	function fromArray (that, array) {
-	  var length = checked(array.length) | 0
-	  that = allocate(that, length)
-	  for (var i = 0; i < length; i += 1) {
-	    that[i] = array[i] & 255
-	  }
-	  return that
-	}
-
-	// Duplicate of fromArray() to keep fromArray() monomorphic.
-	function fromTypedArray (that, array) {
-	  var length = checked(array.length) | 0
-	  that = allocate(that, length)
-	  // Truncating the elements is probably not what people expect from typed
-	  // arrays with BYTES_PER_ELEMENT > 1 but it's compatible with the behavior
-	  // of the old Buffer constructor.
-	  for (var i = 0; i < length; i += 1) {
-	    that[i] = array[i] & 255
-	  }
-	  return that
-	}
-
-	function fromArrayBuffer (that, array) {
-	  if (Buffer.TYPED_ARRAY_SUPPORT) {
-	    // Return an augmented `Uint8Array` instance, for best performance
-	    array.byteLength
-	    that = Buffer._augment(new Uint8Array(array))
-	  } else {
-	    // Fallback: Return an object instance of the Buffer class
-	    that = fromTypedArray(that, new Uint8Array(array))
-	  }
 	  return that
 	}
 
 	function fromArrayLike (that, array) {
-	  var length = checked(array.length) | 0
-	  that = allocate(that, length)
+	  var length = array.length < 0 ? 0 : checked(array.length) | 0
+	  that = createBuffer(that, length)
 	  for (var i = 0; i < length; i += 1) {
 	    that[i] = array[i] & 255
 	  }
 	  return that
 	}
 
-	// Deserialize { type: 'Buffer', data: [1,2,3,...] } into a Buffer object.
-	// Returns a zero-length buffer for inputs that don't conform to the spec.
-	function fromJsonObject (that, object) {
-	  var array
-	  var length = 0
+	function fromArrayBuffer (that, array, byteOffset, length) {
+	  array.byteLength // this throws if `array` is not a valid ArrayBuffer
 
-	  if (object.type === 'Buffer' && isArray(object.data)) {
-	    array = object.data
-	    length = checked(array.length) | 0
+	  if (byteOffset < 0 || array.byteLength < byteOffset) {
+	    throw new RangeError('\'offset\' is out of bounds')
 	  }
-	  that = allocate(that, length)
 
-	  for (var i = 0; i < length; i += 1) {
-	    that[i] = array[i] & 255
+	  if (array.byteLength < byteOffset + (length || 0)) {
+	    throw new RangeError('\'length\' is out of bounds')
 	  }
-	  return that
-	}
 
-	if (Buffer.TYPED_ARRAY_SUPPORT) {
-	  Buffer.prototype.__proto__ = Uint8Array.prototype
-	  Buffer.__proto__ = Uint8Array
-	} else {
-	  // pre-set for values that may exist in the future
-	  Buffer.prototype.length = undefined
-	  Buffer.prototype.parent = undefined
-	}
+	  if (byteOffset === undefined && length === undefined) {
+	    array = new Uint8Array(array)
+	  } else if (length === undefined) {
+	    array = new Uint8Array(array, byteOffset)
+	  } else {
+	    array = new Uint8Array(array, byteOffset, length)
+	  }
 
-	function allocate (that, length) {
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    // Return an augmented `Uint8Array` instance, for best performance
-	    that = Buffer._augment(new Uint8Array(length))
+	    that = array
 	    that.__proto__ = Buffer.prototype
 	  } else {
 	    // Fallback: Return an object instance of the Buffer class
-	    that.length = length
-	    that._isBuffer = true
+	    that = fromArrayLike(that, array)
 	  }
-
-	  var fromPool = length !== 0 && length <= Buffer.poolSize >>> 1
-	  if (fromPool) that.parent = rootParent
-
 	  return that
 	}
 
+	function fromObject (that, obj) {
+	  if (Buffer.isBuffer(obj)) {
+	    var len = checked(obj.length) | 0
+	    that = createBuffer(that, len)
+
+	    if (that.length === 0) {
+	      return that
+	    }
+
+	    obj.copy(that, 0, 0, len)
+	    return that
+	  }
+
+	  if (obj) {
+	    if ((typeof ArrayBuffer !== 'undefined' &&
+	        obj.buffer instanceof ArrayBuffer) || 'length' in obj) {
+	      if (typeof obj.length !== 'number' || isnan(obj.length)) {
+	        return createBuffer(that, 0)
+	      }
+	      return fromArrayLike(that, obj)
+	    }
+
+	    if (obj.type === 'Buffer' && isArray(obj.data)) {
+	      return fromArrayLike(that, obj.data)
+	    }
+	  }
+
+	  throw new TypeError('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.')
+	}
+
 	function checked (length) {
-	  // Note: cannot use `length < kMaxLength` here because that fails when
+	  // Note: cannot use `length < kMaxLength()` here because that fails when
 	  // length is NaN (which is otherwise coerced to zero.)
 	  if (length >= kMaxLength()) {
 	    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
@@ -14161,12 +14803,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return length | 0
 	}
 
-	function SlowBuffer (subject, encoding) {
-	  if (!(this instanceof SlowBuffer)) return new SlowBuffer(subject, encoding)
-
-	  var buf = new Buffer(subject, encoding)
-	  delete buf.parent
-	  return buf
+	function SlowBuffer (length) {
+	  if (+length != length) { // eslint-disable-line eqeqeq
+	    length = 0
+	  }
+	  return Buffer.alloc(+length)
 	}
 
 	Buffer.isBuffer = function isBuffer (b) {
@@ -14183,17 +14824,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var x = a.length
 	  var y = b.length
 
-	  var i = 0
-	  var len = Math.min(x, y)
-	  while (i < len) {
-	    if (a[i] !== b[i]) break
-
-	    ++i
-	  }
-
-	  if (i !== len) {
-	    x = a[i]
-	    y = b[i]
+	  for (var i = 0, len = Math.min(x, y); i < len; ++i) {
+	    if (a[i] !== b[i]) {
+	      x = a[i]
+	      y = b[i]
+	      break
+	    }
 	  }
 
 	  if (x < y) return -1
@@ -14207,9 +14843,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    case 'utf8':
 	    case 'utf-8':
 	    case 'ascii':
+	    case 'latin1':
 	    case 'binary':
 	    case 'base64':
-	    case 'raw':
 	    case 'ucs2':
 	    case 'ucs-2':
 	    case 'utf16le':
@@ -14221,32 +14857,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	Buffer.concat = function concat (list, length) {
-	  if (!isArray(list)) throw new TypeError('list argument must be an Array of Buffers.')
+	  if (!isArray(list)) {
+	    throw new TypeError('"list" argument must be an Array of Buffers')
+	  }
 
 	  if (list.length === 0) {
-	    return new Buffer(0)
+	    return Buffer.alloc(0)
 	  }
 
 	  var i
 	  if (length === undefined) {
 	    length = 0
-	    for (i = 0; i < list.length; i++) {
+	    for (i = 0; i < list.length; ++i) {
 	      length += list[i].length
 	    }
 	  }
 
-	  var buf = new Buffer(length)
+	  var buffer = Buffer.allocUnsafe(length)
 	  var pos = 0
-	  for (i = 0; i < list.length; i++) {
-	    var item = list[i]
-	    item.copy(buf, pos)
-	    pos += item.length
+	  for (i = 0; i < list.length; ++i) {
+	    var buf = list[i]
+	    if (!Buffer.isBuffer(buf)) {
+	      throw new TypeError('"list" argument must be an Array of Buffers')
+	    }
+	    buf.copy(buffer, pos)
+	    pos += buf.length
 	  }
-	  return buf
+	  return buffer
 	}
 
 	function byteLength (string, encoding) {
-	  if (typeof string !== 'string') string = '' + string
+	  if (Buffer.isBuffer(string)) {
+	    return string.length
+	  }
+	  if (typeof ArrayBuffer !== 'undefined' && typeof ArrayBuffer.isView === 'function' &&
+	      (ArrayBuffer.isView(string) || string instanceof ArrayBuffer)) {
+	    return string.byteLength
+	  }
+	  if (typeof string !== 'string') {
+	    string = '' + string
+	  }
 
 	  var len = string.length
 	  if (len === 0) return 0
@@ -14256,13 +14906,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  for (;;) {
 	    switch (encoding) {
 	      case 'ascii':
+	      case 'latin1':
 	      case 'binary':
-	      // Deprecated
-	      case 'raw':
-	      case 'raws':
 	        return len
 	      case 'utf8':
 	      case 'utf-8':
+	      case undefined:
 	        return utf8ToBytes(string).length
 	      case 'ucs2':
 	      case 'ucs-2':
@@ -14285,13 +14934,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	function slowToString (encoding, start, end) {
 	  var loweredCase = false
 
-	  start = start | 0
-	  end = end === undefined || end === Infinity ? this.length : end | 0
+	  // No need to verify that "this.length <= MAX_UINT32" since it's a read-only
+	  // property of a typed array.
+
+	  // This behaves neither like String nor Uint8Array in that we set start/end
+	  // to their upper/lower bounds if the value passed is out of range.
+	  // undefined is handled specially as per ECMA-262 6th Edition,
+	  // Section 13.3.3.7 Runtime Semantics: KeyedBindingInitialization.
+	  if (start === undefined || start < 0) {
+	    start = 0
+	  }
+	  // Return early if start > this.length. Done here to prevent potential uint32
+	  // coercion fail below.
+	  if (start > this.length) {
+	    return ''
+	  }
+
+	  if (end === undefined || end > this.length) {
+	    end = this.length
+	  }
+
+	  if (end <= 0) {
+	    return ''
+	  }
+
+	  // Force coersion to uint32. This will also coerce falsey/NaN values to 0.
+	  end >>>= 0
+	  start >>>= 0
+
+	  if (end <= start) {
+	    return ''
+	  }
 
 	  if (!encoding) encoding = 'utf8'
-	  if (start < 0) start = 0
-	  if (end > this.length) end = this.length
-	  if (end <= start) return ''
 
 	  while (true) {
 	    switch (encoding) {
@@ -14305,8 +14980,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      case 'ascii':
 	        return asciiSlice(this, start, end)
 
+	      case 'latin1':
 	      case 'binary':
-	        return binarySlice(this, start, end)
+	        return latin1Slice(this, start, end)
 
 	      case 'base64':
 	        return base64Slice(this, start, end)
@@ -14323,6 +14999,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	        loweredCase = true
 	    }
 	  }
+	}
+
+	// The property is used by `Buffer.isBuffer` and `is-buffer` (in Safari 5-7) to detect
+	// Buffer instances.
+	Buffer.prototype._isBuffer = true
+
+	function swap (b, n, m) {
+	  var i = b[n]
+	  b[n] = b[m]
+	  b[m] = i
+	}
+
+	Buffer.prototype.swap16 = function swap16 () {
+	  var len = this.length
+	  if (len % 2 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 16-bits')
+	  }
+	  for (var i = 0; i < len; i += 2) {
+	    swap(this, i, i + 1)
+	  }
+	  return this
+	}
+
+	Buffer.prototype.swap32 = function swap32 () {
+	  var len = this.length
+	  if (len % 4 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 32-bits')
+	  }
+	  for (var i = 0; i < len; i += 4) {
+	    swap(this, i, i + 3)
+	    swap(this, i + 1, i + 2)
+	  }
+	  return this
+	}
+
+	Buffer.prototype.swap64 = function swap64 () {
+	  var len = this.length
+	  if (len % 8 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 64-bits')
+	  }
+	  for (var i = 0; i < len; i += 8) {
+	    swap(this, i, i + 7)
+	    swap(this, i + 1, i + 6)
+	    swap(this, i + 2, i + 5)
+	    swap(this, i + 3, i + 4)
+	  }
+	  return this
 	}
 
 	Buffer.prototype.toString = function toString () {
@@ -14348,63 +15071,197 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return '<Buffer ' + str + '>'
 	}
 
-	Buffer.prototype.compare = function compare (b) {
-	  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
-	  if (this === b) return 0
-	  return Buffer.compare(this, b)
+	Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
+	  if (!Buffer.isBuffer(target)) {
+	    throw new TypeError('Argument must be a Buffer')
+	  }
+
+	  if (start === undefined) {
+	    start = 0
+	  }
+	  if (end === undefined) {
+	    end = target ? target.length : 0
+	  }
+	  if (thisStart === undefined) {
+	    thisStart = 0
+	  }
+	  if (thisEnd === undefined) {
+	    thisEnd = this.length
+	  }
+
+	  if (start < 0 || end > target.length || thisStart < 0 || thisEnd > this.length) {
+	    throw new RangeError('out of range index')
+	  }
+
+	  if (thisStart >= thisEnd && start >= end) {
+	    return 0
+	  }
+	  if (thisStart >= thisEnd) {
+	    return -1
+	  }
+	  if (start >= end) {
+	    return 1
+	  }
+
+	  start >>>= 0
+	  end >>>= 0
+	  thisStart >>>= 0
+	  thisEnd >>>= 0
+
+	  if (this === target) return 0
+
+	  var x = thisEnd - thisStart
+	  var y = end - start
+	  var len = Math.min(x, y)
+
+	  var thisCopy = this.slice(thisStart, thisEnd)
+	  var targetCopy = target.slice(start, end)
+
+	  for (var i = 0; i < len; ++i) {
+	    if (thisCopy[i] !== targetCopy[i]) {
+	      x = thisCopy[i]
+	      y = targetCopy[i]
+	      break
+	    }
+	  }
+
+	  if (x < y) return -1
+	  if (y < x) return 1
+	  return 0
 	}
 
-	Buffer.prototype.indexOf = function indexOf (val, byteOffset) {
-	  if (byteOffset > 0x7fffffff) byteOffset = 0x7fffffff
-	  else if (byteOffset < -0x80000000) byteOffset = -0x80000000
-	  byteOffset >>= 0
+	// Finds either the first index of `val` in `buffer` at offset >= `byteOffset`,
+	// OR the last index of `val` in `buffer` at offset <= `byteOffset`.
+	//
+	// Arguments:
+	// - buffer - a Buffer to search
+	// - val - a string, Buffer, or number
+	// - byteOffset - an index into `buffer`; will be clamped to an int32
+	// - encoding - an optional encoding, relevant is val is a string
+	// - dir - true for indexOf, false for lastIndexOf
+	function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
+	  // Empty buffer means no match
+	  if (buffer.length === 0) return -1
 
-	  if (this.length === 0) return -1
-	  if (byteOffset >= this.length) return -1
+	  // Normalize byteOffset
+	  if (typeof byteOffset === 'string') {
+	    encoding = byteOffset
+	    byteOffset = 0
+	  } else if (byteOffset > 0x7fffffff) {
+	    byteOffset = 0x7fffffff
+	  } else if (byteOffset < -0x80000000) {
+	    byteOffset = -0x80000000
+	  }
+	  byteOffset = +byteOffset  // Coerce to Number.
+	  if (isNaN(byteOffset)) {
+	    // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
+	    byteOffset = dir ? 0 : (buffer.length - 1)
+	  }
 
-	  // Negative offsets start from the end of the buffer
-	  if (byteOffset < 0) byteOffset = Math.max(this.length + byteOffset, 0)
+	  // Normalize byteOffset: negative offsets start from the end of the buffer
+	  if (byteOffset < 0) byteOffset = buffer.length + byteOffset
+	  if (byteOffset >= buffer.length) {
+	    if (dir) return -1
+	    else byteOffset = buffer.length - 1
+	  } else if (byteOffset < 0) {
+	    if (dir) byteOffset = 0
+	    else return -1
+	  }
 
+	  // Normalize val
 	  if (typeof val === 'string') {
-	    if (val.length === 0) return -1 // special case: looking for empty string always fails
-	    return String.prototype.indexOf.call(this, val, byteOffset)
-	  }
-	  if (Buffer.isBuffer(val)) {
-	    return arrayIndexOf(this, val, byteOffset)
-	  }
-	  if (typeof val === 'number') {
-	    if (Buffer.TYPED_ARRAY_SUPPORT && Uint8Array.prototype.indexOf === 'function') {
-	      return Uint8Array.prototype.indexOf.call(this, val, byteOffset)
-	    }
-	    return arrayIndexOf(this, [ val ], byteOffset)
+	    val = Buffer.from(val, encoding)
 	  }
 
-	  function arrayIndexOf (arr, val, byteOffset) {
-	    var foundIndex = -1
-	    for (var i = 0; byteOffset + i < arr.length; i++) {
-	      if (arr[byteOffset + i] === val[foundIndex === -1 ? 0 : i - foundIndex]) {
-	        if (foundIndex === -1) foundIndex = i
-	        if (i - foundIndex + 1 === val.length) return byteOffset + foundIndex
+	  // Finally, search either indexOf (if dir is true) or lastIndexOf
+	  if (Buffer.isBuffer(val)) {
+	    // Special case: looking for empty string/buffer always fails
+	    if (val.length === 0) {
+	      return -1
+	    }
+	    return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
+	  } else if (typeof val === 'number') {
+	    val = val & 0xFF // Search for a byte value [0-255]
+	    if (Buffer.TYPED_ARRAY_SUPPORT &&
+	        typeof Uint8Array.prototype.indexOf === 'function') {
+	      if (dir) {
+	        return Uint8Array.prototype.indexOf.call(buffer, val, byteOffset)
 	      } else {
-	        foundIndex = -1
+	        return Uint8Array.prototype.lastIndexOf.call(buffer, val, byteOffset)
 	      }
 	    }
-	    return -1
+	    return arrayIndexOf(buffer, [ val ], byteOffset, encoding, dir)
 	  }
 
 	  throw new TypeError('val must be string, number or Buffer')
 	}
 
-	// `get` is deprecated
-	Buffer.prototype.get = function get (offset) {
-	  console.log('.get() is deprecated. Access using array indexes instead.')
-	  return this.readUInt8(offset)
+	function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
+	  var indexSize = 1
+	  var arrLength = arr.length
+	  var valLength = val.length
+
+	  if (encoding !== undefined) {
+	    encoding = String(encoding).toLowerCase()
+	    if (encoding === 'ucs2' || encoding === 'ucs-2' ||
+	        encoding === 'utf16le' || encoding === 'utf-16le') {
+	      if (arr.length < 2 || val.length < 2) {
+	        return -1
+	      }
+	      indexSize = 2
+	      arrLength /= 2
+	      valLength /= 2
+	      byteOffset /= 2
+	    }
+	  }
+
+	  function read (buf, i) {
+	    if (indexSize === 1) {
+	      return buf[i]
+	    } else {
+	      return buf.readUInt16BE(i * indexSize)
+	    }
+	  }
+
+	  var i
+	  if (dir) {
+	    var foundIndex = -1
+	    for (i = byteOffset; i < arrLength; i++) {
+	      if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+	        if (foundIndex === -1) foundIndex = i
+	        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
+	      } else {
+	        if (foundIndex !== -1) i -= i - foundIndex
+	        foundIndex = -1
+	      }
+	    }
+	  } else {
+	    if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength
+	    for (i = byteOffset; i >= 0; i--) {
+	      var found = true
+	      for (var j = 0; j < valLength; j++) {
+	        if (read(arr, i + j) !== read(val, j)) {
+	          found = false
+	          break
+	        }
+	      }
+	      if (found) return i
+	    }
+	  }
+
+	  return -1
 	}
 
-	// `set` is deprecated
-	Buffer.prototype.set = function set (v, offset) {
-	  console.log('.set() is deprecated. Access using array indexes instead.')
-	  return this.writeUInt8(v, offset)
+	Buffer.prototype.includes = function includes (val, byteOffset, encoding) {
+	  return this.indexOf(val, byteOffset, encoding) !== -1
+	}
+
+	Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
+	  return bidirectionalIndexOf(this, val, byteOffset, encoding, true)
+	}
+
+	Buffer.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) {
+	  return bidirectionalIndexOf(this, val, byteOffset, encoding, false)
 	}
 
 	function hexWrite (buf, string, offset, length) {
@@ -14421,14 +15278,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // must be an even number of digits
 	  var strLen = string.length
-	  if (strLen % 2 !== 0) throw new Error('Invalid hex string')
+	  if (strLen % 2 !== 0) throw new TypeError('Invalid hex string')
 
 	  if (length > strLen / 2) {
 	    length = strLen / 2
 	  }
-	  for (var i = 0; i < length; i++) {
+	  for (var i = 0; i < length; ++i) {
 	    var parsed = parseInt(string.substr(i * 2, 2), 16)
-	    if (isNaN(parsed)) throw new Error('Invalid hex string')
+	    if (isNaN(parsed)) return i
 	    buf[offset + i] = parsed
 	  }
 	  return i
@@ -14442,7 +15299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return blitBuffer(asciiToBytes(string), buf, offset, length)
 	}
 
-	function binaryWrite (buf, string, offset, length) {
+	function latin1Write (buf, string, offset, length) {
 	  return asciiWrite(buf, string, offset, length)
 	}
 
@@ -14477,17 +15334,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  // legacy write(string, encoding, offset, length) - remove in v0.13
 	  } else {
-	    var swap = encoding
-	    encoding = offset
-	    offset = length | 0
-	    length = swap
+	    throw new Error(
+	      'Buffer.write(string, encoding, offset[, length]) is no longer supported'
+	    )
 	  }
 
 	  var remaining = this.length - offset
 	  if (length === undefined || length > remaining) length = remaining
 
 	  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
-	    throw new RangeError('attempt to write outside buffer bounds')
+	    throw new RangeError('Attempt to write outside buffer bounds')
 	  }
 
 	  if (!encoding) encoding = 'utf8'
@@ -14505,8 +15361,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      case 'ascii':
 	        return asciiWrite(this, string, offset, length)
 
+	      case 'latin1':
 	      case 'binary':
-	        return binaryWrite(this, string, offset, length)
+	        return latin1Write(this, string, offset, length)
 
 	      case 'base64':
 	        // Warning: maxLength not taken into account in base64Write
@@ -14641,17 +15498,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var ret = ''
 	  end = Math.min(buf.length, end)
 
-	  for (var i = start; i < end; i++) {
+	  for (var i = start; i < end; ++i) {
 	    ret += String.fromCharCode(buf[i] & 0x7F)
 	  }
 	  return ret
 	}
 
-	function binarySlice (buf, start, end) {
+	function latin1Slice (buf, start, end) {
 	  var ret = ''
 	  end = Math.min(buf.length, end)
 
-	  for (var i = start; i < end; i++) {
+	  for (var i = start; i < end; ++i) {
 	    ret += String.fromCharCode(buf[i])
 	  }
 	  return ret
@@ -14664,7 +15521,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!end || end < 0 || end > len) end = len
 
 	  var out = ''
-	  for (var i = start; i < end; i++) {
+	  for (var i = start; i < end; ++i) {
 	    out += toHex(buf[i])
 	  }
 	  return out
@@ -14702,16 +15559,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var newBuf
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
-	    newBuf = Buffer._augment(this.subarray(start, end))
+	    newBuf = this.subarray(start, end)
+	    newBuf.__proto__ = Buffer.prototype
 	  } else {
 	    var sliceLen = end - start
 	    newBuf = new Buffer(sliceLen, undefined)
-	    for (var i = 0; i < sliceLen; i++) {
+	    for (var i = 0; i < sliceLen; ++i) {
 	      newBuf[i] = this[i + start]
 	    }
 	  }
-
-	  if (newBuf.length) newBuf.parent = this.parent || this
 
 	  return newBuf
 	}
@@ -14881,16 +15737,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function checkInt (buf, value, offset, ext, max, min) {
-	  if (!Buffer.isBuffer(buf)) throw new TypeError('buffer must be a Buffer instance')
-	  if (value > max || value < min) throw new RangeError('value is out of bounds')
-	  if (offset + ext > buf.length) throw new RangeError('index out of range')
+	  if (!Buffer.isBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance')
+	  if (value > max || value < min) throw new RangeError('"value" argument is out of bounds')
+	  if (offset + ext > buf.length) throw new RangeError('Index out of range')
 	}
 
 	Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
 	  value = +value
 	  offset = offset | 0
 	  byteLength = byteLength | 0
-	  if (!noAssert) checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0)
+	  if (!noAssert) {
+	    var maxBytes = Math.pow(2, 8 * byteLength) - 1
+	    checkInt(this, value, offset, byteLength, maxBytes, 0)
+	  }
 
 	  var mul = 1
 	  var i = 0
@@ -14906,7 +15765,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value = +value
 	  offset = offset | 0
 	  byteLength = byteLength | 0
-	  if (!noAssert) checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0)
+	  if (!noAssert) {
+	    var maxBytes = Math.pow(2, 8 * byteLength) - 1
+	    checkInt(this, value, offset, byteLength, maxBytes, 0)
+	  }
 
 	  var i = byteLength - 1
 	  var mul = 1
@@ -14929,7 +15791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function objectWriteUInt16 (buf, value, offset, littleEndian) {
 	  if (value < 0) value = 0xffff + value + 1
-	  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; i++) {
+	  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
 	    buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
 	      (littleEndian ? i : 1 - i) * 8
 	  }
@@ -14963,7 +15825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function objectWriteUInt32 (buf, value, offset, littleEndian) {
 	  if (value < 0) value = 0xffffffff + value + 1
-	  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; i++) {
+	  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
 	    buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
 	  }
 	}
@@ -15009,9 +15871,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var i = 0
 	  var mul = 1
-	  var sub = value < 0 ? 1 : 0
+	  var sub = 0
 	  this[offset] = value & 0xFF
 	  while (++i < byteLength && (mul *= 0x100)) {
+	    if (value < 0 && sub === 0 && this[offset + i - 1] !== 0) {
+	      sub = 1
+	    }
 	    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF
 	  }
 
@@ -15029,9 +15894,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var i = byteLength - 1
 	  var mul = 1
-	  var sub = value < 0 ? 1 : 0
+	  var sub = 0
 	  this[offset + i] = value & 0xFF
 	  while (--i >= 0 && (mul *= 0x100)) {
+	    if (value < 0 && sub === 0 && this[offset + i + 1] !== 0) {
+	      sub = 1
+	    }
 	    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF
 	  }
 
@@ -15106,9 +15974,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function checkIEEE754 (buf, value, offset, ext, max, min) {
-	  if (value > max || value < min) throw new RangeError('value is out of bounds')
-	  if (offset + ext > buf.length) throw new RangeError('index out of range')
-	  if (offset < 0) throw new RangeError('index out of range')
+	  if (offset + ext > buf.length) throw new RangeError('Index out of range')
+	  if (offset < 0) throw new RangeError('Index out of range')
 	}
 
 	function writeFloat (buf, value, offset, littleEndian, noAssert) {
@@ -15173,142 +16040,90 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  if (this === target && start < targetStart && targetStart < end) {
 	    // descending copy from end
-	    for (i = len - 1; i >= 0; i--) {
+	    for (i = len - 1; i >= 0; --i) {
 	      target[i + targetStart] = this[i + start]
 	    }
 	  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
 	    // ascending copy from start
-	    for (i = 0; i < len; i++) {
+	    for (i = 0; i < len; ++i) {
 	      target[i + targetStart] = this[i + start]
 	    }
 	  } else {
-	    target._set(this.subarray(start, start + len), targetStart)
+	    Uint8Array.prototype.set.call(
+	      target,
+	      this.subarray(start, start + len),
+	      targetStart
+	    )
 	  }
 
 	  return len
 	}
 
-	// fill(value, start=0, end=buffer.length)
-	Buffer.prototype.fill = function fill (value, start, end) {
-	  if (!value) value = 0
-	  if (!start) start = 0
-	  if (!end) end = this.length
+	// Usage:
+	//    buffer.fill(number[, offset[, end]])
+	//    buffer.fill(buffer[, offset[, end]])
+	//    buffer.fill(string[, offset[, end]][, encoding])
+	Buffer.prototype.fill = function fill (val, start, end, encoding) {
+	  // Handle string cases:
+	  if (typeof val === 'string') {
+	    if (typeof start === 'string') {
+	      encoding = start
+	      start = 0
+	      end = this.length
+	    } else if (typeof end === 'string') {
+	      encoding = end
+	      end = this.length
+	    }
+	    if (val.length === 1) {
+	      var code = val.charCodeAt(0)
+	      if (code < 256) {
+	        val = code
+	      }
+	    }
+	    if (encoding !== undefined && typeof encoding !== 'string') {
+	      throw new TypeError('encoding must be a string')
+	    }
+	    if (typeof encoding === 'string' && !Buffer.isEncoding(encoding)) {
+	      throw new TypeError('Unknown encoding: ' + encoding)
+	    }
+	  } else if (typeof val === 'number') {
+	    val = val & 255
+	  }
 
-	  if (end < start) throw new RangeError('end < start')
+	  // Invalid ranges are not set to a default, so can range check early.
+	  if (start < 0 || this.length < start || this.length < end) {
+	    throw new RangeError('Out of range index')
+	  }
 
-	  // Fill 0 bytes; we're done
-	  if (end === start) return
-	  if (this.length === 0) return
+	  if (end <= start) {
+	    return this
+	  }
 
-	  if (start < 0 || start >= this.length) throw new RangeError('start out of bounds')
-	  if (end < 0 || end > this.length) throw new RangeError('end out of bounds')
+	  start = start >>> 0
+	  end = end === undefined ? this.length : end >>> 0
+
+	  if (!val) val = 0
 
 	  var i
-	  if (typeof value === 'number') {
-	    for (i = start; i < end; i++) {
-	      this[i] = value
+	  if (typeof val === 'number') {
+	    for (i = start; i < end; ++i) {
+	      this[i] = val
 	    }
 	  } else {
-	    var bytes = utf8ToBytes(value.toString())
+	    var bytes = Buffer.isBuffer(val)
+	      ? val
+	      : utf8ToBytes(new Buffer(val, encoding).toString())
 	    var len = bytes.length
-	    for (i = start; i < end; i++) {
-	      this[i] = bytes[i % len]
+	    for (i = 0; i < end - start; ++i) {
+	      this[i + start] = bytes[i % len]
 	    }
 	  }
 
 	  return this
 	}
 
-	/**
-	 * Creates a new `ArrayBuffer` with the *copied* memory of the buffer instance.
-	 * Added in Node 0.12. Only available in browsers that support ArrayBuffer.
-	 */
-	Buffer.prototype.toArrayBuffer = function toArrayBuffer () {
-	  if (typeof Uint8Array !== 'undefined') {
-	    if (Buffer.TYPED_ARRAY_SUPPORT) {
-	      return (new Buffer(this)).buffer
-	    } else {
-	      var buf = new Uint8Array(this.length)
-	      for (var i = 0, len = buf.length; i < len; i += 1) {
-	        buf[i] = this[i]
-	      }
-	      return buf.buffer
-	    }
-	  } else {
-	    throw new TypeError('Buffer.toArrayBuffer not supported in this browser')
-	  }
-	}
-
 	// HELPER FUNCTIONS
 	// ================
-
-	var BP = Buffer.prototype
-
-	/**
-	 * Augment a Uint8Array *instance* (not the Uint8Array class!) with Buffer methods
-	 */
-	Buffer._augment = function _augment (arr) {
-	  arr.constructor = Buffer
-	  arr._isBuffer = true
-
-	  // save reference to original Uint8Array set method before overwriting
-	  arr._set = arr.set
-
-	  // deprecated
-	  arr.get = BP.get
-	  arr.set = BP.set
-
-	  arr.write = BP.write
-	  arr.toString = BP.toString
-	  arr.toLocaleString = BP.toString
-	  arr.toJSON = BP.toJSON
-	  arr.equals = BP.equals
-	  arr.compare = BP.compare
-	  arr.indexOf = BP.indexOf
-	  arr.copy = BP.copy
-	  arr.slice = BP.slice
-	  arr.readUIntLE = BP.readUIntLE
-	  arr.readUIntBE = BP.readUIntBE
-	  arr.readUInt8 = BP.readUInt8
-	  arr.readUInt16LE = BP.readUInt16LE
-	  arr.readUInt16BE = BP.readUInt16BE
-	  arr.readUInt32LE = BP.readUInt32LE
-	  arr.readUInt32BE = BP.readUInt32BE
-	  arr.readIntLE = BP.readIntLE
-	  arr.readIntBE = BP.readIntBE
-	  arr.readInt8 = BP.readInt8
-	  arr.readInt16LE = BP.readInt16LE
-	  arr.readInt16BE = BP.readInt16BE
-	  arr.readInt32LE = BP.readInt32LE
-	  arr.readInt32BE = BP.readInt32BE
-	  arr.readFloatLE = BP.readFloatLE
-	  arr.readFloatBE = BP.readFloatBE
-	  arr.readDoubleLE = BP.readDoubleLE
-	  arr.readDoubleBE = BP.readDoubleBE
-	  arr.writeUInt8 = BP.writeUInt8
-	  arr.writeUIntLE = BP.writeUIntLE
-	  arr.writeUIntBE = BP.writeUIntBE
-	  arr.writeUInt16LE = BP.writeUInt16LE
-	  arr.writeUInt16BE = BP.writeUInt16BE
-	  arr.writeUInt32LE = BP.writeUInt32LE
-	  arr.writeUInt32BE = BP.writeUInt32BE
-	  arr.writeIntLE = BP.writeIntLE
-	  arr.writeIntBE = BP.writeIntBE
-	  arr.writeInt8 = BP.writeInt8
-	  arr.writeInt16LE = BP.writeInt16LE
-	  arr.writeInt16BE = BP.writeInt16BE
-	  arr.writeInt32LE = BP.writeInt32LE
-	  arr.writeInt32BE = BP.writeInt32BE
-	  arr.writeFloatLE = BP.writeFloatLE
-	  arr.writeFloatBE = BP.writeFloatBE
-	  arr.writeDoubleLE = BP.writeDoubleLE
-	  arr.writeDoubleBE = BP.writeDoubleBE
-	  arr.fill = BP.fill
-	  arr.inspect = BP.inspect
-	  arr.toArrayBuffer = BP.toArrayBuffer
-
-	  return arr
-	}
 
 	var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g
 
@@ -15341,7 +16156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var leadSurrogate = null
 	  var bytes = []
 
-	  for (var i = 0; i < length; i++) {
+	  for (var i = 0; i < length; ++i) {
 	    codePoint = string.charCodeAt(i)
 
 	    // is surrogate component
@@ -15416,7 +16231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function asciiToBytes (str) {
 	  var byteArray = []
-	  for (var i = 0; i < str.length; i++) {
+	  for (var i = 0; i < str.length; ++i) {
 	    // Node's code seems to be doing this and not & 0x7F..
 	    byteArray.push(str.charCodeAt(i) & 0xFF)
 	  }
@@ -15426,7 +16241,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function utf16leToBytes (str, units) {
 	  var c, hi, lo
 	  var byteArray = []
-	  for (var i = 0; i < str.length; i++) {
+	  for (var i = 0; i < str.length; ++i) {
 	    if ((units -= 2) < 0) break
 
 	    c = str.charCodeAt(i)
@@ -15444,143 +16259,137 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function blitBuffer (src, dst, offset, length) {
-	  for (var i = 0; i < length; i++) {
+	  for (var i = 0; i < length; ++i) {
 	    if ((i + offset >= dst.length) || (i >= src.length)) break
 	    dst[i + offset] = src[i]
 	  }
 	  return i
 	}
 
+	function isnan (val) {
+	  return val !== val // eslint-disable-line no-self-compare
+	}
+
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(138).Buffer, (function() { return this; }())))
 
 /***/ },
 /* 139 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+	'use strict'
 
-	;(function (exports) {
-		'use strict';
+	exports.byteLength = byteLength
+	exports.toByteArray = toByteArray
+	exports.fromByteArray = fromByteArray
 
-	  var Arr = (typeof Uint8Array !== 'undefined')
-	    ? Uint8Array
-	    : Array
+	var lookup = []
+	var revLookup = []
+	var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array
 
-		var PLUS   = '+'.charCodeAt(0)
-		var SLASH  = '/'.charCodeAt(0)
-		var NUMBER = '0'.charCodeAt(0)
-		var LOWER  = 'a'.charCodeAt(0)
-		var UPPER  = 'A'.charCodeAt(0)
-		var PLUS_URL_SAFE = '-'.charCodeAt(0)
-		var SLASH_URL_SAFE = '_'.charCodeAt(0)
+	var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	for (var i = 0, len = code.length; i < len; ++i) {
+	  lookup[i] = code[i]
+	  revLookup[code.charCodeAt(i)] = i
+	}
 
-		function decode (elt) {
-			var code = elt.charCodeAt(0)
-			if (code === PLUS ||
-			    code === PLUS_URL_SAFE)
-				return 62 // '+'
-			if (code === SLASH ||
-			    code === SLASH_URL_SAFE)
-				return 63 // '/'
-			if (code < NUMBER)
-				return -1 //no match
-			if (code < NUMBER + 10)
-				return code - NUMBER + 26 + 26
-			if (code < UPPER + 26)
-				return code - UPPER
-			if (code < LOWER + 26)
-				return code - LOWER + 26
-		}
+	revLookup['-'.charCodeAt(0)] = 62
+	revLookup['_'.charCodeAt(0)] = 63
 
-		function b64ToByteArray (b64) {
-			var i, j, l, tmp, placeHolders, arr
+	function placeHoldersCount (b64) {
+	  var len = b64.length
+	  if (len % 4 > 0) {
+	    throw new Error('Invalid string. Length must be a multiple of 4')
+	  }
 
-			if (b64.length % 4 > 0) {
-				throw new Error('Invalid string. Length must be a multiple of 4')
-			}
+	  // the number of equal signs (place holders)
+	  // if there are two placeholders, than the two characters before it
+	  // represent one byte
+	  // if there is only one, then the three characters before it represent 2 bytes
+	  // this is just a cheap hack to not do indexOf twice
+	  return b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0
+	}
 
-			// the number of equal signs (place holders)
-			// if there are two placeholders, than the two characters before it
-			// represent one byte
-			// if there is only one, then the three characters before it represent 2 bytes
-			// this is just a cheap hack to not do indexOf twice
-			var len = b64.length
-			placeHolders = '=' === b64.charAt(len - 2) ? 2 : '=' === b64.charAt(len - 1) ? 1 : 0
+	function byteLength (b64) {
+	  // base64 is 4/3 + up to two characters of the original data
+	  return b64.length * 3 / 4 - placeHoldersCount(b64)
+	}
 
-			// base64 is 4/3 + up to two characters of the original data
-			arr = new Arr(b64.length * 3 / 4 - placeHolders)
+	function toByteArray (b64) {
+	  var i, j, l, tmp, placeHolders, arr
+	  var len = b64.length
+	  placeHolders = placeHoldersCount(b64)
 
-			// if there are placeholders, only get up to the last complete 4 chars
-			l = placeHolders > 0 ? b64.length - 4 : b64.length
+	  arr = new Arr(len * 3 / 4 - placeHolders)
 
-			var L = 0
+	  // if there are placeholders, only get up to the last complete 4 chars
+	  l = placeHolders > 0 ? len - 4 : len
 
-			function push (v) {
-				arr[L++] = v
-			}
+	  var L = 0
 
-			for (i = 0, j = 0; i < l; i += 4, j += 3) {
-				tmp = (decode(b64.charAt(i)) << 18) | (decode(b64.charAt(i + 1)) << 12) | (decode(b64.charAt(i + 2)) << 6) | decode(b64.charAt(i + 3))
-				push((tmp & 0xFF0000) >> 16)
-				push((tmp & 0xFF00) >> 8)
-				push(tmp & 0xFF)
-			}
+	  for (i = 0, j = 0; i < l; i += 4, j += 3) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 18) | (revLookup[b64.charCodeAt(i + 1)] << 12) | (revLookup[b64.charCodeAt(i + 2)] << 6) | revLookup[b64.charCodeAt(i + 3)]
+	    arr[L++] = (tmp >> 16) & 0xFF
+	    arr[L++] = (tmp >> 8) & 0xFF
+	    arr[L++] = tmp & 0xFF
+	  }
 
-			if (placeHolders === 2) {
-				tmp = (decode(b64.charAt(i)) << 2) | (decode(b64.charAt(i + 1)) >> 4)
-				push(tmp & 0xFF)
-			} else if (placeHolders === 1) {
-				tmp = (decode(b64.charAt(i)) << 10) | (decode(b64.charAt(i + 1)) << 4) | (decode(b64.charAt(i + 2)) >> 2)
-				push((tmp >> 8) & 0xFF)
-				push(tmp & 0xFF)
-			}
+	  if (placeHolders === 2) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 2) | (revLookup[b64.charCodeAt(i + 1)] >> 4)
+	    arr[L++] = tmp & 0xFF
+	  } else if (placeHolders === 1) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 10) | (revLookup[b64.charCodeAt(i + 1)] << 4) | (revLookup[b64.charCodeAt(i + 2)] >> 2)
+	    arr[L++] = (tmp >> 8) & 0xFF
+	    arr[L++] = tmp & 0xFF
+	  }
 
-			return arr
-		}
+	  return arr
+	}
 
-		function uint8ToBase64 (uint8) {
-			var i,
-				extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
-				output = "",
-				temp, length
+	function tripletToBase64 (num) {
+	  return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F]
+	}
 
-			function encode (num) {
-				return lookup.charAt(num)
-			}
+	function encodeChunk (uint8, start, end) {
+	  var tmp
+	  var output = []
+	  for (var i = start; i < end; i += 3) {
+	    tmp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
+	    output.push(tripletToBase64(tmp))
+	  }
+	  return output.join('')
+	}
 
-			function tripletToBase64 (num) {
-				return encode(num >> 18 & 0x3F) + encode(num >> 12 & 0x3F) + encode(num >> 6 & 0x3F) + encode(num & 0x3F)
-			}
+	function fromByteArray (uint8) {
+	  var tmp
+	  var len = uint8.length
+	  var extraBytes = len % 3 // if we have 1 byte left, pad 2 bytes
+	  var output = ''
+	  var parts = []
+	  var maxChunkLength = 16383 // must be multiple of 3
 
-			// go through the array every three bytes, we'll deal with trailing stuff later
-			for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
-				temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
-				output += tripletToBase64(temp)
-			}
+	  // go through the array every three bytes, we'll deal with trailing stuff later
+	  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+	    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
+	  }
 
-			// pad the end with zeros, but make sure to not forget the extra bytes
-			switch (extraBytes) {
-				case 1:
-					temp = uint8[uint8.length - 1]
-					output += encode(temp >> 2)
-					output += encode((temp << 4) & 0x3F)
-					output += '=='
-					break
-				case 2:
-					temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1])
-					output += encode(temp >> 10)
-					output += encode((temp >> 4) & 0x3F)
-					output += encode((temp << 2) & 0x3F)
-					output += '='
-					break
-			}
+	  // pad the end with zeros, but make sure to not forget the extra bytes
+	  if (extraBytes === 1) {
+	    tmp = uint8[len - 1]
+	    output += lookup[tmp >> 2]
+	    output += lookup[(tmp << 4) & 0x3F]
+	    output += '=='
+	  } else if (extraBytes === 2) {
+	    tmp = (uint8[len - 2] << 8) + (uint8[len - 1])
+	    output += lookup[tmp >> 10]
+	    output += lookup[(tmp >> 4) & 0x3F]
+	    output += lookup[(tmp << 2) & 0x3F]
+	    output += '='
+	  }
 
-			return output
-		}
+	  parts.push(output)
 
-		exports.toByteArray = b64ToByteArray
-		exports.fromByteArray = uint8ToBase64
-	}( false ? (this.base64js = {}) : exports))
+	  return parts.join('')
+	}
 
 
 /***/ },
