@@ -129,12 +129,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  md.renderer.rules.table_open = function () {
 	    return '<table class="' + root.tableClass + '">\n';
 	  };
-	  if (!root.tocLastLevel) root.tocLastLevel = root.tocFirstLevel + 1;
 	  if (root.toc) {
 	    md.use(_markdownItTocAndAnchor2.default, {
 	      tocClassName: root.tocClass,
 	      tocFirstLevel: root.tocFirstLevel,
-	      tocLastLevel: root.tocLastLevel,
+	      tocLastLevel: root.tocLastLevelComputed,
 	      anchorLink: root.tocAnchorLink,
 	      anchorLinkSymbol: root.tocAnchorLinkSymbol,
 	      anchorLinkSpace: root.tocAnchorLinkSpace,
@@ -143,18 +142,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
 	        if (tocHtml) {
 	          if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = tocHtml;
-	          root.$dispatch('toc-rendered', tocHtml);
+	          root.$emit('toc-rendered', tocHtml);
 	        }
 	      }
 	    });
 	  } else if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = '';
-	  var outHtml = root.show ? md.render(root.source) : '';
+	  var outHtml = root.show ? md.render(root.sourceOut) : '';
 	  root.$el.innerHTML = outHtml;
-	  root.$dispatch('rendered', outHtml);
+	  root.$emit('rendered', outHtml);
 	};
 
 	exports.default = {
 	  template: '<div><slot></slot></div>',
+	  data: function data() {
+	    return {
+	      sourceOut: ''
+	    };
+	  },
+
 	  props: {
 	    watches: {
 	      type: Array,
@@ -245,7 +250,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: 'toc-anchor-link'
 	    }
 	  },
-	  ready: function ready() {
+	  computed: {
+	    tocLastLevelComputed: function tocLastLevelComputed() {
+	      return !this.tockLastLevel ? this.tocFirstLevel + 1 : this.tocLastLevel;
+	    }
+	  },
+	  mounted: function mounted() {
 	    var _this = this;
 
 	    if (this.$el.childNodes.length > 0) {
@@ -259,7 +269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var el = _step.value;
 
 	          var ext = el.outerHTML ? el.outerHTML : el.textContent;
-	          this.source += ext;
+	          this.sourceOut += ext;
 	        }
 	      } catch (err) {
 	        _didIteratorError = true;
