@@ -29,7 +29,7 @@ Supported Markdown Syntax:
 
 ### Browser globals
 
-> The **dist** folder contains `vue-markdown.js` and `vue-markdown.min.js` with the component exported in the `window.VueMarkdown` object. 
+> The **dist** folder contains `vue-markdown.js` and `vue-markdown.min.js` with the component exported in the `window.VueMarkdown` object.
 
 ```html
 <body>
@@ -127,6 +127,7 @@ TIP: The default slot only render **once** at the beginning, and it will overwri
 
 - [markdown-it](https://github.com/markdown-it/markdown-it)
 - [transtone](https://github.com/transtone)
+- [**brandonferens**](https://github.com/brandonferens)
 
 # License
 
