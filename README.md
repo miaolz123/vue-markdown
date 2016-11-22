@@ -4,6 +4,8 @@
 [![npm](https://img.shields.io/npm/l/vue-markdown.svg?style=flat)](https://www.npmjs.com/package/vue-markdown)
 [![npm](https://img.shields.io/npm/dt/vue-markdown.svg?style=flat)](https://www.npmjs.com/package/vue-markdown)
 
+> If you want vue-markdown for `vue1.X.X`, please checkout [vue-markdown1.X.X](https://github.com/miaolz123/vue-markdown/tree/v1).
+
 A Powerful and Highspeed Markdown Parser for Vue.
 
 Quick start: `<vue-markdown>i am a ~~tast~~ **test**.</vue-markdown>`
@@ -24,6 +26,14 @@ Supported Markdown Syntax:
 * [x] mark
 
 `*SyntaxHighlighter` work with [Prism](http://prismjs.com) recommend
+
+# Example
+
+[simple](https://github.com/miaolz123/vue-markdown/blob/master/example/simple)
+
+[webpack-simple](https://github.com/miaolz123/vue-markdown/blob/master/example/webpack-simple)
+
+[Live Demo](http://miaolz123.github.io/vue-markdown/)
 
 # Instllation
 
@@ -75,10 +85,6 @@ new Vue({
 })
 ```
 
-# Example
-
-[Live Demo](http://miaolz123.github.io/vue-markdown/)
-
 # Slots
 
 ```html
@@ -128,6 +134,11 @@ TIP: The default slot only render **once** at the beginning, and it will overwri
 - [markdown-it](https://github.com/markdown-it/markdown-it)
 - [transtone](https://github.com/transtone)
 - [**brandonferens**](https://github.com/brandonferens)
+
+# Contributions
+
+- [miaolz123](https://github.com/miaolz123)
+- [brandonferens](https://github.com/brandonferens)
 
 # License
 
