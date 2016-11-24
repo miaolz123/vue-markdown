@@ -1,5 +1,5 @@
 /**
- * vue-markdown v2.0.1
+ * vue-markdown v2.1.1
  * https://github.com/miaolz123/vue-markdown
  * MIT License
  */
@@ -112,53 +112,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var md = new _markdownIt2.default();
-
-	var rende = function rende(root) {
-	  md = new _markdownIt2.default().use(_markdownItSub2.default).use(_markdownItSup2.default).use(_markdownItFootnote2.default).use(_markdownItDeflist2.default).use(_markdownItAbbr2.default).use(_markdownItIns2.default).use(_markdownItMark2.default);
-	  if (root.emoji) md.use(_markdownItEmoji2.default);
-	  md.set({
-	    html: root.html,
-	    xhtmlOut: root.xhtmlOut,
-	    breaks: root.breaks,
-	    linkify: root.linkify,
-	    typographer: root.typographer,
-	    langPrefix: root.langPrefix,
-	    quotes: root.quotes
-	  });
-	  md.renderer.rules.table_open = function () {
-	    return '<table class="' + root.tableClass + '">\n';
-	  };
-	  if (root.toc) {
-	    md.use(_markdownItTocAndAnchor2.default, {
-	      tocClassName: root.tocClass,
-	      tocFirstLevel: root.tocFirstLevel,
-	      tocLastLevel: root.tocLastLevelComputed,
-	      anchorLink: root.tocAnchorLink,
-	      anchorLinkSymbol: root.tocAnchorLinkSymbol,
-	      anchorLinkSpace: root.tocAnchorLinkSpace,
-	      anchorClassName: root.tocAnchorClass,
-	      anchorLinkSymbolClassName: root.tocAnchorLinkClass,
-	      tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
-	        if (tocHtml) {
-	          if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = tocHtml;
-	          root.$emit('toc-rendered', tocHtml);
-	        }
-	      }
-	    });
-	  } else if (root.tocId && document.getElementById(root.tocId)) document.getElementById(root.tocId).innerHTML = '';
-	  var outHtml = root.show ? md.render(root.sourceOut) : '';
-	  root.$el.innerHTML = outHtml;
-	  root.$emit('rendered', outHtml);
-	};
-
 	exports.default = {
+	  md: new _markdownIt2.default(),
+
 	  template: '<div><slot></slot></div>',
+
 	  data: function data() {
 	    return {
-	      sourceOut: ''
+	      sourceData: this.source
 	    };
 	  },
+
 
 	  props: {
 	    watches: {
@@ -250,26 +214,80 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: 'toc-anchor-link'
 	    }
 	  },
+
 	  computed: {
 	    tocLastLevelComputed: function tocLastLevelComputed() {
-	      return !this.tockLastLevel ? this.tocFirstLevel + 1 : this.tocLastLevel;
+	      return this.tocLastLevel > this.tocFirstLevel ? this.tocLastLevel : this.tocFirstLevel + 1;
 	    }
 	  },
-	  mounted: function mounted() {
+
+	  render: function render(createElement) {
 	    var _this = this;
 
-	    if (this.$el.childNodes.length > 0) {
-	      this.source = '';
+	    this.md = new _markdownIt2.default().use(_markdownItSub2.default).use(_markdownItSup2.default).use(_markdownItFootnote2.default).use(_markdownItDeflist2.default).use(_markdownItAbbr2.default).use(_markdownItIns2.default).use(_markdownItMark2.default);
+
+	    if (this.emoji) {
+	      this.md.use(_markdownItEmoji2.default);
+	    }
+
+	    this.md.set({
+	      html: this.html,
+	      xhtmlOut: this.xhtmlOut,
+	      breaks: this.breaks,
+	      linkify: this.linkify,
+	      typographer: this.typographer,
+	      langPrefix: this.langPrefix,
+	      quotes: this.quotes
+	    });
+	    this.md.renderer.rules.table_open = function () {
+	      return '<table class="' + _this.tableClass + '">\n';
+	    };
+
+	    if (this.toc) {
+	      this.md.use(_markdownItTocAndAnchor2.default, {
+	        tocClassName: this.tocClass,
+	        tocFirstLevel: this.tocFirstLevel,
+	        tocLastLevel: this.tocLastLevelComputed,
+	        anchorLink: this.tocAnchorLink,
+	        anchorLinkSymbol: this.tocAnchorLinkSymbol,
+	        anchorLinkSpace: this.tocAnchorLinkSpace,
+	        anchorClassName: this.tocAnchorClass,
+	        anchorLinkSymbolClassName: this.tocAnchorLinkClass,
+	        tocCallback: function tocCallback(tocMarkdown, tocArray, tocHtml) {
+	          if (tocHtml) {
+	            if (_this.tocId && document.getElementById(_this.tocId)) {
+	              document.getElementById(_this.tocId).innerHTML = tocHtml;
+	            }
+
+	            _this.$emit('toc-rendered', tocHtml);
+	          }
+	        }
+	      });
+	    }
+
+	    var outHtml = this.show ? this.md.render(this.sourceData) : '';
+
+	    this.$emit('rendered', outHtml);
+	    return createElement('div', {
+	      domProps: {
+	        innerHTML: outHtml
+	      }
+	    });
+	  },
+	  beforeMount: function beforeMount() {
+	    var _this2 = this;
+
+	    if (this.$slots.default) {
+	      this.sourceData = '';
 	      var _iteratorNormalCompletion = true;
 	      var _didIteratorError = false;
 	      var _iteratorError = undefined;
 
 	      try {
-	        for (var _iterator = (0, _getIterator3.default)(this.$el.childNodes), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var el = _step.value;
+	        for (var _iterator = (0, _getIterator3.default)(this.$slots.default), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var slot = _step.value;
 
-	          var ext = el.outerHTML ? el.outerHTML : el.textContent;
-	          this.sourceOut += ext;
+	          this.sourceData += slot.text;
 	        }
 	      } catch (err) {
 	        _didIteratorError = true;
@@ -286,13 +304,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	    }
-	    rende(this);
+
 	    this.$watch('source', function () {
-	      rende(_this);
+	      _this2.rende();
 	    });
+
 	    this.watches.forEach(function (v) {
-	      _this.$watch(v, function () {
-	        rende(_this);
+	      _this2.$watch(v, function () {
+	        _this2.rende();
 	      });
 	    });
 	  }
