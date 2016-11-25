@@ -1,5 +1,5 @@
 /**
- * vue-markdown v2.1.1
+ * vue-markdown v2.1.2
  * https://github.com/miaolz123/vue-markdown
  * MIT License
  */
@@ -306,12 +306,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    this.$watch('source', function () {
-	      _this2.rende();
+	      _this2.sourceData = _this2.source;
+	      _this2.$forceUpdate();
 	    });
 
 	    this.watches.forEach(function (v) {
 	      _this2.$watch(v, function () {
-	        _this2.rende();
+	        _this2.$forceUpdate();
 	      });
 	    });
 	  }

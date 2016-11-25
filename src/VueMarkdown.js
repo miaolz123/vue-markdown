@@ -183,12 +183,13 @@ export default {
     }
 
     this.$watch('source', () => {
-      this.rende()
+      this.sourceData = this.source
+      this.$forceUpdate()
     })
 
     this.watches.forEach((v) => {
       this.$watch(v, () => {
-        this.rende()
+        this.$forceUpdate()
       })
     })
   },

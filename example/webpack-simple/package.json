@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "vue": "^2.0.1",
-    "vue-markdown": "^2.1.1"
+    "vue-markdown": "^2.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

@@ -2,7 +2,8 @@
   <div id="app">
     <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
-    <vue-markdown>i am a vue-markdown ~~tast~~ **test**.</vue-markdown>
+    <vue-markdown>The time of **NOW** is :</vue-markdown>
+    <vue-markdown :source="source"></vue-markdown>
     <h2>Essential Links</h2>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
@@ -28,11 +29,17 @@ export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      source: new Date().toLocaleTimeString()
     }
   },
   components: {
     VueMarkdown
+  },
+  mounted () {
+    setInterval(() => {
+      this.source = new Date().toLocaleTimeString();
+    }, 1000);
   }
 }
 </script>

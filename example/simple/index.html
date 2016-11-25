@@ -9,11 +9,24 @@
 
 <body>
   <div id="app">
-    <vue-markdown>i am a vue-markdown ~~tast~~ **test**.</vue-markdown>
+    <vue-markdown>The time of **NOW** is :</vue-markdown>
+    <vue-markdown :source="source"></vue-markdown>
   </div>
   <script>
     Vue.use(VueMarkdown);
-    new Vue({ el: '#app' });
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          source: new Date().toLocaleTimeString()
+        }
+      },
+      mounted () {
+        setInterval(() => {
+          this.source = new Date().toLocaleTimeString();
+        }, 1000);
+      }
+    });
   </script>
 </body>
 
