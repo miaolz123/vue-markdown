@@ -139,6 +139,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 
 - [miaolz123](https://github.com/miaolz123)
 - [brandonferens](https://github.com/brandonferens)
+- [brianbancroft](https://github.com/brianbancroft)
 
 # License
 
