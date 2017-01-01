@@ -91,9 +91,9 @@ new Vue({
 <vue-markdown>this is the default slot</vue-markdown>
 ```
 
-VueMarkdown has a default slot which used to write `markdown` source.
+VueMarkdown has a default slot which is used to write the `markdown` source.
 
-TIP: The default slot only render **once** at the beginning, and it will overwrite the prop of `source`!
+TIP: The default slot only renders **once** at the beginning, and it will overwrite the prop of `source`!
 
 # Props
 
