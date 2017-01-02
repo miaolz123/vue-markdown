@@ -8,6 +8,7 @@ import abbreviation from 'markdown-it-abbr'
 import insert from 'markdown-it-ins'
 import mark from 'markdown-it-mark'
 import toc from 'markdown-it-toc-and-anchor'
+import katex from 'markdown-it-katex'
 
 export default {
   md: new markdownIt(),
@@ -124,6 +125,7 @@ export default {
       .use(abbreviation)
       .use(insert)
       .use(mark)
+      .use(katex, {"throwOnError" : false, "errorColor" : " #cc0000"})
 
     if (this.emoji) {
       this.md.use(emoji)
@@ -161,7 +163,6 @@ export default {
         },
       })
     }
-
     const outHtml = this.show ? this.md.render(this.sourceData) : ''
 
     this.$emit('rendered', outHtml)

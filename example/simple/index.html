@@ -5,15 +5,28 @@
   <title>simple</title>
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
   <script src="../../dist/vue-markdown.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css"/>
 </head>
 
 <body>
   <div id="app">
     <vue-markdown>The time of **NOW** is :</vue-markdown>
     <vue-markdown :source="source"></vue-markdown>
-    <vue-markdown>**Inline Math**</vue-markdown>
-    <vue-markdown>$\sqrt{3x-1}+(1+x)^2$</vue-markdown>
+    <vue-markdown>**Inline Math**: $\sqrt{3x-1}+(1+x)^2$</vue-markdown>
+    <vue-markdown></vue-markdown>
     <vue-markdown>**Block Math**</vue-markdown>
+    <vue-markdown>$$\begin{array}{c}
+ 
+      \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
+      = \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
+      
+      \nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
+      
+      \nabla \cdot \vec{\mathbf{B}} & = 0
+      
+      \end{array}$$
+    </vue-markdown>
   </div>
   <script>
     Vue.use(VueMarkdown);
