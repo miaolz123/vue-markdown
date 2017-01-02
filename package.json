@@ -40,7 +40,7 @@
     "css-loader": "^0.23.1",
     "json-loader": "^0.5.4",
     "style-loader": "^0.13.1",
-    "vue-loader": "^8.3.1",
+    "vue-loader": "^10.0.2",
     "webpack": "^1.13.0"
   },
   "dependencies": {
@@ -53,6 +53,7 @@
     "markdown-it-mark": "^2.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
-    "markdown-it-toc-and-anchor": "^4.1.1"
+    "markdown-it-toc-and-anchor": "^4.1.1",
+    "markdown-it-katex": "^2.0.3"
   }
 }

@@ -11,6 +11,9 @@
   <div id="app">
     <vue-markdown>The time of **NOW** is :</vue-markdown>
     <vue-markdown :source="source"></vue-markdown>
+    <vue-markdown>**Inline Math**</vue-markdown>
+    <vue-markdown>$\sqrt{3x-1}+(1+x)^2$</vue-markdown>
+    <vue-markdown>**Block Math**</vue-markdown>
   </div>
   <script>
     Vue.use(VueMarkdown);
