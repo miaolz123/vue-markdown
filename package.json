@@ -1,17 +1,15 @@
 {
   "name": "vue-markdown",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A Powerful and Highspeed Markdown Parser for Vue",
   "main": "dist/vue-markdown.common.js",
   "files": [
     "dist/vue-markdown.js",
-    "dist/vue-markdown.min.js",
     "dist/vue-markdown.common.js",
     "src"
   ],
   "scripts": {
     "start": "webpack --config webpack.config.js",
-    "min": "uglifyjs ./dist/vue-markdown.js -m -c --noerr -o ./dist/vue-markdown.min.js",
     "build": "webpack --config webpack.common.js",
     "test": "echo true"
   },

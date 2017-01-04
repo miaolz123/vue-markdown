@@ -22,10 +22,13 @@ Supported Markdown Syntax:
 * [x] subscript
 * [x] footnote
 * [x] insert
+* [x] *katex
 * [x] emoji
 * [x] mark
 
 `*SyntaxHighlighter` work with [Prism](http://prismjs.com) recommend
+
+`*katex` need add [katex css](https://unpkg.com/katex/dist/katex.min.css).
 
 # Example
 
@@ -39,7 +42,7 @@ Supported Markdown Syntax:
 
 ### Browser globals
 
-> The **dist** folder contains `vue-markdown.js` and `vue-markdown.min.js` with the component exported in the `window.VueMarkdown` object.
+> The **dist** folder contains `vue-markdown.js` with the component exported in the `window.VueMarkdown` object.
 
 ```html
 <body>
