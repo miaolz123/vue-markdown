@@ -64,6 +64,12 @@ Supported Markdown Syntax:
 $ npm install --save vue-markdown
 ```
 
+### Yarn
+
+```shell
+$ yarn add vue-markdown --save
+```
+
 ## CommonJS
 
 ```js
@@ -76,7 +82,9 @@ new Vue({
 })
 ```
 
-## ES6
+## ES6 (Vue-CLI users)
+
+After installing via Yarn or NPM, use the following snippet in the script portion of the Vue component which you wish to render the Markdown.
 
 ```js
 import VueMarkdown from 'vue-markdown'
@@ -93,6 +101,8 @@ new Vue({
 ```html
 <vue-markdown>this is the default slot</vue-markdown>
 ```
+
+After setting up the middleware in your vue component above, using the embedded markdown is as easy as writing it between the `vue-markdown` tags. 
 
 VueMarkdown has a default slot which is used to write the `markdown` source.
 
