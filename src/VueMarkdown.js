@@ -108,6 +108,10 @@ export default {
       type: String,
       default: 'toc-anchor-link',
     },
+    openLinkInNewTab: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   computed: {
@@ -141,6 +145,25 @@ export default {
       quotes: this.quotes,
     })
     this.md.renderer.rules.table_open = () => `<table class="${this.tableClass}">\n`
+    let defaultLinkRenderer = this.md.renderer.rules.link_open ||
+      function(tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options)
+      }
+    this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+      if (!this.openLinkInNewTab) {
+        return defaultLinkRenderer(tokens, idx, options, env, self)
+      }
+
+      let aIndex = tokens[idx].attrIndex('target')
+
+      if (aIndex < 0) {
+        tokens[idx].attrPush(['target', '_blank']) // add new attribute
+      } else {
+        tokens[idx].attrs[aIndex][1] = '_blank'
+      }
+
+      return defaultLinkRenderer(tokens, idx, options, env, self)
+    }
 
     if (this.toc) {
       this.md.use(toc, {

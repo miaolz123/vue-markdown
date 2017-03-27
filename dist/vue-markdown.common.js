@@ -216,6 +216,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    tocAnchorLinkClass: {
 	      type: String,
 	      default: 'toc-anchor-link'
+	    },
+	    openLinkInNewTab: {
+	      type: Boolean,
+	      default: true
 	    }
 	  },
 
@@ -245,6 +249,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    this.md.renderer.rules.table_open = function () {
 	      return '<table class="' + _this.tableClass + '">\n';
+	    };
+	    var defaultLinkRenderer = this.md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
+	      return self.renderToken(tokens, idx, options);
+	    };
+	    this.md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+	      if (!_this.openLinkInNewTab) {
+	        return defaultLinkRenderer(tokens, idx, options, env, self);
+	      }
+
+	      var aIndex = tokens[idx].attrIndex('target');
+
+	      if (aIndex < 0) {
+	        tokens[idx].attrPush(['target', '_blank']); // add new attribute
+	      } else {
+	        tokens[idx].attrs[aIndex][1] = '_blank';
+	      }
+
+	      return defaultLinkRenderer(tokens, idx, options, env, self);
 	    };
 
 	    if (this.toc) {
