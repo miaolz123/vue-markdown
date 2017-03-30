@@ -220,6 +220,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    openLinkInNewTab: {
 	      type: Boolean,
 	      default: true
+	    },
+	    prerender: {
+	      type: Function,
+	      default: function _default(sourceData) {
+	        return sourceData;
+	      }
 	    }
 	  },
 
@@ -290,7 +296,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      });
 	    }
-	    var outHtml = this.show ? this.md.render(this.sourceData) : '';
+
+	    var outHtml = this.show ? this.md.render(this.prerender(this.sourceData)) : '';
 
 	    this.$emit('rendered', outHtml);
 	    return createElement('div', {
@@ -331,7 +338,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    this.$watch('source', function () {
-	      _this2.sourceData = _this2.source;
+	      _this2.sourceData = _this2.prerender(_this2.source);
 	      _this2.$forceUpdate();
 	    });
 

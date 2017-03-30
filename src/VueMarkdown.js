@@ -112,6 +112,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    prerender: {
+      type: Function,
+      default: (sourceData) => { return sourceData }
+    }
   },
 
   computed: {
@@ -186,7 +190,11 @@ export default {
         },
       })
     }
-    const outHtml = this.show ? this.md.render(this.sourceData) : ''
+
+    const outHtml = this.show ?
+      this.md.render(
+        this.prerender(this.sourceData)
+      ) : ''
 
     this.$emit('rendered', outHtml)
     return createElement(
@@ -207,7 +215,7 @@ export default {
     }
 
     this.$watch('source', () => {
-      this.sourceData = this.source
+      this.sourceData = this.prerender(this.source)
       this.$forceUpdate()
     })
 
