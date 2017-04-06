@@ -115,6 +115,10 @@ export default {
     prerender: {
       type: Function,
       default: (sourceData) => { return sourceData }
+    },
+    postrender: {
+      type: Function,
+      default: (htmlData) => { return htmlData }
     }
   },
 
@@ -191,10 +195,11 @@ export default {
       })
     }
 
-    const outHtml = this.show ?
+    let outHtml = this.show ?
       this.md.render(
         this.prerender(this.sourceData)
       ) : ''
+    outHtml = this.postrender(outHtml);
 
     this.$emit('rendered', outHtml)
     return createElement(

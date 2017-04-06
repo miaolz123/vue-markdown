@@ -226,6 +226,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: function _default(sourceData) {
 	        return sourceData;
 	      }
+	    },
+	    postrender: {
+	      type: Function,
+	      default: function _default(htmlData) {
+	        return htmlData;
+	      }
 	    }
 	  },
 
@@ -298,6 +304,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var outHtml = this.show ? this.md.render(this.prerender(this.sourceData)) : '';
+	    outHtml = this.postrender(outHtml);
 
 	    this.$emit('rendered', outHtml);
 	    return createElement('div', {
