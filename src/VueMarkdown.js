@@ -9,6 +9,7 @@ import insert from 'markdown-it-ins'
 import mark from 'markdown-it-mark'
 import toc from 'markdown-it-toc-and-anchor'
 import katex from 'markdown-it-katex'
+import highlightjs from 'markdown-it-highlightjs'
 
 export default {
   md: new markdownIt(),
@@ -33,6 +34,10 @@ export default {
     show: {
       type: Boolean,
       default: true,
+    },
+    highlight: {
+      type: Boolean,
+      default: true
     },
     html: {
       type: Boolean,
@@ -141,6 +146,10 @@ export default {
 
     if (this.emoji) {
       this.md.use(emoji)
+    }
+
+    if (this.highlight) {
+      this.md.use(highlightjs);
     }
 
     this.md.set({
