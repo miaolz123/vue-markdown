@@ -10,6 +10,7 @@ import mark from 'markdown-it-mark'
 import toc from 'markdown-it-toc-and-anchor'
 import katex from 'markdown-it-katex'
 import highlightjs from 'markdown-it-highlightjs'
+import tasklists from 'markdown-it-task-lists'
 
 export default {
   md: new markdownIt(),
@@ -74,6 +75,10 @@ export default {
     tableClass: {
       type: String,
       default: 'table',
+    },
+    taskLists: {
+      type: Boolean,
+      default: true
     },
     toc: {
       type: Boolean,
@@ -142,7 +147,8 @@ export default {
       .use(abbreviation)
       .use(insert)
       .use(mark)
-      .use(katex, { "throwOnError": false, "errorColor": " #cc0000" })
+      .use(katex, {"throwOnError" : false, "errorColor" : " #cc0000"})
+      .use(tasklists, {enabled: this.taskLists})
 
     if (this.emoji) {
       this.md.use(emoji)
