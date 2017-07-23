@@ -38,7 +38,7 @@ Supported Markdown Syntax:
 
 [Live Demo](http://miaolz123.github.io/vue-markdown/)
 
-# Instllation
+# Installation
 
 ### Browser globals
 
