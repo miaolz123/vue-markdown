@@ -135,6 +135,9 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 | toc-anchor-link-symbol | String | `#` | customize the anchor link symbol |
 | toc-anchor-link-space | Boolean | `true` | enable inserting a space between the anchor link and heading |
 | toc-anchor-link-class | String | `toc-anchor-link` | customize the anchor link symbol class name |
+| open-link-newtab | Boolean | `true` | enable open link in new tab |
+| prerender | Function (String) String | `null` | filter function before markdown parse |
+| postrender | Function (String) String | `null` | filter function after markdown parse |
 
 # Events
 
