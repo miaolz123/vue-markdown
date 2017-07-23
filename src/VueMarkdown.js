@@ -113,7 +113,7 @@ export default {
       type: String,
       default: 'toc-anchor-link',
     },
-    openLinkInNewTab: {
+    openLinkNewtab: {
       type: Boolean,
       default: true,
     },
@@ -167,7 +167,7 @@ export default {
         return self.renderToken(tokens, idx, options)
       }
     this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
-      if (!this.openLinkInNewTab) {
+      if (!this.openLinkNewtab) {
         return defaultLinkRenderer(tokens, idx, options, env, self)
       }
 

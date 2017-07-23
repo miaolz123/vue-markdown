@@ -246,7 +246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      type: String,
 	      default: 'toc-anchor-link'
 	    },
-	    openLinkInNewTab: {
+	    openLinkNewtab: {
 	      type: Boolean,
 	      default: true
 	    },
@@ -299,7 +299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return self.renderToken(tokens, idx, options);
 	    };
 	    this.md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-	      if (!_this.openLinkInNewTab) {
+	      if (!_this.openLinkNewtab) {
 	        return defaultLinkRenderer(tokens, idx, options, env, self);
 	      }
 
