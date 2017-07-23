@@ -37,6 +37,7 @@
     "babel-runtime": "^6.6.1",
     "css-loader": "^0.23.1",
     "json-loader": "^0.5.4",
+    "markdown-it-highlightjs": "^3.0.0",
     "style-loader": "^0.13.1",
     "vue-loader": "^10.0.2",
     "webpack": "^1.13.0"

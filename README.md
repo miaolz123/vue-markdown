@@ -115,6 +115,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 | watches | Array | `["source", "show", "toc"]` | HTML refresh automatically when the prop in this array changed |
 | source | String | `null` | the markdown source code |
 | show | Boolean | `true` | enable render to the default slot automatically |
+| highlight | Boolean | `true` | enable auto script highlight use `highlight.js` |
 | html | Boolean | `true` | enable HTML syntax in source |
 | xhtml-out | Boolean | `true` | `<br></br>` => `<br />` |
 | breaks | Boolean | `true` | `\n` => `<br>` |
@@ -153,6 +154,9 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 - [miaolz123](https://github.com/miaolz123)
 - [brandonferens](https://github.com/brandonferens)
 - [brianbancroft](https://github.com/brianbancroft)
+- [nikolasp](https://github.com/nikolasp)
+- [mbackonja](https://github.com/mbackonja)
+- [Endi1](https://github.com/Endi1)
 
 # License
 
