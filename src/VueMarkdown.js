@@ -9,6 +9,7 @@ import insert from 'markdown-it-ins'
 import mark from 'markdown-it-mark'
 import toc from 'markdown-it-toc-and-anchor'
 import katex from 'markdown-it-katex'
+import highlightjs from 'markdown-it-highlightjs'
 
 export default {
   md: new markdownIt(),
@@ -33,6 +34,10 @@ export default {
     show: {
       type: Boolean,
       default: true,
+    },
+    highlight: {
+      type: Boolean,
+      default: true
     },
     html: {
       type: Boolean,
@@ -108,6 +113,18 @@ export default {
       type: String,
       default: 'toc-anchor-link',
     },
+    openLinkInNewTab: {
+      type: Boolean,
+      default: true,
+    },
+    prerender: {
+      type: Function,
+      default: (sourceData) => { return sourceData }
+    },
+    postrender: {
+      type: Function,
+      default: (htmlData) => { return htmlData }
+    }
   },
 
   computed: {
@@ -131,6 +148,10 @@ export default {
       this.md.use(emoji)
     }
 
+    if (this.highlight) {
+      this.md.use(highlightjs);
+    }
+
     this.md.set({
       html: this.html,
       xhtmlOut: this.xhtmlOut,
@@ -141,6 +162,25 @@ export default {
       quotes: this.quotes,
     })
     this.md.renderer.rules.table_open = () => `<table class="${this.tableClass}">\n`
+    let defaultLinkRenderer = this.md.renderer.rules.link_open ||
+      function(tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options)
+      }
+    this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+      if (!this.openLinkInNewTab) {
+        return defaultLinkRenderer(tokens, idx, options, env, self)
+      }
+
+      let aIndex = tokens[idx].attrIndex('target')
+
+      if (aIndex < 0) {
+        tokens[idx].attrPush(['target', '_blank']) // add new attribute
+      } else {
+        tokens[idx].attrs[aIndex][1] = '_blank'
+      }
+
+      return defaultLinkRenderer(tokens, idx, options, env, self)
+    }
 
     if (this.toc) {
       this.md.use(toc, {
@@ -163,7 +203,12 @@ export default {
         },
       })
     }
-    const outHtml = this.show ? this.md.render(this.sourceData) : ''
+
+    let outHtml = this.show ?
+      this.md.render(
+        this.prerender(this.sourceData)
+      ) : ''
+    outHtml = this.postrender(outHtml);
 
     this.$emit('rendered', outHtml)
     return createElement(
@@ -184,7 +229,7 @@ export default {
     }
 
     this.$watch('source', () => {
-      this.sourceData = this.source
+      this.sourceData = this.prerender(this.source)
       this.$forceUpdate()
     })
 

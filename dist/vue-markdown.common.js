@@ -6,14 +6,14 @@
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("babel-runtime/core-js/get-iterator"), require("markdown-it"), require("markdown-it-emoji"), require("markdown-it-sub"), require("markdown-it-sup"), require("markdown-it-footnote"), require("markdown-it-deflist"), require("markdown-it-abbr"), require("markdown-it-ins"), require("markdown-it-mark"), require("markdown-it-toc-and-anchor"), require("markdown-it-katex"));
+		module.exports = factory(require("babel-runtime/core-js/get-iterator"), require("markdown-it"), require("markdown-it-emoji"), require("markdown-it-sub"), require("markdown-it-sup"), require("markdown-it-footnote"), require("markdown-it-deflist"), require("markdown-it-abbr"), require("markdown-it-ins"), require("markdown-it-mark"), require("markdown-it-toc-and-anchor"), require("markdown-it-katex"), require("markdown-it-highlightjs"));
 	else if(typeof define === 'function' && define.amd)
-		define(["babel-runtime/core-js/get-iterator", "markdown-it", "markdown-it-emoji", "markdown-it-sub", "markdown-it-sup", "markdown-it-footnote", "markdown-it-deflist", "markdown-it-abbr", "markdown-it-ins", "markdown-it-mark", "markdown-it-toc-and-anchor", "markdown-it-katex"], factory);
+		define(["babel-runtime/core-js/get-iterator", "markdown-it", "markdown-it-emoji", "markdown-it-sub", "markdown-it-sup", "markdown-it-footnote", "markdown-it-deflist", "markdown-it-abbr", "markdown-it-ins", "markdown-it-mark", "markdown-it-toc-and-anchor", "markdown-it-katex", "markdown-it-highlightjs"], factory);
 	else if(typeof exports === 'object')
-		exports["VueMarkdown"] = factory(require("babel-runtime/core-js/get-iterator"), require("markdown-it"), require("markdown-it-emoji"), require("markdown-it-sub"), require("markdown-it-sup"), require("markdown-it-footnote"), require("markdown-it-deflist"), require("markdown-it-abbr"), require("markdown-it-ins"), require("markdown-it-mark"), require("markdown-it-toc-and-anchor"), require("markdown-it-katex"));
+		exports["VueMarkdown"] = factory(require("babel-runtime/core-js/get-iterator"), require("markdown-it"), require("markdown-it-emoji"), require("markdown-it-sub"), require("markdown-it-sup"), require("markdown-it-footnote"), require("markdown-it-deflist"), require("markdown-it-abbr"), require("markdown-it-ins"), require("markdown-it-mark"), require("markdown-it-toc-and-anchor"), require("markdown-it-katex"), require("markdown-it-highlightjs"));
 	else
-		root["VueMarkdown"] = factory(root["babel-runtime/core-js/get-iterator"], root["markdown-it"], root["markdown-it-emoji"], root["markdown-it-sub"], root["markdown-it-sup"], root["markdown-it-footnote"], root["markdown-it-deflist"], root["markdown-it-abbr"], root["markdown-it-ins"], root["markdown-it-mark"], root["markdown-it-toc-and-anchor"], root["markdown-it-katex"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__) {
+		root["VueMarkdown"] = factory(root["babel-runtime/core-js/get-iterator"], root["markdown-it"], root["markdown-it-emoji"], root["markdown-it-sub"], root["markdown-it-sup"], root["markdown-it-footnote"], root["markdown-it-deflist"], root["markdown-it-abbr"], root["markdown-it-ins"], root["markdown-it-mark"], root["markdown-it-toc-and-anchor"], root["markdown-it-katex"], root["markdown-it-highlightjs"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__, __WEBPACK_EXTERNAL_MODULE_13__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -58,7 +58,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -114,6 +114,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _markdownItKatex2 = _interopRequireDefault(_markdownItKatex);
 
+	var _markdownItHighlightjs = __webpack_require__(13);
+
+	var _markdownItHighlightjs2 = _interopRequireDefault(_markdownItHighlightjs);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
@@ -140,6 +144,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: ''
 	    },
 	    show: {
+	      type: Boolean,
+	      default: true
+	    },
+	    highlight: {
 	      type: Boolean,
 	      default: true
 	    },
@@ -216,6 +224,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    tocAnchorLinkClass: {
 	      type: String,
 	      default: 'toc-anchor-link'
+	    },
+	    openLinkInNewTab: {
+	      type: Boolean,
+	      default: true
+	    },
+	    prerender: {
+	      type: Function,
+	      default: function _default(sourceData) {
+	        return sourceData;
+	      }
+	    },
+	    postrender: {
+	      type: Function,
+	      default: function _default(htmlData) {
+	        return htmlData;
+	      }
 	    }
 	  },
 
@@ -234,6 +258,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.md.use(_markdownItEmoji2.default);
 	    }
 
+	    if (this.highlight) {
+	      this.md.use(_markdownItHighlightjs2.default);
+	    }
+
 	    this.md.set({
 	      html: this.html,
 	      xhtmlOut: this.xhtmlOut,
@@ -245,6 +273,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    this.md.renderer.rules.table_open = function () {
 	      return '<table class="' + _this.tableClass + '">\n';
+	    };
+	    var defaultLinkRenderer = this.md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
+	      return self.renderToken(tokens, idx, options);
+	    };
+	    this.md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+	      if (!_this.openLinkInNewTab) {
+	        return defaultLinkRenderer(tokens, idx, options, env, self);
+	      }
+
+	      var aIndex = tokens[idx].attrIndex('target');
+
+	      if (aIndex < 0) {
+	        tokens[idx].attrPush(['target', '_blank']); // add new attribute
+	      } else {
+	        tokens[idx].attrs[aIndex][1] = '_blank';
+	      }
+
+	      return defaultLinkRenderer(tokens, idx, options, env, self);
 	    };
 
 	    if (this.toc) {
@@ -268,7 +314,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      });
 	    }
-	    var outHtml = this.show ? this.md.render(this.sourceData) : '';
+
+	    var outHtml = this.show ? this.md.render(this.prerender(this.sourceData)) : '';
+	    outHtml = this.postrender(outHtml);
 
 	    this.$emit('rendered', outHtml);
 	    return createElement('div', {
@@ -309,7 +357,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    this.$watch('source', function () {
-	      _this2.sourceData = _this2.source;
+	      _this2.sourceData = _this2.prerender(_this2.source);
 	      _this2.$forceUpdate();
 	    });
 
@@ -321,79 +369,85 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
 
-/***/ },
+/***/ }),
 /* 8 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
 
-/***/ },
+/***/ }),
 /* 9 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
 
-/***/ },
+/***/ }),
 /* 10 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_10__;
 
-/***/ },
+/***/ }),
 /* 11 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 
-/***/ },
+/***/ }),
 /* 12 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_12__;
 
-/***/ }
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_13__;
+
+/***/ })
 /******/ ])
 });
 ;
