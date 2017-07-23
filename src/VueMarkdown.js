@@ -142,7 +142,7 @@ export default {
       .use(abbreviation)
       .use(insert)
       .use(mark)
-      .use(katex, {"throwOnError" : false, "errorColor" : " #cc0000"})
+      .use(katex, { "throwOnError": false, "errorColor": " #cc0000" })
 
     if (this.emoji) {
       this.md.use(emoji)
@@ -163,7 +163,7 @@ export default {
     })
     this.md.renderer.rules.table_open = () => `<table class="${this.tableClass}">\n`
     let defaultLinkRenderer = this.md.renderer.rules.link_open ||
-      function(tokens, idx, options, env, self) {
+      function (tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options)
       }
     this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
