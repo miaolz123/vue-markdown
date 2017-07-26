@@ -13,6 +13,7 @@
   <div id="app">
     <vue-markdown>The time of **NOW** is :</vue-markdown>
     <vue-markdown :source="source"></vue-markdown>
+    <vue-markdown :anchor-attributes="anchorAttrs">[A link to a website](https://google.com)</vue-markdown>
     <vue-markdown>
 SyntaxHighlighter by highlight.js:
 
@@ -46,6 +47,7 @@ function $initHighlight(block, cls) {
 
       \end{array}$$
     </vue-markdown>
+
   </div>
   <script>
     Vue.use(VueMarkdown);
@@ -53,7 +55,11 @@ function $initHighlight(block, cls) {
       el: '#app',
       data() {
         return {
-          source: new Date().toLocaleTimeString()
+          source: new Date().toLocaleTimeString(),
+          anchorAttrs: {
+            target: '_blank',
+            rel: 'noopener noreferrer nofollow'
+          }
         }
       },
       mounted () {

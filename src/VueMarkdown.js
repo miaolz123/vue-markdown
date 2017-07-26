@@ -113,9 +113,9 @@ export default {
       type: String,
       default: 'toc-anchor-link',
     },
-    openLinkNewtab: {
-      type: Boolean,
-      default: true,
+    anchorAttributes: {
+      type: Object,
+      default: {}
     },
     prerender: {
       type: Function,
@@ -167,18 +167,15 @@ export default {
         return self.renderToken(tokens, idx, options)
       }
     this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
-      if (!this.openLinkNewtab) {
-        return defaultLinkRenderer(tokens, idx, options, env, self)
-      }
-
-      let aIndex = tokens[idx].attrIndex('target')
-
-      if (aIndex < 0) {
-        tokens[idx].attrPush(['target', '_blank']) // add new attribute
-      } else {
-        tokens[idx].attrs[aIndex][1] = '_blank'
-      }
-
+      Object.keys(this.anchorAttributes).map((attribute) => {
+        let aIndex = tokens[idx].attrIndex(attribute)
+        let value = this.anchorAttributes[attribute]
+        if (aIndex < 0) {
+          tokens[idx].attrPush([attribute, value]) // add new attribute
+        } else {
+          tokens[idx].attrs[aIndex][1] = value
+        }
+      })
       return defaultLinkRenderer(tokens, idx, options, env, self)
     }
 
