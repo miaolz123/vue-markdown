@@ -102,7 +102,7 @@ new Vue({
 <vue-markdown>this is the default slot</vue-markdown>
 ```
 
-After setting up the middleware in your vue component above, using the embedded markdown is as easy as writing it between the `vue-markdown` tags. 
+After setting up the middleware in your vue component above, using the embedded markdown is as easy as writing it between the `vue-markdown` tags.
 
 VueMarkdown has a default slot which is used to write the `markdown` source.
 
@@ -135,7 +135,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 | toc-anchor-link-symbol | String | `#` | customize the anchor link symbol |
 | toc-anchor-link-space | Boolean | `true` | enable inserting a space between the anchor link and heading |
 | toc-anchor-link-class | String | `toc-anchor-link` | customize the anchor link symbol class name |
-| open-link-newtab | Boolean | `true` | enable open link in new tab |
+| anchorAttributes | Object | {} | anchor tag attributes such as `target: '_blank'` or `rel: 'nofollow'` |
 | prerender | Function (String) String | `null` | filter function before markdown parse |
 | postrender | Function (String) String | `null` | filter function after markdown parse |
 
