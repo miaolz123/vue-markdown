@@ -160,6 +160,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 - [nikolasp](https://github.com/nikolasp)
 - [mbackonja](https://github.com/mbackonja)
 - [Endi1](https://github.com/Endi1)
+- [printscreen](https://github.com/printscreen)
 
 # License
 

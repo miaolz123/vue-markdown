@@ -2,6 +2,7 @@
   <div id="app">
     <vue-markdown>The time of **NOW** is :</vue-markdown>
     <vue-markdown :source="source"></vue-markdown>
+    <vue-markdown :anchor-attributes="anchorAttrs">[A link to a website](https://google.com)</vue-markdown>
     <vue-markdown>
 SyntaxHighlighter by highlight.js:
 
@@ -46,7 +47,11 @@ export default {
   name: 'app',
   data () {
     return {
-      source: new Date().toLocaleTimeString()
+      source: new Date().toLocaleTimeString(),
+      anchorAttrs: {
+        target: '_blank',
+        rel: 'noopener noreferrer nofollow'
+      }
     }
   },
   components: {
