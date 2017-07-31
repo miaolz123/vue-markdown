@@ -161,6 +161,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 - [mbackonja](https://github.com/mbackonja)
 - [Endi1](https://github.com/Endi1)
 - [printscreen](https://github.com/printscreen)
+- [killix](https://github.com/killix)
 
 # License
 
