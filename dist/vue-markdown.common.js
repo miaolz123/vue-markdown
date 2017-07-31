@@ -1,5 +1,5 @@
 /**
- * vue-markdown v2.2.2
+ * vue-markdown v2.2.3
  * https://github.com/miaolz123/vue-markdown
  * MIT License
  */
