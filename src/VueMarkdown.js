@@ -115,7 +115,7 @@ export default {
     },
     anchorAttributes: {
       type: Object,
-      default: {}
+      default: () => ({})
     },
     prerender: {
       type: Function,
