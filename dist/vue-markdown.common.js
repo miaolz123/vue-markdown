@@ -1,5 +1,5 @@
 /**
- * vue-markdown v2.2.1
+ * vue-markdown v2.2.2
  * https://github.com/miaolz123/vue-markdown
  * MIT License
  */
@@ -231,7 +231,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    anchorAttributes: {
 	      type: Object,
-	      default: {}
+	      default: function _default() {
+	        return {};
+	      }
 	    },
 	    prerender: {
 	      type: Function,
