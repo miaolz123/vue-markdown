@@ -17,6 +17,7 @@ Supported Markdown Syntax:
 * [x] *SyntaxHighlighter
 * [x] definition list
 * [x] strikethrough
+* [x] GFM task list
 * [x] abbreviation
 * [x] superscript
 * [x] subscript
@@ -25,7 +26,6 @@ Supported Markdown Syntax:
 * [x] *katex
 * [x] emoji
 * [x] mark
-* [x] GFM task list
 
 `*SyntaxHighlighter` work with [Prism](http://prismjs.com) recommend
 
@@ -126,7 +126,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 | lang-prefix | String | `language-` | CSS language prefix for fenced blocks |
 | quotes | String | `“”‘’` | use `“”‘’` for Chinese, `„“‚‘` for German, `«»„“` for Russian |
 | table-class | String | `table` | customize html class of the `<table>` |
-| taskLists | Boolean | `true` | enable GF task list |
+| task-lists | Boolean | `true` | enable GFM task list |
 | toc | Boolean | `false` | enable automatic table of contents |
 | toc-id | String | `undefined` | the HTML id to render TOC |
 | toc-class | String | `table` | customize html class of the `<ul>` wrapping the TOC |
@@ -164,6 +164,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 - [Endi1](https://github.com/Endi1)
 - [printscreen](https://github.com/printscreen)
 - [killix](https://github.com/killix)
+- [LeFnord](https://github.com/lefnord)
 
 # License
 
