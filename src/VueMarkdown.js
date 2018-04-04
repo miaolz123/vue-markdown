@@ -130,9 +130,9 @@ export default {
       default: (htmlData) => { return htmlData },
     },
     inline: {
-			type: Boolean,
+      type: Boolean,
       default: false,
-		},
+    },
   },
 
   computed: {
@@ -207,17 +207,17 @@ export default {
     }
 
     let outHtml
-		if (this.show) {
-			outHtml = this.prerender(this.sourceData)
-			if (this.inline) {
-				outHtml = this.md.renderInline(outHtml)
-			} else {
-				outHtml = this.md.render(outHtml)
-			}
-			outHtml = this.postrender(outHtml)
-		} else {
-			outHtml = ''
-		}
+    if (this.show) {
+      outHtml = this.prerender(this.sourceData)
+      if (this.inline) {
+        outHtml = this.md.renderInline(outHtml)
+      } else {
+        outHtml = this.md.render(outHtml)
+      }
+      outHtml = this.postrender(outHtml)
+    } else {
+      outHtml = ''
+    }
 
     this.$emit('rendered', outHtml)
     return createElement(
