@@ -1,5 +1,5 @@
 /**
- * vue-markdown v2.2.4
+ * vue-markdown v2.2.5
  * https://github.com/miaolz123/vue-markdown
  * MIT License
  */
@@ -250,6 +250,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      default: function _default(htmlData) {
 	        return htmlData;
 	      }
+	    },
+	    updatePrism: {
+	      type: Boolean,
+	      default: true
 	    }
 	  },
 
@@ -322,6 +326,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    outHtml = this.postrender(outHtml);
 
 	    this.$emit('rendered', outHtml);
+
+	    if (this.updatePrism && window.Prism) {
+	      this.$nextTick(function () {
+	        Prism.highlightAllUnder(_this.$el);
+	      });
+	    }
+
 	    return createElement('div', {
 	      domProps: {
 	        innerHTML: outHtml
