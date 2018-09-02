@@ -128,7 +128,11 @@ export default {
     postrender: {
       type: Function,
       default: (htmlData) => { return htmlData }
-    }
+    },
+    updatePrism: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   computed: {
@@ -209,6 +213,13 @@ export default {
     outHtml = this.postrender(outHtml);
 
     this.$emit('rendered', outHtml)
+
+    if (this.updatePrism && window.Prism){
+      this.$nextTick(() => {
+        Prism.highlightAllUnder(this.$el)
+      })
+    }
+
     return createElement(
       'div', {
         domProps: {

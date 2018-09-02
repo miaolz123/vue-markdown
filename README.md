@@ -111,34 +111,35 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 
 # Props
 
-| Prop | Type | Default | Describe |
-| ---- | ---- | ------- | ------- |
-| watches | Array | `["source", "show", "toc"]` | HTML refresh automatically when the prop in this array changed |
-| source | String | `null` | the markdown source code |
-| show | Boolean | `true` | enable render to the default slot automatically |
-| html | Boolean | `true` | enable HTML syntax in source |
-| xhtml-out | Boolean | `true` | `<br></br>` => `<br />` |
-| breaks | Boolean | `true` | `\n` => `<br>` |
-| linkify | Boolean | `true` | autoconvert URL-like text to link |
-| emoji | Boolean | `true` | `:)` => `😃` |
-| typographer | Boolean | `true` | enable some language-neutral replacement and quotes beautification |
-| lang-prefix | String | `language-` | CSS language prefix for fenced blocks |
-| quotes | String | `“”‘’` | use `“”‘’` for Chinese, `„“‚‘` for German, `«»„“` for Russian |
-| table-class | String | `table` | customize html class of the `<table>` |
-| task-lists | Boolean | `true` | enable GFM task list |
-| toc | Boolean | `false` | enable automatic table of contents |
-| toc-id | String | `undefined` | the HTML id to render TOC |
-| toc-class | String | `table` | customize html class of the `<ul>` wrapping the TOC |
-| toc-first-level | Number | `2` | use `2` if you want to skip `<h1>` from the TOC |
-| toc-last-level | Number | `'toc-first-level' + 1` | use `5` if you want to skip `<h6>` from the TOC |
-| toc-anchor-link | Boolean | `true` | enable the automatic anchor link in the headings |
-| toc-anchor-class | String | `toc-anchor` | customize the anchor class name |
-| toc-anchor-link-symbol | String | `#` | customize the anchor link symbol |
-| toc-anchor-link-space | Boolean | `true` | enable inserting a space between the anchor link and heading |
-| toc-anchor-link-class | String | `toc-anchor-link` | customize the anchor link symbol class name |
-| anchorAttributes | Object | `{}` | anchor tag attributes such as `target: '_blank'` or `rel: 'nofollow'` |
-| prerender | Function (String) String | `null` | filter function before markdown parse |
-| postrender | Function (String) String | `null` | filter function after markdown parse |
+| Prop                   | Type                     | Default                     | Describe                                                                                                                   |
+| ---------------------- | ------------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| watches                | Array                    | `["source", "show", "toc"]` | HTML refresh automatically when the prop in this array changed                                                             |
+| source                 | String                   | `null`                      | the markdown source code                                                                                                   |
+| show                   | Boolean                  | `true`                      | enable render to the default slot automatically                                                                            |
+| html                   | Boolean                  | `true`                      | enable HTML syntax in source                                                                                               |
+| xhtml-out              | Boolean                  | `true`                      | `<br></br>` => `<br />`                                                                                                    |
+| breaks                 | Boolean                  | `true`                      | `\n` => `<br>`                                                                                                             |
+| linkify                | Boolean                  | `true`                      | autoconvert URL-like text to link                                                                                          |
+| emoji                  | Boolean                  | `true`                      | `:)` => `😃`                                                                                                               |
+| typographer            | Boolean                  | `true`                      | enable some language-neutral replacement and quotes beautification                                                         |
+| update-prism           | Boolean                  | `true`                      | if true, vue-markdown will automatically call a re-render of all code blocks through Prism.js ([Using Prism.js](#using-prism.js)) |
+| lang-prefix            | String                   | `language-`                 | CSS language prefix for fenced blocks                                                                                      |
+| quotes                 | String                   | `“”‘’`                      | use `“”‘’` for Chinese, `„“‚‘` for German, `«»„“` for Russian                                                              |
+| table-class            | String                   | `table`                     | customize html class of the `<table>`                                                                                      |
+| task-lists             | Boolean                  | `true`                      | enable GFM task list                                                                                                       |
+| toc                    | Boolean                  | `false`                     | enable automatic table of contents                                                                                         |
+| toc-id                 | String                   | `undefined`                 | the HTML id to render TOC                                                                                                  |
+| toc-class              | String                   | `table`                     | customize html class of the `<ul>` wrapping the TOC                                                                        |
+| toc-first-level        | Number                   | `2`                         | use `2` if you want to skip `<h1>` from the TOC                                                                            |
+| toc-last-level         | Number                   | `'toc-first-level' + 1`     | use `5` if you want to skip `<h6>` from the TOC                                                                            |
+| toc-anchor-link        | Boolean                  | `true`                      | enable the automatic anchor link in the headings                                                                           |
+| toc-anchor-class       | String                   | `toc-anchor`                | customize the anchor class name                                                                                            |
+| toc-anchor-link-symbol | String                   | `#`                         | customize the anchor link symbol                                                                                           |
+| toc-anchor-link-space  | Boolean                  | `true`                      | enable inserting a space between the anchor link and heading                                                               |
+| toc-anchor-link-class  | String                   | `toc-anchor-link`           | customize the anchor link symbol class name                                                                                |
+| anchorAttributes       | Object                   | `{}`                        | anchor tag attributes such as `target: '_blank'` or `rel: 'nofollow'`                                                      |
+| prerender              | Function (String) String | `null`                      | filter function before markdown parse                                                                                      |
+| postrender             | Function (String) String | `null`                      | filter function after markdown parse                                                                                       |
 
 # Events
 
@@ -146,6 +147,13 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 | ---- | --------- | -------- |
 | rendered | outHtml[String] | dispatch when render finish |
 | toc-rendered | tocHtml[String] | dispatch when TOC render finish, never dispatch if the toc[prop] is `false` |
+
+# Using Prism.js
+
+1. Visit the [download page](https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript)
+2. Select all the options that apply for your project
+3. At the bottom of the page download both the JS and CSS
+4. Include them in your `index.html` **MAKE SURE to include Prism before your** `app.js`
 
 # Thanks
 
@@ -164,6 +172,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 - [printscreen](https://github.com/printscreen)
 - [killix](https://github.com/killix)
 - [LeFnord](https://github.com/lefnord)
+- [NoahCardoza](https://github.com/NoahCardoza)
 
 # License
 
