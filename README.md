@@ -27,7 +27,7 @@ Supported Markdown Syntax:
 * [x] emoji
 * [x] mark
 
-`*SyntaxHighlighter` work with [Prism](http://prismjs.com) recommend
+`*SyntaxHighlighter` work with [Prism](https://prismjs.com) recommend
 
 `*katex` need add [katex css](https://unpkg.com/katex/dist/katex.min.css).
 
@@ -37,7 +37,7 @@ Supported Markdown Syntax:
 
 [webpack-simple](https://github.com/miaolz123/vue-markdown/blob/master/example/webpack-simple)
 
-[Live Demo](http://miaolz123.github.io/vue-markdown/)
+[Live Demo](https://miaolz123.github.io/vue-markdown/)
 
 # Installation
 
