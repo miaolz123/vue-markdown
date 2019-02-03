@@ -3,6 +3,7 @@
   "version": "2.2.4",
   "description": "A Powerful and Highspeed Markdown Parser for Vue",
   "main": "dist/vue-markdown.common.js",
+  "types": "index.d.ts",
   "files": [
     "dist/vue-markdown.js",
     "dist/vue-markdown.common.js",
@@ -38,6 +39,7 @@
     "css-loader": "^0.23.1",
     "json-loader": "^0.5.7",
     "style-loader": "^0.13.1",
+    "vue": "^2.5.22",
     "webpack": "^1.13.0"
   },
   "dependencies": {
