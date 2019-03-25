@@ -117,6 +117,10 @@ export default {
       type: String,
       default: 'toc-anchor-link',
     },
+    tocAnchorLinkBefore: {
+      type: Boolean,
+      default: true
+    },
     anchorAttributes: {
       type: Object,
       default: () => ({})
@@ -188,6 +192,7 @@ export default {
         anchorLink: this.tocAnchorLink,
         anchorLinkSymbol: this.tocAnchorLinkSymbol,
         anchorLinkSpace: this.tocAnchorLinkSpace,
+        anchorLinkBefore: this.tocAnchorLinkBefore,
         anchorClassName: this.tocAnchorClass,
         anchorLinkSymbolClassName: this.tocAnchorLinkClass,
         tocCallback: (tocMarkdown, tocArray, tocHtml) => {
