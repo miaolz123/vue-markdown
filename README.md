@@ -125,7 +125,7 @@ TIP: The default slot only renders **once** at the beginning, and it will overwr
 | lang-prefix | String | `language-` | CSS language prefix for fenced blocks |
 | quotes | String | `“”‘’` | use `“”‘’` for Chinese, `„“‚‘` for German, `«»„“` for Russian |
 | table-class | String | `table` | customize html class of the `<table>` |
-| task-lists | Boolean | `true` | enable GFM task list |
+| task-lists | Boolean | `true` | Makes GFM task lists mutable, `false` shows GFM as readonly checkboxes |
 | toc | Boolean | `false` | enable automatic table of contents |
 | toc-id | String | `undefined` | the HTML id to render TOC |
 | toc-class | String | `table` | customize html class of the `<ul>` wrapping the TOC |
