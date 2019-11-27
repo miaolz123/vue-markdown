@@ -29,7 +29,7 @@ Supported Markdown Syntax:
 
 `*SyntaxHighlighter` work with [Prism](https://prismjs.com) recommend
 
-`*katex` need add [katex css](https://unpkg.com/katex/dist/katex.min.css).
+`*katex` need add [katex css](https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css).
 
 # Example
 

@@ -48,7 +48,7 @@
     "markdown-it-emoji": "^1.1.1",
     "markdown-it-footnote": "^2.0.0",
     "markdown-it-ins": "^2.0.0",
-    "markdown-it-katex": "^2.0.3",
+    "markdown-it-katex": "git+https://github.com/MicroDroid/markdown-it-katex.git",
     "markdown-it-mark": "^2.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
