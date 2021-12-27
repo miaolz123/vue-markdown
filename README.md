@@ -68,7 +68,7 @@ $ npm install --save vue-markdown
 ### Yarn
 
 ```shell
-$ yarn add vue-markdown --save
+$ yarn add vue-markdown
 ```
 
 ## CommonJS
